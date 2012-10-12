@@ -70,6 +70,7 @@ void Interface::stopAcq() {
 }
 
 void Interface::getStatus(StatusType& status) {
+        DEB_MEMBER_FUNCT();    
 	m_sync->getStatus(status);
 }
 
@@ -87,6 +88,7 @@ int Interface::getNbAcquiredFrames() {
 }
 
 int Interface::getNbHwAcquiredFrames() {
+        DEB_MEMBER_FUNCT();    
 	return getNbAcquiredFrames();
 }
 

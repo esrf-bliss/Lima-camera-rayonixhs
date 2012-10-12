@@ -25,14 +25,18 @@
 #include "LimaCompatibility.h"
 #include "SizeUtils.h"
 #include "RayonixHsCamera.h"
-//#include "Debug.h"
+#include "Debug.h"
 
-#include "HwBinCtrlObj.h"
+//#include "HwBinCtrlObj.h"
+#include "HwInterface.h"
 
 namespace lima {
 namespace RayonixHs {
 
 class BinCtrlObj : public HwBinCtrlObj {
+   friend class Interface;
+   DEB_CLASS_NAMESPC(DebModCamera,"BinCtrlObj","RayonixHs");
+   
    public:
       BinCtrlObj(Camera *cam);
       ~BinCtrlObj();

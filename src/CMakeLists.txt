@@ -4,17 +4,17 @@ project(RayonixHsLimaPlugin)
 set (BUILD_SHARED_LIBS true)
 
 set(ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
-set(LIMA_DIR ${ROOT_DIR}/../..)
+set(LIMA_DIR ${ROOT_DIR}/../Lima)
 
-set(BOOST_INCLUDE /opt/rayonix/include)
-set(LIMA_INCLUDE ${LIMA_DIR}/hardware/include ${LIMA_DIR}/common/include)
-set(LIMA_LIB ${LIMA_DIR}/build ${LIMA_DIR}/third-party/Processlib/build)
-set(RAYONIXHS_LIB ${ROOT_DIR}/lib64)
-set(RAYONIXHS_INCLUDE ${ROOT_DIR}/include ${ROOT_DIR}/include/craydl)
+set(BOOST_INCLUDE_DIRS /opt/rayonix/include)
+set(LIMA_INCLUDE_DIRS ${LIMA_DIR}/hardware/include ${LIMA_DIR}/common/include)
+set(LIMA_LIB_DIRS ${LIMA_DIR}/build ${LIMA_DIR}/third-party/Processlib/build)
+set(RAYONIXHS_LIB_DIRS ${ROOT_DIR}/sdk/lib64)
+set(RAYONIXHS_INCLUDE_DIRS ${ROOT_DIR}/sdk/include ${ROOT_DIR}/include)
 
 ################################################################################################################################################################################
-set(ALL_INCLUDES ${BOOST_INCLUDE} ${LIMA_INCLUDE} ${RAYONIXHS_INCLUDE})
-set(ALL_LIBS ${RAYONIXHS_LIB} ${LIMA_LIB})
+set(ALL_INCLUDES ${BOOST_INCLUDE_DIRS} ${LIMA_INCLUDE_DIRS} ${RAYONIXHS_INCLUDE_DIRS})
+set(ALL_LIBS ${RAYONIXHS_LIB_DIRS} ${LIMA_LIB_DIRS})
 
 #separate_arguments(ALL_INCLUDES_SEP UNIX_COMMAND "${ALL_INCLUDES}")
 #message(ALL_INCLUDES: ${ALL_INCLUDES_SEP})

@@ -9,16 +9,20 @@ int main() {
    
    lima::RayonixHs::Camera camera;
 
-   printf("Setting exposure time...\n");
+   printf("Setting exposure time...");
    camera.setExpTime(0);
+   printf("done.\n");
 
-   printf("Setting num frames...\n");
+   printf("Setting num frames...");
    camera.setNbFrames(desiredFrameCount);
+   printf("done.\n");
    
-   printf("Starting acq...\n");
+   printf("Preparing acquisition...\n");
+   camera.prepareAcq();
+   
+   printf("Starting acquisition...\n");
    camera.startAcq();
    while(!camera.acquiring()) {}
-   printf("Acquisition started.\n");
    
    printf("Waiting on completion...\n");
    while(camera.acquiring()) {
@@ -26,7 +30,7 @@ int main() {
       //std::cout << "Still acquring..." << std::endl;
    }
    
-   printf("Done.\n");
+   printf("All done.\n");
 
    return 0;
 }

@@ -40,6 +40,7 @@ enum DETECTOR_STATUS {
 };
 
 class Camera : public HwMaxImageSizeCallbackGen {
+   DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
    friend class Interface;
 
 	public:
