@@ -1,12 +1,11 @@
 
 #include "craydl.h"
 
+#include "RayonixHsBufferCtrlObj.h"
 #include "RayonixHsCamera.h"
 
 using namespace lima;
 using namespace lima::RayonixHs;
-
-//TODO: Frame callback?!?!
 
 Camera::Camera()
 	: m_rx_detector(new craydl::RxDetector()),
@@ -25,6 +24,7 @@ void Camera::init() {
         DEB_MEMBER_FUNCT();
 	craydl::RxReturnStatus status;
 	
+	//Open camera
 	status = m_rx_detector->Open();
 	if (status.IsError()) {
 		DEB_ERROR() << "Camera::init: Error opening camera!";
@@ -33,11 +33,19 @@ void Camera::init() {
 	}
 
 	m_detector_status = DETECTOR_STATUS_IDLE;
+	
+	//Get unbinned frame size from camera
+	craydl::DetectorFormat detector_format;
+	if (m_rx_detector->GetDetectorFormat(detector_format).IsError()) {
+		DEB_ERROR() << "Camera::init: Error getting camera format!";
+		return;
+	}
+	int fast, slow;
+	fast = detector_format.n_pixels_fast();
+	slow = detector_format.n_pixels_slow();
 
-	int fast, slow, depth;
-	m_rx_detector->GetFrameSize(fast, slow, depth);
 	m_max_image_size = Size(fast, slow);
-
+	
 	m_exp_time = 0;
 	m_lat_time = 0;
 	m_nb_frames = 0;
@@ -56,9 +64,9 @@ Camera::~Camera() {
 	delete m_frame_status_cb;
 }
 
-SoftBufferCtrlObj* Camera::getBufferCtrlObj() {
+HwBufferCtrlObj* Camera::getBufferCtrlObj() {
         DEB_MEMBER_FUNCT();
-	return (SoftBufferCtrlObj *)m_buffer_ctrl_obj;
+	return (HwBufferCtrlObj *)m_buffer_ctrl_obj;
 }
 
 void Camera::getDetectorType(std::string &type) {
@@ -96,8 +104,7 @@ bool Camera::checkTrigMode(TrigMode mode) {
 
 void Camera::getPixelSize(double &x, double &y) {
         DEB_MEMBER_FUNCT();
-//TODO: Fix when library has pixel size method
-	x = y = -1.;
+	m_rx_detector->GetPixelSize(x, y);
 }
 
 void Camera::getMaxImageSize(Size& max_image_size) {
@@ -136,9 +143,8 @@ void Camera::setLatTime(double lat_time) {
 	if (lat_time < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid latency time");
 
+	//Rayonix camera latency time is always zero
 	DEB_TRACE() << "Camera::setLatTime: Latency time unsupported on this camera.";
-
-	//m_lat_time = lat_time;
 }
 
 void Camera::getLatTime(double& lat_time) {
@@ -171,13 +177,15 @@ void Camera::checkBin(Bin& bin) {
 }
 
 void Camera::setFrameDim(const FrameDim& frame_dim) {
-        DEB_MEMBER_FUNCT();
-	m_frame_dim = frame_dim;
+      DEB_MEMBER_FUNCT();
+     //Rayonix detector library handles this automatically
 }
 
 void Camera::getFrameDim(FrameDim& frame_dim) {
         DEB_MEMBER_FUNCT();
-	frame_dim = m_frame_dim;
+	int fast, slow, depth;
+	m_rx_detector->GetFrameSize(fast, slow, depth);
+	frame_dim.setSize(Size(fast, slow));
 }
 
 void Camera::reset() {
@@ -209,6 +217,8 @@ void Camera::startAcq() {
         DEB_MEMBER_FUNCT();
 
 //TODO: Other frame types?
+	m_frame_status_cb->resetFrameCounts();
+
 	if (m_rx_detector->StartAcquisition(craydl::ACQUIRE_LIGHT).IsError())
 		DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
 }
@@ -244,19 +254,33 @@ void Camera::getDetectorModel(std::string &model) {
 
 void Camera::setRoi(const Roi& roi) {
         DEB_MEMBER_FUNCT();
-	// TODO: Add ROI functionality
+	//Rayonix HS cameras do software ROI so this is not implemented.
 }
 
 void Camera::getRoi(Roi& roi) {
         DEB_MEMBER_FUNCT();
-	// TODO: Add ROI functionality
+	//Rayonix HS cameras do software ROI so this is not implemented.
+	roi = Roi(Point(0, 0), m_max_image_size);
 }
 
-void Camera::checkRoi(Roi& roi) {
-        DEB_MEMBER_FUNCT();
-	// TODO: Add ROI functionality
+void Camera::checkRoi(const Roi& set_roi, Roi& hw_roi) {
+       DEB_MEMBER_FUNCT();
+       DEB_PARAM() << DEB_VAR1(set_roi);
+
+       //Rayonix HS cameras do software ROI so this is not implemented.
+       hw_roi = Roi(Point(0, 0), m_max_image_size); 
+
+       DEB_RETURN() << DEB_VAR1(hw_roi);
 }
 
-//void Camera::acquisitionComplete() {
-//   m_acquiring = false;
-//}
+void Camera::frameReady(craydl::RxFrame *pFrame) {
+   HwFrameInfoType frame_info;
+   frame_info.acq_frame_nb = pFrame->InternalFrameID();
+   frame_info.frame_ptr = pFrame->getBufferAddress();
+   FrameDim frame_dim(pFrame->getNFast(), pFrame->getNSlow(), Bpp16);
+   frame_info.frame_dim = frame_dim;
+
+   //TODO: Convert RxFrame's boost time to timeval?
+   //boost::posixtime::ptime acq_end_time_boost = pFrame->metaData()->AcquisitionEndTimestamp();
+   m_buffer_ctrl_obj->frameReady(frame_info);
+}

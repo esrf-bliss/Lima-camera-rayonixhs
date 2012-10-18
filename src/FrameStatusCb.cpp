@@ -26,7 +26,7 @@ void FrameStatusCb::RawFrameReady(int frame_number, craydl::RxFrame *rx_frame) {
 
 void FrameStatusCb::BackgroundFrameReady(craydl::RxFrame *frame_p) { ++mBgFramesRcvd; std::cout << "Have received " << mBgFramesRcvd << " background frames." << std::endl; }
 
-void FrameStatusCb::FrameReady(int frame_number, craydl::RxFrame *rx_frame) { ++mCorrFramesRcvd; std::cout << "Have received " << mCorrFramesRcvd << " corrected frames." << std::endl; }
+void FrameStatusCb::FrameReady(int frame_number, craydl::RxFrame *rx_frame) { ++mCorrFramesRcvd; std::cout << "Have received " << mCorrFramesRcvd << " corrected frames." << std::endl; m_cam->frameReady(rx_frame); }
 
 void FrameStatusCb::FrameAborted(int frame_number) { std::cout << "FrameStatusCb: Frame #" << frame_number << " aborted!" << std::endl; }
 

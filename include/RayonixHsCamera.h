@@ -24,10 +24,13 @@
 
 //#include <ostream>
 
+#include "Debug.h"
+#include "HwMaxImageSizeCallback.h"
 #include "HwInterface.h"
 #include "HwBufferMgr.h"
 #include "SizeUtils.h"
 
+#include "craydl.h"
 #include "FrameStatusCb.h"
 #include "RayonixHsSyncCtrlObj.h"
 
@@ -42,6 +45,7 @@ enum DETECTOR_STATUS {
 class Camera : public HwMaxImageSizeCallbackGen {
    DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
    friend class Interface;
+   friend class FrameStatusCb;
 
 	public:
 		Camera();
@@ -85,12 +89,12 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		void setRoi(const Roi& roi);
 		void getRoi(Roi& roi);
-		void checkRoi(Roi& roi);
+		void checkRoi(const Roi& set_roi, Roi &hw_roi);
 
 		void setFrameDim(const FrameDim& frame_dim);
 		void getFrameDim(FrameDim& frame_dim);
 
-		SoftBufferCtrlObj* getBufferCtrlObj();
+		HwBufferCtrlObj* getBufferCtrlObj();
 
 	private:
 		void init();
@@ -117,7 +121,9 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		//void acquisitionComplete();
 
+		void frameReady(craydl::RxFrame *pFrame);
 };
+
 
 //LIBRAYONIXHS_API std::ostream& operator <<(std::ostream& os, Camera& simu);
 

@@ -13,6 +13,12 @@ set(RAYONIXHS_LIB_DIRS ${ROOT_DIR}/sdk/lib64)
 set(RAYONIXHS_INCLUDE_DIRS ${ROOT_DIR}/sdk/include ${ROOT_DIR}/include)
 
 ################################################################################################################################################################################
+set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
+
+set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
+
 set(ALL_INCLUDES ${BOOST_INCLUDE_DIRS} ${LIMA_INCLUDE_DIRS} ${RAYONIXHS_INCLUDE_DIRS})
 set(ALL_LIBS ${RAYONIXHS_LIB_DIRS} ${LIMA_LIB_DIRS})
 

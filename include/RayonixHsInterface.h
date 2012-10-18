@@ -32,7 +32,6 @@ class DetInfoCtrlObj;
 class BufferCtrlObj;
 class SyncCtrlObj;
 class BinCtrlObj;
-//class RoiCtrlObj;
 
 class Interface: public HwInterface {
 	DEB_CLASS_NAMESPC(DebModCamera, "Interface", "RayonixHs");
@@ -57,7 +56,6 @@ class Interface: public HwInterface {
 		BufferCtrlObj* m_buffer;
 		SyncCtrlObj* m_sync;
 		BinCtrlObj *m_bin;
-		//RoiCtrlObj *m_roi;
 };
 
 } // namespace RayonixHs
