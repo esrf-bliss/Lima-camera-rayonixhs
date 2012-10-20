@@ -8,9 +8,7 @@ using namespace lima;
 using namespace lima::RayonixHs;
 
 BufferCtrlObj::BufferCtrlObj(Camera *cam)
-   : m_buffer_cb_mgr(m_buffer_alloc_mgr),
-     m_buffer_ctrl_mgr(m_buffer_cb_mgr),
-     m_exposing(false),
+   : m_exposing(false),
      m_cam(cam) {
 
    DEB_CONSTRUCTOR();
@@ -115,19 +113,13 @@ void BufferCtrlObj::registerFrameCallback(HwFrameCallback &frame_cb)
   //i.e:
   //m_callback = &frame_cb;
   DEB_MEMBER_FUNCT();
-  m_buffer_ctrl_mgr.registerFrameCallback(frame_cb);
+  HwFrameCallbackGen::registerFrameCallback(frame_cb);
 }
 
 void BufferCtrlObj::unregisterFrameCallback(HwFrameCallback& frame_cb)
 {
   DEB_MEMBER_FUNCT();
-  m_buffer_ctrl_mgr.unregisterFrameCallback(frame_cb);
-}
-
-void BufferCtrlObj::frameReady(HwFrameInfoType &frame_info) {
-  //DEB_MEMBER_FUNCT();
-   //m_callback->newFrameReady(frame_info);
-   m_buffer_cb_mgr.newFrameReady(frame_info);
+  HwFrameCallbackGen::unregisterFrameCallback(frame_cb);
 }
 
 #if 0

@@ -275,12 +275,15 @@ void Camera::checkRoi(const Roi& set_roi, Roi& hw_roi) {
 
 void Camera::frameReady(craydl::RxFrame *pFrame) {
    HwFrameInfoType frame_info;
+   
    frame_info.acq_frame_nb = pFrame->InternalFrameID();
    frame_info.frame_ptr = pFrame->getBufferAddress();
    FrameDim frame_dim(pFrame->getNFast(), pFrame->getNSlow(), Bpp16);
    frame_info.frame_dim = frame_dim;
-
+   frame_info.buffer_owner_ship = HwFrameInfoType::Managed; // == memory mapping
+   
    //TODO: Convert RxFrame's boost time to timeval?
    //boost::posixtime::ptime acq_end_time_boost = pFrame->metaData()->AcquisitionEndTimestamp();
+   
    m_buffer_ctrl_obj->frameReady(frame_info);
 }

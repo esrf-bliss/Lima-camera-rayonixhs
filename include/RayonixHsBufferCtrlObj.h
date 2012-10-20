@@ -32,7 +32,7 @@ class Camera;
 class SyncCtrlObj;
 class Interface;
 
-class BufferCtrlObj: public HwBufferCtrlObj {
+class BufferCtrlObj: public HwBufferCtrlObj, public HwFrameCallbackGen {
       friend class Interface;
       
       DEB_CLASS_NAMESPC(DebModCamera,"BufferCtrlObj","RayonixHs");
@@ -62,18 +62,14 @@ class BufferCtrlObj: public HwBufferCtrlObj {
       void registerFrameCallback(HwFrameCallback &frame_cb);
       void unregisterFrameCallback(HwFrameCallback &frame_cb);
 
-      void frameReady(HwFrameInfoType &frame_info);
-      
+      void frameReady(HwFrameInfoType &info) { newFrameReady(info); }
+
    private:
       SyncCtrlObj* m_sync;
       bool m_exposing;
       Camera *m_cam;
       
       HwFrameCallback *m_callback;
-
-      SoftBufferAllocMgr m_buffer_alloc_mgr;
-      StdBufferCbMgr m_buffer_cb_mgr;
-      BufferCtrlMgr m_buffer_ctrl_mgr;
 };
 
 } //namespace RayonixHs
