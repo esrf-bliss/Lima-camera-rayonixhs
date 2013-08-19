@@ -6,21 +6,27 @@ set (BUILD_SHARED_LIBS true)
 set(ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
 set(LIMA_DIR ${ROOT_DIR}/../Lima)
 
-set(BOOST_INCLUDE_DIRS /opt/rayonix/include)
+set(BOOST_INCLUDE_DIRS ${ROOT_DIR}/third-party/boost/include)
+set(BOOST_LIB_DIRS ${ROOT_DIR}/third-party/boost/lib)
 set(LIMA_INCLUDE_DIRS ${LIMA_DIR}/hardware/include ${LIMA_DIR}/common/include)
 set(LIMA_LIB_DIRS ${LIMA_DIR}/build ${LIMA_DIR}/third-party/Processlib/build)
 set(RAYONIXHS_LIB_DIRS ${ROOT_DIR}/sdk/lib64)
-set(RAYONIXHS_INCLUDE_DIRS ${ROOT_DIR}/sdk/include ${ROOT_DIR}/include)
+set(RAYONIXHS_INCLUDE_DIRS ${ROOT_DIR}/sdk/include/craydl ${ROOT_DIR}/include)
+
+if (NOT EXISTS ${LIMA_DIR})
+	message(FATAL_ERROR "Did not find main Lima source tree at ${LIMA_DIR}.")
+endif()
 
 ################################################################################################################################################################################
-set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
-set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
+#set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG -DWITH_SPS_IMAGE") # we want -g for release
 
-set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
-set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
+#set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -DWITH_SPS_IMAGE") #cmake auto adds "-g" for Debug
 
 set(ALL_INCLUDES ${BOOST_INCLUDE_DIRS} ${LIMA_INCLUDE_DIRS} ${RAYONIXHS_INCLUDE_DIRS})
-set(ALL_LIBS ${RAYONIXHS_LIB_DIRS} ${LIMA_LIB_DIRS})
+set(ALL_LIBS ${RAYONIXHS_LIB_DIRS} ${LIMA_LIB_DIRS} ${BOOST_LIB_DIRS})
+#message("All libs: ${ALL_LIBS}")
 
 #separate_arguments(ALL_INCLUDES_SEP UNIX_COMMAND "${ALL_INCLUDES}")
 #message(ALL_INCLUDES: ${ALL_INCLUDES_SEP})
@@ -37,32 +43,44 @@ add_library(RayonixHs ${CPP_FILES})
 
 find_library(LimaLib limacore ${ALL_LIBS})
 if (NOT EXISTS ${LimaLib})
-   message( "Could not find limacore lima library!")
+   message(FATAL_ERROR "Could not find limacore lima library!")
+else()
+   message("Found LimaLib at ${LimaLib}")
 endif (NOT EXISTS ${LimaLib})
 
 find_library(ProcessLib processlib ${ALL_LIBS})
 if (NOT EXISTS ${ProcessLib})
-   message( "Could not find processlib library!")
+   message(FATAL_ERROR "Could not find processlib library!")
+else()
+   message("Found ProcessLib at ${ProcessLib}")
 endif (NOT EXISTS ${ProcessLib})
 
 find_library(SpecInstLib SiVCamDll ${ALL_LIBS})
 if (NOT EXISTS ${SpecInstLib})
-   message( "Could not find SpecInst SiVCamDll library!")
+   message(FATAL_ERROR "Could not find SpecInst SiVCamDll library!")
+else()
+   message("Found SpecInstLib at ${SpecInstLib}")
 endif (NOT EXISTS ${SpecInstLib})
 
 find_library(craydlLib craydl ${ALL_LIBS})
 if (NOT EXISTS ${craydlLib})
-   message( "Could not find craydl library!")
+   message(FATAL_ERROR "Could not find craydl library!")
+else()
+   message("Found craydlLib at ${craydlLib}")
 endif (NOT EXISTS ${craydlLib})
 
 find_library(craydlGpuLib craydl_gpu ${ALL_LIBS})
 if (NOT EXISTS ${craydlGpuLib})
-   message( "Could not find craydl_gpu library!")
+   message(FATAL_ERROR "Could not find craydl_gpu library!")
+else()
+   message("Found craydlGpuLib at ${craydlGpuLib}")
 endif (NOT EXISTS ${craydlGpuLib})
 
 find_library(cbfLib cbf ${ALL_LIBS})
 if (NOT EXISTS ${cbfLib})
-   message( "Could not find CBF library!")
+   message(FATAL_ERROR "Could not find CBF library!")
+else()
+   message("Found CBF lib at ${cbfLib}")
 endif (NOT EXISTS ${cbfLib})
 
 #set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR} ${CMAKE_MODULE_PATH})
@@ -85,7 +103,7 @@ endif (NOT EXISTS ${cbfLib})
 include(FindOpenSSL)
 find_package(OpenSSL)
 if (NOT OPENSSL_FOUND)
-   message( "Could not find openssl libraries!")
+   message(FATAL_ERROR "Could not find openssl libraries!")
 endif ()
 
 add_executable(test test.cpp)

@@ -8,7 +8,7 @@ using namespace lima;
 using namespace lima::RayonixHs;
 
 Camera::Camera()
-	: m_rx_detector(new craydl::RxDetector()),
+	: m_rx_detector(new craydl::RxDetector("./RxDetector.conf")),
 	  m_acquiring(false) {
         
 	DEB_CONSTRUCTOR();
@@ -208,7 +208,10 @@ HwInterface::StatusType::Basic Camera::getStatus() {
 
 void Camera::prepareAcq() {
         DEB_MEMBER_FUNCT();
-	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb), 1).IsError()) {
+   if (m_rx_detector->SetAcquisitionUserCB(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb)).IsError()) {
+      DEB_ERROR() << "Camera::prepareAcq: Error setting frame callback!";
+   }
+	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 1).IsError()) {
 		DEB_ERROR() << "Camera::prepareAcq: Error setting up acquisition sequence!";
 	}
 }

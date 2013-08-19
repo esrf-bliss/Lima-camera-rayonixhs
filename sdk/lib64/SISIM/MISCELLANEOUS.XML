@@ -1,0 +1,152 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <list>
+        <display>Miscellaneous</display>
+        <read_only>1</read_only>
+        <parameter>
+            <post_name>MISC_0</post_name>
+            <display>Tested Speeds</display>
+            <value>14</value>
+            <min>0</min>
+            <max>2</max>
+            <unit_type>9</unit_type>
+            <pull_down>
+                <display>675.7KHz</display>
+                <value>14</value>
+            </pull_down>
+            <pull_down>
+                <display>58.55KHz</display>
+                <value>208</value>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>MISC_1</post_name>
+            <display>CCD 0 SN</display>
+            <value>TEMPLATE</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>17</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_2</post_name>
+            <display>Hardware Part Number</display>
+            <value>0</value>
+            <min>0</min>
+            <max>4294967295</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_3</post_name>
+            <display>Hardware Revision</display>
+            <value>0</value>
+            <min>0</min>
+            <max>4294967295</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_4</post_name>
+            <display>Rectangular CCD Array</display>
+            <value>1</value>
+            <min>0</min>
+            <max>2</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>False</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>True</display>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>MISC_5</post_name>
+            <display>Rectangular Grid X</display>
+            <value>1</value>
+            <min>1</min>
+            <max>25</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_6</post_name>
+            <display>Rectangular Grid Y</display>
+            <value>1</value>
+            <min>1</min>
+            <max>25</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_7</post_name>
+            <display>Image Area Size X</display>
+            <value>30720</value>
+            <min>0</min>
+            <max>2147483647</max>
+            <unit_type>15</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_8</post_name>
+            <display>Image Area Size Y</display>
+            <value>30720</value>
+            <min>0</min>
+            <max>2147483647</max>
+            <unit_type>15</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_9</post_name>
+            <display>Operational Temp</display>
+            <value>2032</value>
+            <min>1632</min>
+            <max>3032</max>
+            <unit_type>3</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_10</post_name>
+            <display>Operational Pressure</display>
+            <value>150</value>
+            <min>0</min>
+            <max>720000</max>
+            <unit_type>2</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_11</post_name>
+            <display>CCD 0 Focal Plane X</display>
+            <value>-15360</value>
+            <min>-2147483648</min>
+            <max>2147483647</max>
+            <unit_type>15</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_12</post_name>
+            <display>CCD 0 Focal Plane Y</display>
+            <value>15360</value>
+            <min>-2147483648</min>
+            <max>2147483647</max>
+            <unit_type>15</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MISC_13</post_name>
+            <display>CCD 0 SR0 Orientation</display>
+            <value>0</value>
+            <min>0</min>
+            <max>4</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Top</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Right</display>
+            </pull_down>
+            <pull_down>
+                <value>2</value>
+                <display>Bottom</display>
+            </pull_down>
+            <pull_down>
+                <value>3</value>
+                <display>Left</display>
+            </pull_down>
+        </parameter>
+    </list>
+</si_data>
