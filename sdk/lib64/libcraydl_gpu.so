@@ -1,1 +1,1 @@
-libcraydl_gpu.so.0
+libcraydl_nocuda/libcraydl_gpu.so
