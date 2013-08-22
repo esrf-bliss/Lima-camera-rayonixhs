@@ -1,3 +1,9 @@
+ABOUT:
+
+Lima detector plugin for the Rayonix high-speed CCD cameras (HS).  Uses the "RxDetector" (a/k/a "craydl") library in the sdk folder.  The RxDetector library will load either the
+"SimCameraPlugin" (for software simulator) or the "ClCameraPlugin" (for CameraLink cameras), depending upon which camera is chosen in the "RxDetector.conf" file (in the "rundir" directory).  The "Sim-*" camera names
+in the config file are for the software simulator.
+
 TO BUILD:
 
 	./build_debug.sh

@@ -32,7 +32,6 @@ bool SyncCtrlObj::checkTrigMode(TrigMode trig_mode) {
 void SyncCtrlObj::setTrigMode(TrigMode trig_mode) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(trig_mode);
-	bool error = true;
 
 	if (checkTrigMode(trig_mode)) {
 		m_cam->setTrigMode(trig_mode);
@@ -123,13 +122,27 @@ void SyncCtrlObj::getStatus(HwInterface::StatusType& status) {
 
 	switch (m_cam->getStatus()) {
 	   case HwInterface::StatusType::Exposure:
-	       status.acq = AcqRunning;
+          status.acq = AcqRunning;
 	       status.det = DetExposure;
 	       break;
 	   case HwInterface::StatusType::Ready:
 		   status.acq = AcqReady;
 		   status.det = DetIdle;
 		   break;
+      case HwInterface::StatusType::Readout:
+         status.acq = AcqRunning;
+         status.det = DetReadout;
+         break;
+      case HwInterface::StatusType::Latency:
+         status.det = DetLatency;
+         break;
+      case HwInterface::StatusType::Config:
+         status.acq = AcqConfig;
+         break;
+      default:
+         status.acq = AcqFault;
+         status.det = DetFault;
+         break;
 	}
 	DEB_RETURN() << DEB_VAR1(status);
 }

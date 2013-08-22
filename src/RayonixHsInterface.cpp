@@ -73,7 +73,7 @@ void Interface::getStatus(StatusType& status) {
 int Interface::getNbAcquiredFrames() {
 	DEB_MEMBER_FUNCT();
 
-	int aNbAcquiredFrames;
+   int aNbAcquiredFrames = 0;
 	if (m_cam)
 		aNbAcquiredFrames = m_cam->getNbAcquiredFrames();
 
