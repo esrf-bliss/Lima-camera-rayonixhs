@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <list>
+        <display>Mode Mask</display>
+        <read_only>1</read_only>
+        <parameter>
+            <post_name>Mode Mask 0</post_name>
+            <display>Mode Mask</display>
+            <value>3</value>
+            <min>0</min>
+            <max>65535</max>
+            <unit_type>11</unit_type>
+        </parameter>
+    </list>
+</si_data>

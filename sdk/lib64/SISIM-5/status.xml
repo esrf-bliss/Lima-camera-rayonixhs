@@ -1,0 +1,271 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <status>
+        <item>
+            <index>0</index>
+            <display>Camera Flags</display>
+            <value>776</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>34567</mask>
+                <display>Readout,Integration,Sequencer busy,FPGA Temperature Alarm,Controller Temperature Alarm,Voltages Alarm,Master Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>1</index>
+            <display>Slot Alarm Flags</display>
+            <value>0</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>33554431</mask>
+                <display>Slot 0 Alarm,Slot 1 Alarm,Slot 2 Alarm,Slot 3 AlarmSlot 4 Alarm,Slot 5 Alarm,Slot 6 Alarm,Slot 7 Alarm,Slot 8 Alarm,Slot 9 Alarm,Slot 10 Alarm,Slot 11 Alarm,Slot 12 Alarm,Slot 13 AlarmSlot 14 Alarm,Slot 15 Alarm,Slot 16 Alarm,Slot 17 Alarm,Slot 18 Alarm,Slot 19 Alarm,Slot 20 Alarm,Slot 21 Alarm,Slot 22 Alarm,Slot 23 AlarmSlot 24 Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>2</index>
+            <display>Continuous Clear Mode</display>
+            <value>0</value>
+            <unit_type>8</unit_type>
+            <entries>3</entries>
+            <pull_down>
+                <value>0</value>
+                <display>Enable</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Disable 1 cycle</display>
+            </pull_down>
+            <pull_down>
+                <value>2</value>
+                <display>Disable</display>
+            </pull_down>
+        </item>
+        <item>
+            <index>3</index>
+            <display>Frame Clear Time</display>
+            <value>138</value>
+            <unit_type>7</unit_type>
+        </item>
+        <item>
+            <index>4</index>
+            <display>CCD Read Time</display>
+            <value>138</value>
+            <unit_type>7</unit_type>
+        </item>
+        <item>
+            <index>5</index>
+            <display>Controller PPC 1.2V Supply</display>
+            <value>1206</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>6</index>
+            <display>Controller FPGA 1.2V Supply</display>
+            <value>1206</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>7</index>
+            <display>Controller 1.8V Supply</display>
+            <value>1773</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>8</index>
+            <display>Controller 2.5V Supply</display>
+            <value>2508</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>9</index>
+            <display>Controller 3.3V Supply</display>
+            <value>3250</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>10</index>
+            <display>Controller DDR2 VTT Supply</display>
+            <value>892</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>11</index>
+            <display>Controller DDR2 VREF Supply</display>
+            <value>896</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>12</index>
+            <display>Controller Temperature</display>
+            <value>3182</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>13</index>
+            <display>Controller FPGA Temperature</display>
+            <value>3249</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>14</index>
+            <display>CCD 0 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>15</index>
+            <display>CCD 1 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>16</index>
+            <display>CCD 2 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>17</index>
+            <display>CCD 3 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>18</index>
+            <display>CCD 4 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>19</index>
+            <display>CCD 5 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>20</index>
+            <display>CCD 6 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>21</index>
+            <display>CCD 7 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>22</index>
+            <display>CCD 8 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>23</index>
+            <display>CCD 9 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>24</index>
+            <display>CCD 10 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>25</index>
+            <display>CCD 11 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>26</index>
+            <display>CCD 12 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>27</index>
+            <display>CCD 13 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>28</index>
+            <display>CCD 14 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>29</index>
+            <display>CCD 15 Flags</display>
+            <value>1</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Pixel FIFO Empty,Pixel FIFO 1/2 Full,Pixel FIFO Full,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+    </status>
+</si_data>

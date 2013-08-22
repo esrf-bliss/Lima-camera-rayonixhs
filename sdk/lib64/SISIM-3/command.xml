@@ -1,0 +1,187 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <list>
+        <display>Commands</display>
+        <parameter>
+            <post_name>ABORT</post_name>
+            <display>Abort an exposure or readout.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>ACQUIRE</post_name>
+            <display>Acquire an image.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>6</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Light</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Dark</display>
+            </pull_down>
+            <pull_down>
+                <value>2</value>
+                <display>Triggered</display>
+            </pull_down>
+            <pull_down>
+                <value>3</value>
+                <display>Linearity</display>
+            </pull_down>
+            <pull_down>
+                <value>4</value>
+                <display>TDI external pacing</display>
+            </pull_down>
+            <pull_down>
+                <value>5</value>
+                <display>TDI internal pacing</display>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>CLEAR</post_name>
+            <display>Get/set the continuous clear mode.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>3</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Enable</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Disable 1 cycle</display>
+            </pull_down>
+            <pull_down>
+                <value>2</value>
+                <display>Disable</display>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>COOLER</post_name>
+            <display>Get/set the cooler enable flag.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>2</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Off</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>On</display>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>MODEDEL</post_name>
+            <display>Delete the mode at [INDEX].</display>
+            <value>0</value>
+            <min>0</min>
+            <max>15</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MODEGET</post_name>
+            <display>Read the control table from [INDEX].</display>
+            <value>0</value>
+            <min>0</min>
+            <max>15</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MODESET</post_name>
+            <display>Save the control table to [INDEX].</display>
+            <value>0</value>
+            <min>0</min>
+            <max>15</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>MS_LEFT</post_name>
+            <display>Display the remaining exposure milliseconds.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>SHUTTER</post_name>
+            <display>Get/set the shutter open flag.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>2</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Close</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Open</display>
+            </pull_down>
+        </parameter>
+        <parameter>
+            <post_name>SUGET</post_name>
+            <display>Read the setup table from flash.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>SUSET</post_name>
+            <display>Save the setup table to flash.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>SYSRST</post_name>
+            <display>Initiate a system reset.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>S_I_DIS</post_name>
+            <display>Clear a status index enable bit [&apos;ALL&apos;,INDEX].</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>S_I_EN</post_name>
+            <display>Set a status index enable bit [&apos;ALL&apos;,INDEX].</display>
+            <value>0</value>
+            <min>0</min>
+            <max>0</max>
+            <unit_type>11</unit_type>
+        </parameter>
+        <parameter>
+            <post_name>VVALVE</post_name>
+            <display>Get/set the vacuum valve enable flag.</display>
+            <value>0</value>
+            <min>0</min>
+            <max>2</max>
+            <unit_type>8</unit_type>
+            <pull_down>
+                <value>0</value>
+                <display>Off</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>On</display>
+            </pull_down>
+        </parameter>
+    </list>
+</si_data>

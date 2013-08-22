@@ -22,6 +22,7 @@
 #ifndef RAYONIXHSBUFFERCTRLOBJ_H
 #define RAYONIXHSBUFFERCTRLOBJ_H
 
+#include "HwBufferCtrlObj.h"
 #include "HwBufferMgr.h"
 
 namespace lima {
@@ -31,19 +32,44 @@ class Camera;
 class SyncCtrlObj;
 class Interface;
 
-class BufferCtrlObj: public SoftBufferCtrlObj {
+class BufferCtrlObj: public HwBufferCtrlObj, public HwFrameCallbackGen {
       friend class Interface;
+      
       DEB_CLASS_NAMESPC(DebModCamera,"BufferCtrlObj","RayonixHs");
 
    public:
       BufferCtrlObj(Camera *cam);
-      void prepareAcq();
-      void startAcq();
       
+      void setFrameDim(const FrameDim& frame_dim);
+      void getFrameDim(FrameDim& frame_dim);
+      
+      void setNbBuffers(int nb_buffers);
+      void getNbBuffers(int& nb_buffers);
+      
+      void setNbConcatFrames(int nb_concat_frames);
+      void getNbConcatFrames(int& nb_concat_frames);
+      
+      void getMaxNbBuffers(int& max_nb_buffers);
+      
+      void* getBufferPtr(int,int);
+      
+      void* getFramePtr(int);
+      
+      void getStartTimestamp(Timestamp&);
+      
+      void getFrameInfo(int acq_frame_nb, HwFrameInfoType& info);
+      
+      void registerFrameCallback(HwFrameCallback &frame_cb);
+      void unregisterFrameCallback(HwFrameCallback &frame_cb);
+
+      void frameReady(HwFrameInfoType &info) { newFrameReady(info); }
+
    private:
       SyncCtrlObj* m_sync;
       bool m_exposing;
       Camera *m_cam;
+      
+      HwFrameCallback *m_callback;
 };
 
 } //namespace RayonixHs

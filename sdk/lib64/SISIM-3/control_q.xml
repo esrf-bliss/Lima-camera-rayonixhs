@@ -1,0 +1,579 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <list>
+        <display>Control</display>
+        <parameter>
+            <display>CCD Operation</display>
+            <value>1</value>
+        </parameter>
+        <parameter>
+            <display>Bits Per Pixel</display>
+            <value>16</value>
+        </parameter>
+        <parameter>
+            <display>DSI Sample Time</display>
+            <value>14</value>
+        </parameter>
+        <parameter>
+            <display>Gain</display>
+            <value>0</value>
+        </parameter>
+        <parameter>
+            <display>Port Select</display>
+            <value>65535</value>
+        </parameter>
+        <parameter>
+            <display>Parallel Binning</display>
+            <value>10</value>
+        </parameter>
+        <parameter>
+            <display>Parallel Length</display>
+            <value>96</value>
+        </parameter>
+        <parameter>
+            <display>Parallel Origin</display>
+            <value>0</value>
+        </parameter>
+        <parameter>
+            <display>Parallel Phasing</display>
+            <value>2</value>
+        </parameter>
+        <parameter>
+            <display>Parallel Post Scan</display>
+            <value>0</value>
+        </parameter>
+        <parameter>
+            <display>Serial Binning</display>
+            <value>2</value>
+        </parameter>
+        <parameter>
+            <display>Serial Length</display>
+            <value>120</value>
+        </parameter>
+        <parameter>
+            <display>Serial Origin</display>
+            <value>2</value>
+        </parameter>
+        <parameter>
+            <display>Serial Phasing</display>
+            <value>0</value>
+        </parameter>
+        <parameter>
+            <display>Serial Post Scan</display>
+            <value>2</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 0 ADC Offset</display>
+            <value>-1169</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 0 Correlation Bias</display>
+            <value>3999</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 1 ADC Offset</display>
+            <value>-1176</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 1 Correlation Bias</display>
+            <value>4035</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 2 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 2 Correlation Bias</display>
+            <value>4037</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 3 ADC Offset</display>
+            <value>-1169</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 3 Correlation Bias</display>
+            <value>4035</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 4 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 4 Correlation Bias</display>
+            <value>4033</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 5 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 5 Correlation Bias</display>
+            <value>4035</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 6 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 6 Correlation Bias</display>
+            <value>4036</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 7 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 7 Correlation Bias</display>
+            <value>4037</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 8 ADC Offset</display>
+            <value>-1173</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 8 Correlation Bias</display>
+            <value>3999</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 9 ADC Offset</display>
+            <value>-1183</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 9 Correlation Bias</display>
+            <value>4031</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 10 ADC Offset</display>
+            <value>-1171</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 10 Correlation Bias</display>
+            <value>4033</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 11 ADC Offset</display>
+            <value>-1170</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 11 Correlation Bias</display>
+            <value>4033</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 12 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 12 Correlation Bias</display>
+            <value>4031</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 13 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 13 Correlation Bias</display>
+            <value>4032</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 14 ADC Offset</display>
+            <value>-1179</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 14 Correlation Bias</display>
+            <value>4033</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 15 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 0 Port 15 Correlation Bias</display>
+            <value>4032</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 0 ADC Offset</display>
+            <value>-1171</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 0 Correlation Bias</display>
+            <value>3997</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 1 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 1 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 2 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 2 Correlation Bias</display>
+            <value>4030</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 3 ADC Offset</display>
+            <value>-1173</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 3 Correlation Bias</display>
+            <value>4028</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 4 ADC Offset</display>
+            <value>-1176</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 4 Correlation Bias</display>
+            <value>4026</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 5 ADC Offset</display>
+            <value>-1180</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 5 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 6 ADC Offset</display>
+            <value>-1173</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 6 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 7 ADC Offset</display>
+            <value>-1179</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 7 Correlation Bias</display>
+            <value>4028</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 8 ADC Offset</display>
+            <value>-1176</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 8 Correlation Bias</display>
+            <value>3999</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 9 ADC Offset</display>
+            <value>-1173</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 9 Correlation Bias</display>
+            <value>4026</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 10 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 10 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 11 ADC Offset</display>
+            <value>-1187</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 11 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 12 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 12 Correlation Bias</display>
+            <value>4026</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 13 ADC Offset</display>
+            <value>-1167</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 13 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 14 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 14 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 15 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 1 Port 15 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 0 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 0 Correlation Bias</display>
+            <value>3998</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 1 ADC Offset</display>
+            <value>-1171</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 1 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 2 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 2 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 3 ADC Offset</display>
+            <value>-1171</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 3 Correlation Bias</display>
+            <value>4027</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 4 ADC Offset</display>
+            <value>-1170</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 4 Correlation Bias</display>
+            <value>4028</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 5 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 5 Correlation Bias</display>
+            <value>4028</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 6 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 6 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 7 ADC Offset</display>
+            <value>-1176</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 7 Correlation Bias</display>
+            <value>4031</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 8 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 8 Correlation Bias</display>
+            <value>4000</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 9 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 9 Correlation Bias</display>
+            <value>4030</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 10 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 10 Correlation Bias</display>
+            <value>4031</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 11 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 11 Correlation Bias</display>
+            <value>4030</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 12 ADC Offset</display>
+            <value>-1167</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 12 Correlation Bias</display>
+            <value>4028</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 13 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 13 Correlation Bias</display>
+            <value>4029</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 14 ADC Offset</display>
+            <value>-1170</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 14 Correlation Bias</display>
+            <value>4032</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 15 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 2 Port 15 Correlation Bias</display>
+            <value>4031</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 0 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 0 Correlation Bias</display>
+            <value>4001</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 1 ADC Offset</display>
+            <value>-1180</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 1 Correlation Bias</display>
+            <value>4044</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 2 ADC Offset</display>
+            <value>-1171</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 2 Correlation Bias</display>
+            <value>4045</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 3 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 3 Correlation Bias</display>
+            <value>4045</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 4 ADC Offset</display>
+            <value>-1180</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 4 Correlation Bias</display>
+            <value>4040</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 5 ADC Offset</display>
+            <value>-1184</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 5 Correlation Bias</display>
+            <value>4041</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 6 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 6 Correlation Bias</display>
+            <value>4044</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 7 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 7 Correlation Bias</display>
+            <value>4045</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 8 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 8 Correlation Bias</display>
+            <value>3999</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 9 ADC Offset</display>
+            <value>-1172</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 9 Correlation Bias</display>
+            <value>4038</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 10 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 10 Correlation Bias</display>
+            <value>4040</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 11 ADC Offset</display>
+            <value>-1179</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 11 Correlation Bias</display>
+            <value>4038</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 12 ADC Offset</display>
+            <value>-1174</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 12 Correlation Bias</display>
+            <value>4036</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 13 ADC Offset</display>
+            <value>-1178</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 13 Correlation Bias</display>
+            <value>4037</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 14 ADC Offset</display>
+            <value>-1175</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 14 Correlation Bias</display>
+            <value>4038</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 15 ADC Offset</display>
+            <value>-1177</value>
+        </parameter>
+        <parameter>
+            <display>CCD 3 Port 15 Correlation Bias</display>
+            <value>4037</value>
+        </parameter>
+    </list>
+</si_data>

@@ -25,13 +25,13 @@ bool SyncCtrlObj::checkTrigMode(TrigMode trig_mode) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(trig_mode);
 
+	DEB_RETURN() << DEB_VAR1(m_cam->checkTrigMode(trig_mode));
 	return m_cam->checkTrigMode(trig_mode);
 }
 
 void SyncCtrlObj::setTrigMode(TrigMode trig_mode) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(trig_mode);
-	bool error = true;
 
 	if (checkTrigMode(trig_mode)) {
 		m_cam->setTrigMode(trig_mode);
@@ -41,6 +41,7 @@ void SyncCtrlObj::setTrigMode(TrigMode trig_mode) {
 }
 
 void SyncCtrlObj::getTrigMode(TrigMode &trig_mode) {
+        DEB_MEMBER_FUNCT();    
 	m_cam->getTrigMode(trig_mode);
 }
 
@@ -60,10 +61,12 @@ void SyncCtrlObj::getExpTime(double &exp_time) {
 }
 
 void SyncCtrlObj::setLatTime(double lat_time) {
+        DEB_MEMBER_FUNCT();    
 	m_cam->setLatTime(lat_time);
 }
 
 void SyncCtrlObj::getLatTime(double& lat_time) {
+        DEB_MEMBER_FUNCT();    
 	m_cam->getLatTime(lat_time);
 }
 
@@ -75,18 +78,22 @@ void SyncCtrlObj::setNbFrames(int nb_frames) {
 }
 
 void SyncCtrlObj::getNbFrames(int& nb_frames) {
+        DEB_MEMBER_FUNCT();    
 	m_cam->getNbFrames(nb_frames);
 }
 
 void SyncCtrlObj::setNbHwFrames(int nb_frames) {
+        DEB_MEMBER_FUNCT();    
 	setNbFrames(nb_frames);
 }
 
 void SyncCtrlObj::getNbHwFrames(int& nb_frames) {
+        DEB_MEMBER_FUNCT();    
 	getNbFrames(nb_frames);
 }
 
 void SyncCtrlObj::getValidRanges(ValidRangesType& valid_ranges) {
+        DEB_MEMBER_FUNCT();    
 	valid_ranges.min_exp_time = 0;
 	valid_ranges.max_exp_time = 86400;
 	valid_ranges.min_lat_time = 0.;
@@ -115,13 +122,27 @@ void SyncCtrlObj::getStatus(HwInterface::StatusType& status) {
 
 	switch (m_cam->getStatus()) {
 	   case HwInterface::StatusType::Exposure:
-	       status.acq = AcqRunning;
+          status.acq = AcqRunning;
 	       status.det = DetExposure;
 	       break;
 	   case HwInterface::StatusType::Ready:
 		   status.acq = AcqReady;
 		   status.det = DetIdle;
 		   break;
+      case HwInterface::StatusType::Readout:
+         status.acq = AcqRunning;
+         status.det = DetReadout;
+         break;
+      case HwInterface::StatusType::Latency:
+         status.det = DetLatency;
+         break;
+      case HwInterface::StatusType::Config:
+         status.acq = AcqConfig;
+         break;
+      default:
+         status.acq = AcqFault;
+         status.det = DetFault;
+         break;
 	}
 	DEB_RETURN() << DEB_VAR1(status);
 }

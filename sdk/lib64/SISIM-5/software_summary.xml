@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <software_summary>
+        <part>
+            <display>Controller Processor Firmware</display>
+            <part-number>8049</part-number>
+            <revision>0</revision>
+        </part>
+        <part>
+            <display>Controller FPGA Firmware</display>
+            <part-number>8049</part-number>
+            <revision>0</revision>
+        </part>
+    </software_summary>
+</si_data>

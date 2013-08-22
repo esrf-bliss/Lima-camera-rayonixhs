@@ -4,17 +4,29 @@ project(RayonixHsLimaPlugin)
 set (BUILD_SHARED_LIBS true)
 
 set(ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
-set(LIMA_DIR ${ROOT_DIR}/../..)
+set(LIMA_DIR ${ROOT_DIR}/../Lima)
 
-set(BOOST_INCLUDE /opt/rayonix/include)
-set(LIMA_INCLUDE ${LIMA_DIR}/hardware/include ${LIMA_DIR}/common/include)
-set(LIMA_LIB ${LIMA_DIR}/build ${LIMA_DIR}/third-party/Processlib/build)
-set(RAYONIXHS_LIB ${ROOT_DIR}/lib64)
-set(RAYONIXHS_INCLUDE ${ROOT_DIR}/include ${ROOT_DIR}/include/craydl)
+set(BOOST_INCLUDE_DIRS ${ROOT_DIR}/third-party/boost/include)
+set(BOOST_LIB_DIRS ${ROOT_DIR}/third-party/boost/lib)
+set(LIMA_INCLUDE_DIRS ${LIMA_DIR}/hardware/include ${LIMA_DIR}/common/include)
+set(LIMA_LIB_DIRS ${LIMA_DIR}/build ${LIMA_DIR}/third-party/Processlib/build)
+set(RAYONIXHS_LIB_DIRS ${ROOT_DIR}/sdk/lib64)
+set(RAYONIXHS_INCLUDE_DIRS ${ROOT_DIR}/sdk/include/craydl ${ROOT_DIR}/include)
+
+if (NOT EXISTS ${LIMA_DIR})
+	message(FATAL_ERROR "Did not find main Lima source tree at ${LIMA_DIR}.")
+endif()
 
 ################################################################################################################################################################################
-set(ALL_INCLUDES ${BOOST_INCLUDE} ${LIMA_INCLUDE} ${RAYONIXHS_INCLUDE})
-set(ALL_LIBS ${RAYONIXHS_LIB} ${LIMA_LIB})
+#set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g -DNO_LIMA_DEBUG") # we want -g for release
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -g -DNO_LIMA_DEBUG -DWITH_SPS_IMAGE") # we want -g for release
+
+#set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0") #cmake auto adds "-g" for Debug
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O0 -DWITH_SPS_IMAGE") #cmake auto adds "-g" for Debug
+
+set(ALL_INCLUDES ${BOOST_INCLUDE_DIRS} ${LIMA_INCLUDE_DIRS} ${RAYONIXHS_INCLUDE_DIRS})
+set(ALL_LIBS ${RAYONIXHS_LIB_DIRS} ${LIMA_LIB_DIRS} ${BOOST_LIB_DIRS})
+#message("All libs: ${ALL_LIBS}")
 
 #separate_arguments(ALL_INCLUDES_SEP UNIX_COMMAND "${ALL_INCLUDES}")
 #message(ALL_INCLUDES: ${ALL_INCLUDES_SEP})
@@ -31,58 +43,41 @@ add_library(RayonixHs ${CPP_FILES})
 
 find_library(LimaLib limacore ${ALL_LIBS})
 if (NOT EXISTS ${LimaLib})
-   message( "Could not find limacore lima library!")
+   message(FATAL_ERROR "Could not find limacore lima library!")
+else()
+   message("Found LimaLib at ${LimaLib}")
 endif (NOT EXISTS ${LimaLib})
 
 find_library(ProcessLib processlib ${ALL_LIBS})
 if (NOT EXISTS ${ProcessLib})
-   message( "Could not find processlib library!")
+   message(FATAL_ERROR "Could not find processlib library!")
+else()
+   message("Found ProcessLib at ${ProcessLib}")
 endif (NOT EXISTS ${ProcessLib})
 
-find_library(SpecInstLib SiVCamDll ${ALL_LIBS})
-if (NOT EXISTS ${SpecInstLib})
-   message( "Could not find SpecInst SiVCamDll library!")
-endif (NOT EXISTS ${SpecInstLib})
+#find_package(CUDA)
+
+#if (CUDA_FOUND)
+#	message("Found nVidia CUDA.  Using regular craydl library.")
 
 find_library(craydlLib craydl ${ALL_LIBS})
 if (NOT EXISTS ${craydlLib})
-   message( "Could not find craydl library!")
+	message(FATAL_ERROR "Could not find craydl library!")
+else()
+	message("Found craydlLib at ${craydlLib}")
 endif (NOT EXISTS ${craydlLib})
 
-find_library(craydlGpuLib craydl_gpu ${ALL_LIBS})
-if (NOT EXISTS ${craydlGpuLib})
-   message( "Could not find craydl_gpu library!")
-endif (NOT EXISTS ${craydlGpuLib})
-
-find_library(cbfLib cbf ${ALL_LIBS})
-if (NOT EXISTS ${cbfLib})
-   message( "Could not find CBF library!")
-endif (NOT EXISTS ${cbfLib})
-
-#set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR} ${CMAKE_MODULE_PATH})
-#cmake_policy(PUSH)
-#set(MARCCD_USE_STATIC_LIBS        ON)
-#find_package(MarCCD)
-#cmake_policy(POP)
-#if (MARCCD_FOUND)
-#   if (MARCCD_USE_STATIC_LIBS)
-#      set (EXTERNAL_STATIC_LIBRARIES ${EXTERNAL_STATIC_LIBRARIES}
-#      ${MARCCD_LIBRARIES})
-#   else()
-#      set (EXTERNAL_SHARED_LIBRARIES ${EXTERNAL_SHARED_LIBRARIES}
-#      ${MARCCD_LIBRARIES})
-#   endif()
 #else()
-#   message( "Could not find marccd libraries!")
+#	message("nVidia CUDA NOT found.  Using craydl_nocuda library for testing
+#	purposes.")
+#	find_library(craydlNoCudaLib craydl_nocuda ${ALL_LIBS})
+#	if (NOT EXISTS ${craydlNoCudaLib})
+#		message(FATAL_ERROR "Could not find craydl_nocuda library!")
+#	else()
+#		message("Found craydlNoCudaLib at ${craydlNoCudaLib}")
+#	endif (NOT EXISTS ${craydlNoCudaLib})
 #endif()
 
-include(FindOpenSSL)
-find_package(OpenSSL)
-if (NOT OPENSSL_FOUND)
-   message( "Could not find openssl libraries!")
-endif ()
-
 add_executable(test test.cpp)
-#target_link_libraries(test RayonixHs ${LimaLib} ${ProcessLib} ${SpecInstLib} ${craydlLib} ${craydlGpuLib} ${MARCCD_LIBRARIES} ${cbfLib} ${OPENSSL_LIBRARIES} gsl dl)
 target_link_libraries(test RayonixHs ${LimaLib} ${ProcessLib} ${SpecInstLib} ${craydlLib} ${craydlGpuLib} ${cbfLib} ${OPENSSL_LIBRARIES} gsl dl)
 

@@ -1,0 +1,1829 @@
+<?xml version="1.0" standalone="yes" ?>
+<!DOCTYPE si_data >
+<si_data>
+    <status>
+        <item>
+            <index>0</index>
+            <display>Camera Alarm Flags</display>
+            <value>49408</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>65287</mask>
+                <display>Readout,Integration,Sequencer busy,FPGA Temperature Alarm,Controller Temperature Alarm,Voltages Alarm,VPM Alarm,Power Supply Alarm,Cryo 0 Alarm,PDM Alarm,Master Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>1</index>
+            <display>Camera Up Time</display>
+            <value>250782638</value>
+            <unit_type>7</unit_type>
+        </item>
+        <item>
+            <index>2</index>
+            <display>Slot Alarm Flags</display>
+            <value>15</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>15</mask>
+                <display>Slot 0 Alarm,Slot 1 Alarm,Slot 2 Alarm,Slot 3 Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>3</index>
+            <display>Continuous Clear Mode</display>
+            <value>0</value>
+            <unit_type>8</unit_type>
+            <entries>3</entries>
+            <pull_down>
+                <value>0</value>
+                <display>Enable</display>
+            </pull_down>
+            <pull_down>
+                <value>1</value>
+                <display>Disable 1 cycle</display>
+            </pull_down>
+            <pull_down>
+                <value>2</value>
+                <display>Disable</display>
+            </pull_down>
+        </item>
+        <item>
+            <index>4</index>
+            <display>Frame Clear Time</display>
+            <value>365</value>
+            <unit_type>7</unit_type>
+        </item>
+        <item>
+            <index>5</index>
+            <display>CCD Read Time</display>
+            <value>22</value>
+            <unit_type>7</unit_type>
+        </item>
+        <item>
+            <index>6</index>
+            <display>Controller PPC 1.2V Supply</display>
+            <value>1208</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>7</index>
+            <display>Controller FPGA 1.2V Supply</display>
+            <value>1203</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>8</index>
+            <display>Controller 1.8V Supply</display>
+            <value>1800</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>9</index>
+            <display>Controller 2.5V Supply</display>
+            <value>2500</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>10</index>
+            <display>Controller 3.3V Supply</display>
+            <value>3234</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>11</index>
+            <display>Controller DDR2 VTT Supply</display>
+            <value>906</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>12</index>
+            <display>Controller DDR2 VREF Supply</display>
+            <value>908</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>13</index>
+            <display>Controller Temperature</display>
+            <value>3142</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>14</index>
+            <display>Controller FPGA Temperature</display>
+            <value>3244</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>15</index>
+            <display>Cold End 1 Temperature</display>
+            <value>1656</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>16</index>
+            <display>Cold End 2 Temperature</display>
+            <value>1679</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>17</index>
+            <display>Air Temperature 1</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>18</index>
+            <display>Air Temperature 2</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>19</index>
+            <display>Air Temperature 3</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>20</index>
+            <display>Air Temperature 4</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>21</index>
+            <display>PDM Flags</display>
+            <value>33119</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>64383</mask>
+                <display>CTR Alive,PDM Alive,VPM Alive,PS Alive,CC0 Alive,CC1 Alive,Heaters On,CC0 ENB,CC1 ENB,VPM Alarm,PS Alarm,CC0 Alarm,CC1 Alarm,PDM Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>22</index>
+            <display>PDM HKS Temperature</display>
+            <value>3384</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>23</index>
+            <display>PDM -13V Supply</display>
+            <value>-13039</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>24</index>
+            <display>PDM -6V Supply</display>
+            <value>-5991</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>25</index>
+            <display>PDM 1.2V Supply</display>
+            <value>1208</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>26</index>
+            <display>PDM 3.3V Supply</display>
+            <value>3241</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>27</index>
+            <display>PDM 4V Supply</display>
+            <value>4558</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>28</index>
+            <display>PDM 6V Supply</display>
+            <value>4847</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>29</index>
+            <display>PDM 13V Supply</display>
+            <value>13027</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>30</index>
+            <display>PDM 24V Supply</display>
+            <value>23938</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>31</index>
+            <display>PDM 24V Fan Supply</display>
+            <value>23945</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>32</index>
+            <display>PDM 28V Supply</display>
+            <value>31025</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>33</index>
+            <display>VPM Flags</display>
+            <value>3903</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>65535</mask>
+                <display>VPM Alive,Valve Alive,Chamber Sensor Alive,Line Sensor Alive,Pump Alive,Frame Ok,Ignore Pump,Ignore All,Valve Enabled,Valve Open,Pump Running,Cooling Enabled,Pressure Alarm,Pump Alarm,Valve Alarm,VPM Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>34</index>
+            <display>VPM Temperature</display>
+            <value>3058</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>35</index>
+            <display>VPM 3.3V Supply</display>
+            <value>3241</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>36</index>
+            <display>VPM 24V Supply</display>
+            <value>23986</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>37</index>
+            <display>VPM Pump Speed</display>
+            <value>1200</value>
+            <unit_type>12</unit_type>
+            <units>CPS</units>
+        </item>
+        <item>
+            <index>38</index>
+            <display>VPM Pump Current</display>
+            <value>460</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>39</index>
+            <display>VPM Pump Voltage</display>
+            <value>23870</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>40</index>
+            <display>VPM Pump Temp.</display>
+            <value>3082</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>41</index>
+            <display>VPM Pump Time</display>
+            <value>244</value>
+            <unit_type>12</unit_type>
+            <units>Hrs.</units>
+        </item>
+        <item>
+            <index>42</index>
+            <display>Chamber Pressure</display>
+            <value>0</value>
+            <unit_type>2</unit_type>
+        </item>
+        <item>
+            <index>43</index>
+            <display>Vacuum Line Pressure</display>
+            <value>0</value>
+            <unit_type>2</unit_type>
+        </item>
+        <item>
+            <index>44</index>
+            <display>Power Supply Flags</display>
+            <value>1023</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>58367</mask>
+                <display>PS Alive,PDM Alive,SPI Alive,PMS Alive,PMS Init,PMS Ready,PMS On,PMS Ok,PS On,PS Ok,SPI Alarm,PM Alarm,PS Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>45</index>
+            <display>Power Supply HKS Temperature</display>
+            <value>3042</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>46</index>
+            <display>Power Supply Temperature 1</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>47</index>
+            <display>Power Supply Temperature 2</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>48</index>
+            <display>Power Supply Temperature 3</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>49</index>
+            <display>Power Supply Temperature 4</display>
+            <value>0</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>50</index>
+            <display>Power Supply Fan 24V</display>
+            <value>24836</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>51</index>
+            <display>Power Supply HKS 13V</display>
+            <value>13077</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>52</index>
+            <display>Power Supply HKS 3.3V</display>
+            <value>3279</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>53</index>
+            <display>Power Supply HKS 2.5V</display>
+            <value>2497</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>54</index>
+            <display>Primary 28V Supply</display>
+            <value>31099</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>55</index>
+            <display>Primary 28V Current</display>
+            <value>402</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>56</index>
+            <display>Primary 28V Temperature</display>
+            <value>3244</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>57</index>
+            <display>Primary 24V Fan Supply</display>
+            <value>24335</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>58</index>
+            <display>Primary 24V Fan Current</display>
+            <value>534</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>59</index>
+            <display>Primary 24V Fan Temperature</display>
+            <value>3040</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>60</index>
+            <display>Primary 24V Supply</display>
+            <value>23954</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>61</index>
+            <display>Primary 24V Current</display>
+            <value>1016</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>62</index>
+            <display>Primary 24V Temperature</display>
+            <value>3054</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>63</index>
+            <display>Primary 13V Supply</display>
+            <value>12979</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>64</index>
+            <display>Primary 13V Current</display>
+            <value>1584</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>65</index>
+            <display>Primary 13V Temperature</display>
+            <value>3044</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>66</index>
+            <display>Primary 6V Supply</display>
+            <value>7794</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>67</index>
+            <display>Primary 6V Current</display>
+            <value>10000</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>68</index>
+            <display>Primary 6V Temperature</display>
+            <value>3088</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>69</index>
+            <display>Primary 4V Supply</display>
+            <value>5981</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>70</index>
+            <display>Primary 4V Current</display>
+            <value>8085</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>71</index>
+            <display>Primary 4V Temperature</display>
+            <value>3120</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>72</index>
+            <display>Primary -6V Supply</display>
+            <value>6842</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>73</index>
+            <display>Primary -6V Current</display>
+            <value>2338</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>74</index>
+            <display>Primary -6V Temperature</display>
+            <value>3084</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>75</index>
+            <display>Primary -13V Supply</display>
+            <value>12968</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>76</index>
+            <display>Primary -13V Current</display>
+            <value>1598</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>77</index>
+            <display>Primary -13V Temperature</display>
+            <value>3052</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>78</index>
+            <display>Cryo-Controller Flags</display>
+            <value>1920</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>2047</mask>
+                <display>Fan1 Speed Error,Fan2 Speed Error,Fan3 Speed Error,Gauge1 Pressure Error,Gauge2 Pressure Error,Gauge3 Pressure Error,Gauge4 Pressure Error,Cryo On,Cryo Enabled,Valve1 On,Valve2 On</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>79</index>
+            <display>Cryo-Controller HKS Temperature</display>
+            <value>3090</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>80</index>
+            <display>Cryo-Controller Temperature</display>
+            <value>3090</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>81</index>
+            <display>CryoTiger Current</display>
+            <value>1942</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>82</index>
+            <display>CryoTiger Supply</display>
+            <value>46</value>
+            <unit_type>12</unit_type>
+            <units>PSI</units>
+        </item>
+        <item>
+            <index>83</index>
+            <display>CryoTiger A</display>
+            <value>288</value>
+            <unit_type>12</unit_type>
+            <units>PSI</units>
+        </item>
+        <item>
+            <index>84</index>
+            <display>CryoTiger B</display>
+            <value>298</value>
+            <unit_type>12</unit_type>
+            <units>PSI</units>
+        </item>
+        <item>
+            <index>85</index>
+            <display>CryoTiger Return</display>
+            <value>293</value>
+            <unit_type>12</unit_type>
+            <units>PSI</units>
+        </item>
+        <item>
+            <index>86</index>
+            <display>CCD 0 Flags</display>
+            <value>64</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>278783</mask>
+                <display>Line,Frame,Integrating,Trigger Rise Armed,Trigger Rise Read,Trigger Fall Armed,Trigger Fall Read,Spare,No Sync.,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>87</index>
+            <display>CCD 1 Flags</display>
+            <value>64</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>278783</mask>
+                <display>Line,Frame,Integrating,Trigger Rise Armed,Trigger Rise Read,Trigger Fall Armed,Trigger Fall Read,Spare,No Sync.,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>88</index>
+            <display>CCD 2 Flags</display>
+            <value>64</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>278783</mask>
+                <display>Line,Frame,Integrating,Trigger Rise Armed,Trigger Rise Read,Trigger Fall Armed,Trigger Fall Read,Spare,No Sync.,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>89</index>
+            <display>CCD 3 Flags</display>
+            <value>64</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>278783</mask>
+                <display>Line,Frame,Integrating,Trigger Rise Armed,Trigger Rise Read,Trigger Fall Armed,Trigger Fall Read,Spare,No Sync.,Pixel FIFO Overflow</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>90</index>
+            <display>CCD 0 S+</display>
+            <value>6312</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>91</index>
+            <display>CCD 0 S-</display>
+            <value>-6559</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>92</index>
+            <display>CCD 0 SW+</display>
+            <value>5037</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>93</index>
+            <display>CCD 0 SW-</display>
+            <value>-4050</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>94</index>
+            <display>CCD 0 R+</display>
+            <value>7108</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>95</index>
+            <display>CCD 0 R-</display>
+            <value>-38</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>96</index>
+            <display>CCD 0 VDD</display>
+            <value>27632</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>97</index>
+            <display>CCD 0 VRD</display>
+            <value>15029</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>98</index>
+            <display>CCD 0 VLG</display>
+            <value>2</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>99</index>
+            <display>CCD 0 P+</display>
+            <value>4674</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>100</index>
+            <display>CCD 0 P-</display>
+            <value>-5391</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>101</index>
+            <display>CCD 0 MPP-</display>
+            <value>-5947</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>102</index>
+            <display>CCD 0 1.2V</display>
+            <value>1159</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>103</index>
+            <display>CCD 0 3.3V</display>
+            <value>3244</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>104</index>
+            <display>CCD 0 +4V</display>
+            <value>4467</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>105</index>
+            <display>CCD 0 +5V</display>
+            <value>5015</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>106</index>
+            <display>CCD 0 +13V</display>
+            <value>12866</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>107</index>
+            <display>CCD 0 +24V</display>
+            <value>23613</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>108</index>
+            <display>CCD 0 +28V</display>
+            <value>30793</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>109</index>
+            <display>CCD 0 -5V</display>
+            <value>-5006</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>110</index>
+            <display>CCD 0 -13V</display>
+            <value>-13015</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>111</index>
+            <display>CCD 0 Clamp</display>
+            <value>-153</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>112</index>
+            <display>CCD 0 Gain S.</display>
+            <value>-13019</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>113</index>
+            <display>CCD 0 Heat A+</display>
+            <value>22527</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>114</index>
+            <display>CCD 0 Heat B+</display>
+            <value>23601</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>115</index>
+            <display>CCD 0 Heat A</display>
+            <value>220</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>116</index>
+            <display>CCD 0 Heat B</display>
+            <value>8</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>117</index>
+            <display>CCD 0 CPU Temp.</display>
+            <value>3117</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>118</index>
+            <display>CCD 0 CCD Temp.</display>
+            <value>1932</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>119</index>
+            <display>CCD 0 Cold Plate Temp.</display>
+            <value>3107</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>120</index>
+            <display>CCD 0 HKS Flags</display>
+            <value>38919</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>63495</mask>
+                <display>Analog A Ready,Analog B Ready,Link Ready,Rail Error,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>121</index>
+            <display>CCD 0 SR0 1.2V</display>
+            <value>1205</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>122</index>
+            <display>CCD 0 SR0 3.3V</display>
+            <value>3254</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>123</index>
+            <display>CCD 0 SR0 +4V</display>
+            <value>4438</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>124</index>
+            <display>CCD 0 SR0 +5V</display>
+            <value>3996</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>125</index>
+            <display>CCD 0 SR0 +6V</display>
+            <value>4392</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>126</index>
+            <display>CCD 0 SR0 -5V</display>
+            <value>-4827</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>127</index>
+            <display>CCD 0 SR0 -6V</display>
+            <value>-6025</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>128</index>
+            <display>CCD 0 SR0 CPU Temp.</display>
+            <value>3032</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>129</index>
+            <display>CCD 0 SR0 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>130</index>
+            <display>CCD 0 SR1 1.2V</display>
+            <value>1195</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>131</index>
+            <display>CCD 0 SR1 3.3V</display>
+            <value>3248</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>132</index>
+            <display>CCD 0 SR1 +4V</display>
+            <value>4416</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>133</index>
+            <display>CCD 0 SR1 +5V</display>
+            <value>3988</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>134</index>
+            <display>CCD 0 SR1 +6V</display>
+            <value>4380</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>135</index>
+            <display>CCD 0 SR1 -5V</display>
+            <value>-4795</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>136</index>
+            <display>CCD 0 SR1 -6V</display>
+            <value>-5969</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>137</index>
+            <display>CCD 0 SR1 CPU Temp.</display>
+            <value>3083</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>138</index>
+            <display>CCD 0 SR1 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>139</index>
+            <display>CCD 1 S+</display>
+            <value>6017</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>140</index>
+            <display>CCD 1 S-</display>
+            <value>-3038</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>141</index>
+            <display>CCD 1 SW+</display>
+            <value>5887</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>142</index>
+            <display>CCD 1 SW-</display>
+            <value>-3057</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>143</index>
+            <display>CCD 1 R+</display>
+            <value>7914</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>144</index>
+            <display>CCD 1 R-</display>
+            <value>-30</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>145</index>
+            <display>CCD 1 VDD</display>
+            <value>28294</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>146</index>
+            <display>CCD 1 VRD</display>
+            <value>14983</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>147</index>
+            <display>CCD 1 VLG</display>
+            <value>4</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>148</index>
+            <display>CCD 1 P+</display>
+            <value>4644</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>149</index>
+            <display>CCD 1 P-</display>
+            <value>-6082</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>150</index>
+            <display>CCD 1 MPP-</display>
+            <value>-5961</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>151</index>
+            <display>CCD 1 1.2V</display>
+            <value>1163</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>152</index>
+            <display>CCD 1 3.3V</display>
+            <value>3254</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>153</index>
+            <display>CCD 1 +4V</display>
+            <value>4138</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>154</index>
+            <display>CCD 1 +5V</display>
+            <value>4972</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>155</index>
+            <display>CCD 1 +13V</display>
+            <value>12947</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>156</index>
+            <display>CCD 1 +24V</display>
+            <value>23874</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>157</index>
+            <display>CCD 1 +28V</display>
+            <value>30848</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>158</index>
+            <display>CCD 1 -5V</display>
+            <value>-5022</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>159</index>
+            <display>CCD 1 -13V</display>
+            <value>-12927</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>160</index>
+            <display>CCD 1 Clamp</display>
+            <value>-145</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>161</index>
+            <display>CCD 1 Gain S.</display>
+            <value>-12930</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>162</index>
+            <display>CCD 1 Heat A+</display>
+            <value>23235</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>163</index>
+            <display>CCD 1 Heat B+</display>
+            <value>23933</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>164</index>
+            <display>CCD 1 Heat A</display>
+            <value>112</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>165</index>
+            <display>CCD 1 Heat B</display>
+            <value>1</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>166</index>
+            <display>CCD 1 CPU Temp.</display>
+            <value>3179</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>167</index>
+            <display>CCD 1 CCD Temp.</display>
+            <value>1932</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>168</index>
+            <display>CCD 1 Cold Plate Temp.</display>
+            <value>3054</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>169</index>
+            <display>CCD 1 HKS Flags</display>
+            <value>38919</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>63495</mask>
+                <display>Analog A Ready,Analog B Ready,Link Ready,Rail Error,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>170</index>
+            <display>CCD 1 SR0 1.2V</display>
+            <value>1200</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>171</index>
+            <display>CCD 1 SR0 3.3V</display>
+            <value>3280</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>172</index>
+            <display>CCD 1 SR0 +4V</display>
+            <value>4143</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>173</index>
+            <display>CCD 1 SR0 +5V</display>
+            <value>3816</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>174</index>
+            <display>CCD 1 SR0 +6V</display>
+            <value>4200</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>175</index>
+            <display>CCD 1 SR0 -5V</display>
+            <value>-4843</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>176</index>
+            <display>CCD 1 SR0 -6V</display>
+            <value>-5994</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>177</index>
+            <display>CCD 1 SR0 CPU Temp.</display>
+            <value>3015</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>178</index>
+            <display>CCD 1 SR0 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>179</index>
+            <display>CCD 1 SR1 1.2V</display>
+            <value>1203</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>180</index>
+            <display>CCD 1 SR1 3.3V</display>
+            <value>3271</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>181</index>
+            <display>CCD 1 SR1 +4V</display>
+            <value>4129</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>182</index>
+            <display>CCD 1 SR1 +5V</display>
+            <value>3817</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>183</index>
+            <display>CCD 1 SR1 +6V</display>
+            <value>4214</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>184</index>
+            <display>CCD 1 SR1 -5V</display>
+            <value>-4841</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>185</index>
+            <display>CCD 1 SR1 -6V</display>
+            <value>-5998</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>186</index>
+            <display>CCD 1 SR1 CPU Temp.</display>
+            <value>3041</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>187</index>
+            <display>CCD 1 SR1 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>188</index>
+            <display>CCD 2 S+</display>
+            <value>5994</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>189</index>
+            <display>CCD 2 S-</display>
+            <value>-2983</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>190</index>
+            <display>CCD 2 SW+</display>
+            <value>6002</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>191</index>
+            <display>CCD 2 SW-</display>
+            <value>-3005</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>192</index>
+            <display>CCD 2 R+</display>
+            <value>8001</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>193</index>
+            <display>CCD 2 R-</display>
+            <value>-115</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>194</index>
+            <display>CCD 2 VDD</display>
+            <value>28122</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>195</index>
+            <display>CCD 2 VRD</display>
+            <value>14948</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>196</index>
+            <display>CCD 2 VLG</display>
+            <value>-4</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>197</index>
+            <display>CCD 2 P+</display>
+            <value>3526</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>198</index>
+            <display>CCD 2 P-</display>
+            <value>-6512</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>199</index>
+            <display>CCD 2 MPP-</display>
+            <value>-6307</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>200</index>
+            <display>CCD 2 1.2V</display>
+            <value>1160</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>201</index>
+            <display>CCD 2 3.3V</display>
+            <value>3218</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>202</index>
+            <display>CCD 2 +4V</display>
+            <value>4037</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>203</index>
+            <display>CCD 2 +5V</display>
+            <value>4978</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>204</index>
+            <display>CCD 2 +13V</display>
+            <value>12618</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>205</index>
+            <display>CCD 2 +24V</display>
+            <value>23274</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>206</index>
+            <display>CCD 2 +28V</display>
+            <value>30509</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>207</index>
+            <display>CCD 2 -5V</display>
+            <value>-5057</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>208</index>
+            <display>CCD 2 -13V</display>
+            <value>-13269</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>209</index>
+            <display>CCD 2 Clamp</display>
+            <value>-169</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>210</index>
+            <display>CCD 2 Gain S.</display>
+            <value>-13271</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>211</index>
+            <display>CCD 2 Heat A+</display>
+            <value>22464</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>212</index>
+            <display>CCD 2 Heat B+</display>
+            <value>23252</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>213</index>
+            <display>CCD 2 Heat A</display>
+            <value>195</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>214</index>
+            <display>CCD 2 Heat B</display>
+            <value>8</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>215</index>
+            <display>CCD 2 CPU Temp.</display>
+            <value>3299</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>216</index>
+            <display>CCD 2 CCD Temp.</display>
+            <value>1932</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>217</index>
+            <display>CCD 2 Cold Plate Temp.</display>
+            <value>3100</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>218</index>
+            <display>CCD 2 HKS Flags</display>
+            <value>47111</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>63495</mask>
+                <display>Analog A Ready,Analog B Ready,Link Ready,Rail Error,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>219</index>
+            <display>CCD 2 SR0 1.2V</display>
+            <value>1194</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>220</index>
+            <display>CCD 2 SR0 3.3V</display>
+            <value>3248</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>221</index>
+            <display>CCD 2 SR0 +4V</display>
+            <value>4025</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>222</index>
+            <display>CCD 2 SR0 +5V</display>
+            <value>3528</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>223</index>
+            <display>CCD 2 SR0 +6V</display>
+            <value>3918</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>224</index>
+            <display>CCD 2 SR0 -5V</display>
+            <value>-4757</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>225</index>
+            <display>CCD 2 SR0 -6V</display>
+            <value>-6162</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>226</index>
+            <display>CCD 2 SR0 CPU Temp.</display>
+            <value>3062</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>227</index>
+            <display>CCD 2 SR0 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>228</index>
+            <display>CCD 2 SR1 1.2V</display>
+            <value>1197</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>229</index>
+            <display>CCD 2 SR1 3.3V</display>
+            <value>3238</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>230</index>
+            <display>CCD 2 SR1 +4V</display>
+            <value>4021</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>231</index>
+            <display>CCD 2 SR1 +5V</display>
+            <value>3529</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>232</index>
+            <display>CCD 2 SR1 +6V</display>
+            <value>3917</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>233</index>
+            <display>CCD 2 SR1 -5V</display>
+            <value>-4750</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>234</index>
+            <display>CCD 2 SR1 -6V</display>
+            <value>-6155</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>235</index>
+            <display>CCD 2 SR1 CPU Temp.</display>
+            <value>3148</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>236</index>
+            <display>CCD 2 SR1 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>237</index>
+            <display>CCD 3 S+</display>
+            <value>6480</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>238</index>
+            <display>CCD 3 S-</display>
+            <value>-6043</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>239</index>
+            <display>CCD 3 SW+</display>
+            <value>5988</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>240</index>
+            <display>CCD 3 SW-</display>
+            <value>-4276</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>241</index>
+            <display>CCD 3 R+</display>
+            <value>9041</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>242</index>
+            <display>CCD 3 R-</display>
+            <value>-118</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>243</index>
+            <display>CCD 3 VDD</display>
+            <value>28302</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>244</index>
+            <display>CCD 3 VRD</display>
+            <value>14933</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>245</index>
+            <display>CCD 3 VLG</display>
+            <value>6</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>246</index>
+            <display>CCD 3 P+</display>
+            <value>3687</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>247</index>
+            <display>CCD 3 P-</display>
+            <value>-5482</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>248</index>
+            <display>CCD 3 MPP-</display>
+            <value>-5637</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>249</index>
+            <display>CCD 3 1.2V</display>
+            <value>1157</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>250</index>
+            <display>CCD 3 3.3V</display>
+            <value>3248</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>251</index>
+            <display>CCD 3 +4V</display>
+            <value>4353</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>252</index>
+            <display>CCD 3 +5V</display>
+            <value>5001</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>253</index>
+            <display>CCD 3 +13V</display>
+            <value>12846</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>254</index>
+            <display>CCD 3 +24V</display>
+            <value>23784</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>255</index>
+            <display>CCD 3 +28V</display>
+            <value>30652</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>256</index>
+            <display>CCD 3 -5V</display>
+            <value>-5018</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>257</index>
+            <display>CCD 3 -13V</display>
+            <value>-12969</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>258</index>
+            <display>CCD 3 Clamp</display>
+            <value>-153</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>259</index>
+            <display>CCD 3 Gain S.</display>
+            <value>-12972</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>260</index>
+            <display>CCD 3 Heat A+</display>
+            <value>23296</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>261</index>
+            <display>CCD 3 Heat B+</display>
+            <value>24005</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>262</index>
+            <display>CCD 3 Heat A</display>
+            <value>118</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>263</index>
+            <display>CCD 3 Heat B</display>
+            <value>3</value>
+            <unit_type>6</unit_type>
+        </item>
+        <item>
+            <index>264</index>
+            <display>CCD 3 CPU Temp.</display>
+            <value>3334</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>265</index>
+            <display>CCD 3 CCD Temp.</display>
+            <value>1932</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>266</index>
+            <display>CCD 3 Cold Plate Temp.</display>
+            <value>1837</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>267</index>
+            <display>CCD 3 HKS Flags</display>
+            <value>47111</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>63495</mask>
+                <display>Analog A Ready,Analog B Ready,Link Ready,Rail Error,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>268</index>
+            <display>CCD 3 SR0 1.2V</display>
+            <value>1181</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>269</index>
+            <display>CCD 3 SR0 3.3V</display>
+            <value>3218</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>270</index>
+            <display>CCD 3 SR0 +4V</display>
+            <value>4312</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>271</index>
+            <display>CCD 3 SR0 +5V</display>
+            <value>3832</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>272</index>
+            <display>CCD 3 SR0 +6V</display>
+            <value>4240</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>273</index>
+            <display>CCD 3 SR0 -5V</display>
+            <value>-4757</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>274</index>
+            <display>CCD 3 SR0 -6V</display>
+            <value>-5957</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>275</index>
+            <display>CCD 3 SR0 CPU Temp.</display>
+            <value>3141</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>276</index>
+            <display>CCD 3 SR0 Flags</display>
+            <value>53249</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+        <item>
+            <index>277</index>
+            <display>CCD 3 SR1 1.2V</display>
+            <value>1196</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>278</index>
+            <display>CCD 3 SR1 3.3V</display>
+            <value>3257</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>279</index>
+            <display>CCD 3 SR1 +4V</display>
+            <value>4320</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>280</index>
+            <display>CCD 3 SR1 +5V</display>
+            <value>3878</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>281</index>
+            <display>CCD 3 SR1 +6V</display>
+            <value>4259</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>282</index>
+            <display>CCD 3 SR1 -5V</display>
+            <value>-4769</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>283</index>
+            <display>CCD 3 SR1 -6V</display>
+            <value>-6000</value>
+            <unit_type>4</unit_type>
+        </item>
+        <item>
+            <index>284</index>
+            <display>CCD 3 SR1 CPU Temp.</display>
+            <value>3112</value>
+            <unit_type>3</unit_type>
+        </item>
+        <item>
+            <index>285</index>
+            <display>CCD 3 SR1 Flags</display>
+            <value>36865</value>
+            <unit_type>10</unit_type>
+            <bit_field>
+                <mask>61441</mask>
+                <display>Operational,Supply Error,Temperature Error,CRC Error,Alarm</display>
+            </bit_field>
+        </item>
+    </status>
+</si_data>
