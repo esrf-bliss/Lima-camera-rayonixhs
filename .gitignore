@@ -6,3 +6,4 @@ build.release
 .project
 *.log
 @eaDir/
+*~
