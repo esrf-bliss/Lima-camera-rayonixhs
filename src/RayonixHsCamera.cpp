@@ -1,7 +1,5 @@
 
 #include "craydl.h"
-
-#include "RayonixHsBufferCtrlObj.h"
 #include "RayonixHsCamera.h"
 
 using namespace lima;
@@ -14,8 +12,6 @@ Camera::Camera()
 	DEB_CONSTRUCTOR();
 
 	init();
-	// create the Frame buffer obj
-	m_buffer_ctrl_obj = new BufferCtrlObj(this);
 
 	m_frame_status_cb = new FrameStatusCb(this, m_acquiring);
 	//m_frame_status_cb->registerCallbackAcqComplete(&lima::RayonixHs::Camera::acquisitionComplete);
@@ -68,7 +64,7 @@ Camera::~Camera() {
 
 HwBufferCtrlObj* Camera::getBufferCtrlObj() {
         DEB_MEMBER_FUNCT();
-	return (HwBufferCtrlObj *)m_buffer_ctrl_obj;
+	return &m_buffer_ctrl_obj;
 }
 
 void Camera::getDetectorType(std::string &type) {
@@ -226,18 +222,22 @@ void Camera::prepareAcq() {
    if (m_rx_detector->SetAcquisitionUserCB(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb)).IsError()) {
       DEB_ERROR() << "Camera::prepareAcq: Error setting frame callback!";
    }
-	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 1).IsError()) {
-		DEB_ERROR() << "Camera::prepareAcq: Error setting up acquisition sequence!";
-	}
+   // 0 means first frame id (InternalFrameID)
+   if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError()) 
+     DEB_ERROR() << "Camera::prepareAcq: Error setting up acquisition sequence!";
+
+   m_expected_frame_nb = 0;
 }
 
 void Camera::startAcq() {
         DEB_MEMBER_FUNCT();
 
-//TODO: Other frame types?
+	//TODO: Other frame types?
 	m_frame_status_cb->resetFrameCounts();
 
-	if (m_rx_detector->StartAcquisition(craydl::ACQUIRE_LIGHT).IsError())
+	m_buffer_ctrl_obj.getBuffer().setStartTimestamp(Timestamp::now());
+
+	if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
 		DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
 }
 
@@ -291,17 +291,36 @@ void Camera::checkRoi(const Roi& set_roi, Roi& hw_roi) {
        DEB_RETURN() << DEB_VAR1(hw_roi);
 }
 
-void Camera::frameReady(craydl::RxFrame *pFrame) {
-   HwFrameInfoType frame_info;
-   
-   frame_info.acq_frame_nb = pFrame->InternalFrameID();
-   frame_info.frame_ptr = pFrame->getBufferAddress();
+void Camera::frameReady(const craydl::RxFrame *pFrame) {
+  
+   StdBufferCbMgr& buffer_mgr = m_buffer_ctrl_obj.getBuffer();
+   void *ptr = buffer_mgr.getFrameBufferPtr(pFrame->InternalFrameID());
    FrameDim frame_dim(pFrame->getNFast(), pFrame->getNSlow(), Bpp16);
-   frame_info.frame_dim = frame_dim;
-   frame_info.buffer_owner_ship = HwFrameInfoType::Managed; // == memory mapping
+   memcpy(ptr,pFrame->getBufferAddress(),frame_dim.getMemSize());
+
    
-   //TODO: Convert RxFrame's boost time to timeval?
-   //boost::posixtime::ptime acq_end_time_boost = pFrame->metaData()->AcquisitionEndTimestamp();
+   HwFrameInfoType frame_info;
+   frame_info.acq_frame_nb = pFrame->InternalFrameID();
+
+   AutoMutex aLock(m_mutex);
+   if(m_expected_frame_nb == pFrame->InternalFrameID())
+     {
+       bool continueAcq = buffer_mgr.newFrameReady(frame_info);
+       ++m_expected_frame_nb;
+
+       for(std::map<int,HwFrameInfoType>::iterator i = m_pending_frames.begin();
+	   continueAcq && i != m_pending_frames.end();m_pending_frames.erase(i++))
+	 {
+	   if(i->first == m_expected_frame_nb)
+	     {
+	       ++m_expected_frame_nb;
+	       continueAcq = buffer_mgr.newFrameReady(i->second);
+	     }
+	   else
+	     break;
+	 }
+     }
+   else
+     m_pending_frames[pFrame->InternalFrameID()] = frame_info;
    
-   m_buffer_ctrl_obj->frameReady(frame_info);
 }

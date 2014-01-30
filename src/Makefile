@@ -1,8 +1,11 @@
-rayonixhs-objs = RayonixHsCamera.o RayonixHsInterface.o RayonixHsDetInfoCtrlObj.o RayonixHsSyncCtrlObj.o RayonixHsBinCtrlObj.o
+rayonixhs-objs = FrameStatusCb.o RayonixHsCamera.o RayonixHsInterface.o RayonixHsDetInfoCtrlObj.o RayonixHsSyncCtrlObj.o RayonixHsBinCtrlObj.o
 
 SRCS = $(rayonixhs-objs:.o=.cpp)
 
-CXXFLAGS += -I../include -I../../../hardware/include -I../../../common/include -I../sdk/include/craydl\
+#CXXFLAGS += -I../include -I../../../hardware/include -I../../../common/include -I../sdk/include/craydl\
+
+CXXFLAGS += -I../include -I../../../hardware/include -I../../../common/include -I/opt/rayonix/include/craydl\
+            -I/opt/rayonix/include \
 	    -pthread -fPIC
 
 all:	RayonixHs.o

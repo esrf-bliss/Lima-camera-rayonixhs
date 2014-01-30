@@ -1,7 +1,6 @@
 #include "RayonixHsInterface.h"
 #include "RayonixHsCamera.h"
 #include "RayonixHsDetInfoCtrlObj.h"
-#include "RayonixHsBufferCtrlObj.h"
 #include "RayonixHsBinCtrlObj.h"
 #include "RayonixHsSyncCtrlObj.h"
 

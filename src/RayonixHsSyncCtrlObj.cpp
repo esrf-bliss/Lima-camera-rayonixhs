@@ -1,7 +1,6 @@
 #include <sstream>
 
 #include "RayonixHsSyncCtrlObj.h"
-#include "RayonixHsBufferCtrlObj.h"
 #include "RayonixHsCamera.h"
 
 using namespace lima;

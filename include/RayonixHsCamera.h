@@ -33,7 +33,6 @@
 #include "craydl.h"
 #include "FrameStatusCb.h"
 #include "RayonixHsSyncCtrlObj.h"
-#include "RayonixHsBufferCtrlObj.h"
 
 namespace lima {
 namespace RayonixHs {
@@ -100,7 +99,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 	private:
 		void init();
 
-		BufferCtrlObj *m_buffer_ctrl_obj;
+		SoftBufferCtrlObj m_buffer_ctrl_obj;
 
 
 		FrameDim m_frame_dim;
@@ -114,6 +113,9 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		DETECTOR_STATUS m_detector_status;
 
 		FrameStatusCb *m_frame_status_cb;
+		Mutex m_mutex;
+		std::map<int,HwFrameInfoType> m_pending_frames;
+		int m_expected_frame_nb;
 
 		craydl::RxDetector *m_rx_detector;
 
@@ -121,7 +123,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		//void acquisitionComplete();
 
-		void frameReady(craydl::RxFrame *pFrame);
+		void frameReady(const craydl::RxFrame *pFrame);
 };
 
 

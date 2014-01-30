@@ -15,11 +15,11 @@ class FrameStatusCb : public virtual craydl::VirtualFrameCallback {
 
         ~FrameStatusCb();
 
-        void RawFrameReady(int frame_number, craydl::RxFrame *rx_frame);
+        void RawFrameReady(int frame_number, const craydl::RxFrame *rx_frame);
 
-        void BackgroundFrameReady(craydl::RxFrame *frame_p);
+        void BackgroundFrameReady(const craydl::RxFrame *frame_p);
 
-        void FrameReady(int frame_number, craydl::RxFrame *rx_frame);
+        void FrameReady(int frame_number, const craydl::RxFrame *rx_frame);
 
         void FrameAborted(int frame_number);
 
