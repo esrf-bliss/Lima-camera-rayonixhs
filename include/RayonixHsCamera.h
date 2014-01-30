@@ -33,6 +33,7 @@
 #include "craydl.h"
 #include "FrameStatusCb.h"
 #include "RayonixHsSyncCtrlObj.h"
+#include "RayonixHsBufferCtrlObj.h"
 
 namespace lima {
 namespace RayonixHs {
@@ -101,7 +102,6 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		BufferCtrlObj *m_buffer_ctrl_obj;
 
-		SyncCtrlObj* m_sync;
 
 		FrameDim m_frame_dim;
 

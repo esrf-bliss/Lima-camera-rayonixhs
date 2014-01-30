@@ -7,10 +7,9 @@
 using namespace lima;
 using namespace lima::RayonixHs;
 
-SyncCtrlObj::SyncCtrlObj(Camera *cam, BufferCtrlObj *buffer)
+SyncCtrlObj::SyncCtrlObj(Camera *cam)
 	: m_cam(cam),
 	  m_trig_mode(IntTrig),
-	  m_buffer(buffer),
 	  m_nb_frames(1),
 	  m_started(false) {
 

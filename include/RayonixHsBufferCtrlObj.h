@@ -65,7 +65,6 @@ class BufferCtrlObj: public HwBufferCtrlObj, public HwFrameCallbackGen {
       void frameReady(HwFrameInfoType &info) { newFrameReady(info); }
 
    private:
-      SyncCtrlObj* m_sync;
       bool m_exposing;
       Camera *m_cam;
       

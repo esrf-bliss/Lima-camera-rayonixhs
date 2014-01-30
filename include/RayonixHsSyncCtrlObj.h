@@ -29,12 +29,11 @@ namespace lima {
 namespace RayonixHs {
 
 class Camera;
-class BufferCtrlObj;
 
 class SyncCtrlObj: public HwSyncCtrlObj {
 	DEB_CLASS_NAMESPC(DebModCamera,"SyncCtrlObj","RayonixHs");
 	public:
-		SyncCtrlObj(Camera*, BufferCtrlObj*);
+		SyncCtrlObj(Camera*);
 		virtual ~SyncCtrlObj();
 
 		virtual bool checkTrigMode(TrigMode trig_mode);
@@ -63,7 +62,6 @@ class SyncCtrlObj: public HwSyncCtrlObj {
 	private:
 		Camera* m_cam;
 		TrigMode m_trig_mode;
-		BufferCtrlObj* m_buffer;
 		int m_nb_frames;
 		bool m_started;
 };

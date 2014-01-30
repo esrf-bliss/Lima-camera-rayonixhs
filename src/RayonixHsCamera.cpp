@@ -14,6 +14,8 @@ Camera::Camera()
 	DEB_CONSTRUCTOR();
 
 	init();
+	// create the Frame buffer obj
+	m_buffer_ctrl_obj = new BufferCtrlObj(this);
 
 	m_frame_status_cb = new FrameStatusCb(this, m_acquiring);
 	//m_frame_status_cb->registerCallbackAcqComplete(&lima::RayonixHs::Camera::acquisitionComplete);
@@ -130,11 +132,17 @@ void Camera::setExpTime(double exp_time) {
 	if (exp_time < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid exposure time");
 
+	if (m_rx_detector->SetExposureTime(exp_time).IsError()) {
+		DEB_ERROR() << "Camera::setExpTime: Error setting exposure!";
+		return;
+	}
 	m_exp_time = exp_time;
 }
 
 void Camera::getExpTime(double& exp_time) {
         DEB_MEMBER_FUNCT();
+
+	m_exp_time = m_rx_detector->ExposureTime();
 	exp_time = m_exp_time;
 }
 
@@ -143,12 +151,19 @@ void Camera::setLatTime(double lat_time) {
 	if (lat_time < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid latency time");
 
+	if (m_rx_detector->SetIntervalTime(lat_time).IsError()) {
+		DEB_ERROR() << "Camera::setLatTime: Error setting latency!";
+		return;
+	}
+	m_lat_time = lat_time;
 	//Rayonix camera latency time is always zero
-	DEB_TRACE() << "Camera::setLatTime: Latency time unsupported on this camera.";
+	//DEB_TRACE() << "Camera::setLatTime: Latency time unsupported on this camera.";
 }
 
 void Camera::getLatTime(double& lat_time) {
         DEB_MEMBER_FUNCT();
+
+	m_lat_time = m_rx_detector->IntervalTime();
 	lat_time = m_lat_time;
 }
 

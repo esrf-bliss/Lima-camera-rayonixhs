@@ -29,7 +29,6 @@ namespace RayonixHs {
 
 class Camera;
 class DetInfoCtrlObj;
-class BufferCtrlObj;
 class SyncCtrlObj;
 class BinCtrlObj;
 
@@ -53,7 +52,7 @@ class Interface: public HwInterface {
 	private:
 		Camera* m_cam;
 		DetInfoCtrlObj* m_det_info;
-		BufferCtrlObj* m_buffer;
+		HwBufferCtrlObj* m_buffer;
 		SyncCtrlObj* m_sync;
 		BinCtrlObj *m_bin;
 };

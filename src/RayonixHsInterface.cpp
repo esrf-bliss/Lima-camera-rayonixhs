@@ -14,19 +14,14 @@ Interface::Interface(Camera *cam)
 	DEB_CONSTRUCTOR();
 
 	m_det_info = new DetInfoCtrlObj(cam);
-	m_buffer = new BufferCtrlObj(cam);
-	m_sync = new SyncCtrlObj(cam, m_buffer);
-	cam->m_sync = m_sync;
+	m_buffer = cam->getBufferCtrlObj();
+	m_sync = new SyncCtrlObj(cam);
 	m_bin = new BinCtrlObj(cam);
-
-	if (m_buffer)
-		m_buffer->m_sync = m_sync;
 }
 
 Interface::~Interface() {
 	DEB_DESTRUCTOR();
 
-	delete m_buffer;
 	delete m_det_info;
 	delete m_sync;
 	delete m_bin;
