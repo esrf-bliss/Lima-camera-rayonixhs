@@ -37,10 +37,15 @@
 namespace lima {
 namespace RayonixHs {
 
-enum DETECTOR_STATUS {
+enum DetectorStatus {
    DETECTOR_STATUS_IDLE,
    DETECTOR_STATUS_INTEGRATING
 };
+
+ enum FrameMode {
+   SINGLE,
+   FAST_TRANSFER
+ };
 
 class Camera : public HwMaxImageSizeCallbackGen {
    DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
@@ -96,21 +101,28 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		HwBufferCtrlObj* getBufferCtrlObj();
 
+		// Specific Rayonix interface for configuration
+		void setFrameMode(FrameMode mode);
+		void getFrameMode(FrameMode &mode);
+		void setTriggerSignalType(craydl::TriggerSignalType_t signal_type);
+		void getTriggerSignalType(craydl::TriggerSignalType_t &signal_type);
+
 	private:
 		void init();
 
 		SoftBufferCtrlObj m_buffer_ctrl_obj;
 
-
 		FrameDim m_frame_dim;
 
 		double m_exp_time;
 		double m_lat_time;
-		int m_nb_frames;
+		double m_int_time;
 
+		int m_nb_frames;
+		TrigMode m_trig_mode;
 		Size m_max_image_size;
 
-		DETECTOR_STATUS m_detector_status;
+		DetectorStatus m_detector_status;
 
 		FrameStatusCb *m_frame_status_cb;
 		Mutex m_mutex;
@@ -118,10 +130,10 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		int m_expected_frame_nb;
 
 		craydl::RxDetector *m_rx_detector;
+		FrameMode m_frame_mode;
+		craydl::TriggerSignalType_t m_trig_signal_type;
 
 		volatile bool m_acquiring;
-
-		//void acquisitionComplete();
 
 		void frameReady(const craydl::RxFrame *pFrame);
 };

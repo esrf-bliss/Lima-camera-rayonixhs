@@ -44,9 +44,14 @@ void Camera::init() {
 
 	m_max_image_size = Size(fast, slow);
 	
-	m_exp_time = 0;
-	m_lat_time = 0;
-	m_nb_frames = 0;
+	m_exp_time = 1.0;
+	m_lat_time = 0.001;
+	m_int_time = m_exp_time + m_lat_time;
+
+	m_nb_frames = 1;
+	// default frame mode is SINGLE, FAST_TRANFSER is not
+	m_frame_mode = SINGLE;
+	m_trig_signal_type = craydl::TriggerSignalTypeOpto;
 }
 
 Camera::~Camera() {
@@ -87,19 +92,62 @@ void Camera::setImageType(ImageType img_type) {
 	}
 }
 
+
 bool Camera::checkTrigMode(TrigMode mode) {
         DEB_MEMBER_FUNCT();
+	bool valid_mode;
+
 	switch (mode) {
-		case IntTrig:
-		case ExtTrigSingle:
-		case ExtTrigMult:
-		case ExtGate:
-			return true;
-		default:
-			return false;
+	case IntTrig:
+	case IntTrigMult:
+	case ExtTrigSingle:
+	case ExtTrigMult:
+	case ExtGate:
+	case ExtTrigReadout:
+	  valid_mode = true;
+	  break;
+	default:
+	  valid_mode = false;
 	}
+	return valid_mode;
 }
 
+void Camera::setFrameMode(FrameMode mode) {
+  DEB_MEMBER_FUNCT();
+  
+  // RayonixHs is switched to FAST_TRANSFER frame mode by setting exposure time to 0 
+  // then interval time sets the exposure duration, and latency is 1ms (transfer time)
+  if (mode != m_frame_mode) {
+    double exp_time;
+    if (mode == SINGLE) exp_time = m_exp_time;
+    else // FAST_TRANSFER
+      exp_time = 0;
+
+    if (m_rx_detector->SetExposureTime(exp_time).IsError()) {
+      DEB_ERROR() << "Camera::setExpTime: Error setting exposure!";
+      return;  
+    }
+    
+  }
+  m_frame_mode = mode;
+}
+
+void Camera::getFrameMode(FrameMode &mode) {
+  DEB_MEMBER_FUNCT();
+  mode = m_frame_mode;
+}
+
+void Camera::getTrigMode(TrigMode &mode) {
+        DEB_MEMBER_FUNCT();
+//TODO: Trig mode functionality to do
+	mode = m_trig_mode;
+}
+
+void Camera::setTrigMode(TrigMode mode) {
+        DEB_MEMBER_FUNCT();
+//TODO: Trig mode functionality to do
+	m_trig_mode = mode;
+}
 void Camera::getPixelSize(double &x, double &y) {
         DEB_MEMBER_FUNCT();
 	m_rx_detector->GetPixelSize(x, y);
@@ -127,19 +175,33 @@ void Camera::setExpTime(double exp_time) {
         DEB_MEMBER_FUNCT();
 	if (exp_time < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid exposure time");
-
-	if (m_rx_detector->SetExposureTime(exp_time).IsError()) {
-		DEB_ERROR() << "Camera::setExpTime: Error setting exposure!";
-		return;
+	if (m_frame_mode == SINGLE) {
+	  if (m_rx_detector->SetExposureTime(exp_time).IsError()) {
+	    DEB_ERROR() << "Camera::setExpTime: Error setting exposure!";
+	    return;
+	  }
+	  m_exp_time = exp_time;
 	}
-	m_exp_time = exp_time;
+	else { // FAST_TRANSFER
+	  if (m_rx_detector->SetIntervalTime(exp_time).IsError()) {
+	    DEB_ERROR() << "Camera::setLatTime: Error setting latency!";
+	    return;
+	  }
+	  m_int_time = exp_time;
+	}
 }
 
 void Camera::getExpTime(double& exp_time) {
         DEB_MEMBER_FUNCT();
-
-	m_exp_time = m_rx_detector->ExposureTime();
-	exp_time = m_exp_time;
+	double real_exp_time;
+	if (m_frame_mode == SINGLE) {
+	  m_exp_time = m_rx_detector->ExposureTime();
+	  exp_time = m_exp_time;
+	}
+	else { // FAST_TRANSFER
+	  m_int_time = m_rx_detector->IntervalTime();
+	  exp_time = m_int_time;
+	}
 }
 
 void Camera::setLatTime(double lat_time) {
@@ -147,19 +209,32 @@ void Camera::setLatTime(double lat_time) {
 	if (lat_time < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid latency time");
 
-	if (m_rx_detector->SetIntervalTime(lat_time).IsError()) {
-		DEB_ERROR() << "Camera::setLatTime: Error setting latency!";
-		return;
+	// Ok, RayonixHs manages an interval time not a latency:
+	// in SINGLE frame mode latency = interval - exposure
+	// in FAST_TRANSFER latency = 1ms and interval is the exposure (exposure must be 0 )
+	if (m_frame_mode == SINGLE) {
+	  if (m_rx_detector->SetIntervalTime(lat_time+m_exp_time).IsError()) {
+	    DEB_ERROR() << "Camera::setLatTime: Error setting latency!";
+	    return;
+	  }  
+	}
+	else {
+	  // FAST_TRANSFER: latency is fixed, 1ms of frame transfer
+	  throw LIMA_HW_EXC(InvalidValue, "Cannot set latency in FAST_TRANSFER frame mode!");
 	}
 	m_lat_time = lat_time;
-	//Rayonix camera latency time is always zero
-	//DEB_TRACE() << "Camera::setLatTime: Latency time unsupported on this camera.";
 }
 
 void Camera::getLatTime(double& lat_time) {
         DEB_MEMBER_FUNCT();
 
-	m_lat_time = m_rx_detector->IntervalTime();
+	if (m_frame_mode == SINGLE){
+	  lat_time = m_lat_time;
+	}
+	else { // FAST_TRANSFER: latency is fixed, 1ms of frame transfer
+	  lat_time = 1e-3;
+	}
+	//m_lat_time = m_rx_detector->IntervalTime();
 	lat_time = m_lat_time;
 }
 
@@ -222,11 +297,76 @@ void Camera::prepareAcq() {
    if (m_rx_detector->SetAcquisitionUserCB(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb)).IsError()) {
       DEB_ERROR() << "Camera::prepareAcq: Error setting frame callback!";
    }
-   // 0 means first frame id (InternalFrameID)
+   // 0 means first frame id equal 0 (InternalFrameID)
    if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError()) 
      DEB_ERROR() << "Camera::prepareAcq: Error setting up acquisition sequence!";
 
+   craydl::FrameTriggerType_t rx_frame_trig_type;
+   craydl::TriggerSignalType_t rx_trig_signal_type;
+   craydl::SequenceGate_t rx_sequence_gate;
+   craydl::TriggerDirection_t rx_trig_direction;
+   int trigger;
+
+   switch (m_trig_mode) {
+   case IntTrig:
+     rx_frame_trig_type  = craydl::FrameTriggerTypeNone;
+     rx_trig_signal_type = craydl::TriggerSignalTypeNone;
+     rx_sequence_gate    = craydl::SequenceGateModeNone;
+     rx_trig_direction = craydl::TriggerDirectionInput;
+     trigger = 0;
+     break;
+   case IntTrigMult:
+     rx_frame_trig_type  = craydl::FrameTriggerTypeFrame;
+     rx_trig_signal_type = craydl::TriggerSignalTypeSoftware;
+     rx_sequence_gate    = craydl::SequenceGateModeNone;
+     rx_trig_direction = craydl::TriggerDirectionInput;
+     trigger = 0;
+     if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+       DEB_ERROR() << "Camera::prepareAcq: Error preparing acquisition in IntTrigMult mode!";
+     break;
+
+   case ExtTrigSingle:
+     rx_frame_trig_type  = craydl::FrameTriggerTypeNone;
+     rx_trig_signal_type = m_trig_signal_type;
+     rx_sequence_gate    = craydl::SequenceGateModeStart;
+     rx_trig_direction = craydl::TriggerDirectionInput;
+     trigger = 1; // the Gate input
+     break;
+
+   case ExtTrigMult:
+     rx_frame_trig_type  = craydl::FrameTriggerTypeFrame;
+     rx_trig_signal_type = m_trig_signal_type;
+     rx_sequence_gate    = craydl::SequenceGateModeNone;
+     rx_trig_direction = craydl::TriggerDirectionInput;
+     trigger = 0; // Frame input
+     break;
+
+   case ExtGate:
+     break;
+
+   case ExtTrigReadout:
+     break;
+
+   }
+
+   m_rx_detector->SetFrameTriggerMode(craydl::FrameTriggerType(rx_frame_trig_type));
+   m_rx_detector->SetTriggerSignalType(trigger, rx_trig_direction, craydl::TriggerSignalType(rx_trig_signal_type));
+   m_rx_detector->SetSequenceGate(craydl::SequenceGateMode(rx_sequence_gate));
+
+
    m_expected_frame_nb = 0;
+}
+
+void Camera::getTriggerSignalType(craydl::TriggerSignalType_t & signal_type) {
+  DEB_MEMBER_FUNCT();
+  signal_type = m_trig_signal_type;
+}
+
+void Camera::setTriggerSignalType(craydl::TriggerSignalType_t signal_type) {
+  DEB_MEMBER_FUNCT();
+  if (signal_type == craydl::TriggerSignalTypeSoftware)
+    throw LIMA_HW_EXC(InvalidValue, "SignalTypeSoftware is reversed, please use setTrigMode(IntTrig[Mult]) instead !");
+  m_trig_signal_type = signal_type;
 }
 
 void Camera::startAcq() {
@@ -237,25 +377,21 @@ void Camera::startAcq() {
 
 	m_buffer_ctrl_obj.getBuffer().setStartTimestamp(Timestamp::now());
 
-	if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
-		DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
+	if (m_trig_mode == IntTrigMult) {
+	  // in this mode startAcq() must  be called for each frame
+	  if (m_rx_detector->StartExposure(craydl::FrameAcquisitionTypeLight).IsError())
+	    DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
+	}
+	else {
+	  if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+	    DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
+	}
 }
 
 void Camera::stopAcq() {
         DEB_MEMBER_FUNCT();
 	if (m_rx_detector->EndAcquisition(true).IsError())
 		DEB_ERROR() << "Camera::stopAcq: Error stopping acquisition!";
-}
-
-void Camera::getTrigMode(TrigMode &mode) {
-        DEB_MEMBER_FUNCT();
-//TODO: Trig mode functionality to do
-	mode = IntTrig;
-}
-
-void Camera::setTrigMode(TrigMode mode) {
-        DEB_MEMBER_FUNCT();
-//TODO: Trig mode functionality to do
 }
 
 int Camera::getNbAcquiredFrames() {

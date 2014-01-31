@@ -92,10 +92,13 @@ void SyncCtrlObj::getNbHwFrames(int& nb_frames) {
 
 void SyncCtrlObj::getValidRanges(ValidRangesType& valid_ranges) {
         DEB_MEMBER_FUNCT();    
-	valid_ranges.min_exp_time = 0;
+	valid_ranges.min_exp_time = 1e-3;
 	valid_ranges.max_exp_time = 86400;
-	valid_ranges.min_lat_time = 0.;
+	valid_ranges.min_lat_time = 1e-3;
 	valid_ranges.max_lat_time = 0.;
+
+	DEB_RETURN() << DEB_VAR2(valid_ranges.min_exp_time, valid_ranges.max_exp_time);
+	DEB_RETURN() << DEB_VAR2(valid_ranges.min_lat_time, valid_ranges.max_lat_time);
 }
 
 void SyncCtrlObj::startAcq() {
