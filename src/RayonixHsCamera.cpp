@@ -51,7 +51,7 @@ void Camera::init() {
 	m_nb_frames = 1;
 	// default frame mode is SINGLE, FAST_TRANFSER is not
 	m_frame_mode = SINGLE;
-	m_trig_signal_type = craydl::TriggerSignalTypeOpto;
+	m_trig_signal_type = OPTO;
 }
 
 Camera::~Camera() {
@@ -139,13 +139,11 @@ void Camera::getFrameMode(FrameMode &mode) {
 
 void Camera::getTrigMode(TrigMode &mode) {
         DEB_MEMBER_FUNCT();
-//TODO: Trig mode functionality to do
 	mode = m_trig_mode;
 }
 
 void Camera::setTrigMode(TrigMode mode) {
         DEB_MEMBER_FUNCT();
-//TODO: Trig mode functionality to do
 	m_trig_mode = mode;
 }
 void Camera::getPixelSize(double &x, double &y) {
@@ -327,7 +325,7 @@ void Camera::prepareAcq() {
 
    case ExtTrigSingle:
      rx_frame_trig_type  = craydl::FrameTriggerTypeNone;
-     rx_trig_signal_type = m_trig_signal_type;
+     rx_trig_signal_type = (craydl::TriggerSignalType_t)m_trig_signal_type;
      rx_sequence_gate    = craydl::SequenceGateModeStart;
      rx_trig_direction = craydl::TriggerDirectionInput;
      trigger = 1; // the Gate input
@@ -335,7 +333,7 @@ void Camera::prepareAcq() {
 
    case ExtTrigMult:
      rx_frame_trig_type  = craydl::FrameTriggerTypeFrame;
-     rx_trig_signal_type = m_trig_signal_type;
+     rx_trig_signal_type =  (craydl::TriggerSignalType_t)m_trig_signal_type;
      rx_sequence_gate    = craydl::SequenceGateModeNone;
      rx_trig_direction = craydl::TriggerDirectionInput;
      trigger = 0; // Frame input
@@ -357,15 +355,15 @@ void Camera::prepareAcq() {
    m_expected_frame_nb = 0;
 }
 
-void Camera::getTriggerSignalType(craydl::TriggerSignalType_t & signal_type) {
+void Camera::getTriggerSignalType(TriggerSignalType & signal_type) {
   DEB_MEMBER_FUNCT();
   signal_type = m_trig_signal_type;
 }
 
-void Camera::setTriggerSignalType(craydl::TriggerSignalType_t signal_type) {
+void Camera::setTriggerSignalType(TriggerSignalType signal_type) {
   DEB_MEMBER_FUNCT();
-  if (signal_type == craydl::TriggerSignalTypeSoftware)
-    throw LIMA_HW_EXC(InvalidValue, "SignalTypeSoftware is reversed, please use setTrigMode(IntTrig[Mult]) instead !");
+  if (signal_type == SOFTWARE)
+    throw LIMA_HW_EXC(InvalidValue, "Signal Type SOFT is reserved, please use setTrigMode(IntTrig[Mult]) instead !");
   m_trig_signal_type = signal_type;
 }
 

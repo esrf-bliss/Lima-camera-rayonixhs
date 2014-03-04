@@ -23,11 +23,11 @@
 #define RayonixHsINTERFACE_H
 
 #include "HwInterface.h"
+#include "RayonixHsCamera.h"
 
 namespace lima {
 namespace RayonixHs {
 
-class Camera;
 class DetInfoCtrlObj;
 class SyncCtrlObj;
 class BinCtrlObj;
@@ -49,6 +49,13 @@ class Interface: public HwInterface {
 
 		virtual int getNbAcquiredFrames();
 		virtual int getNbHwAcquiredFrames();
+
+		// Rayonix specific Hw Interface
+		void setFrameMode(FrameMode mode);
+		void getFrameMode(FrameMode &mode);
+		void setTriggerSignalType(TriggerSignalType signal_type);
+		void getTriggerSignalType(TriggerSignalType &signal_type);
+		
 	private:
 		Camera* m_cam;
 		DetInfoCtrlObj* m_det_info;

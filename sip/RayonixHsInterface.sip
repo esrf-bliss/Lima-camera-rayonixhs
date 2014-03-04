@@ -26,6 +26,7 @@ namespace RayonixHs
   {
 %TypeHeaderCode
 #include <RayonixHsInterface.h>
+#include <RayonixHsCamera.h>
 using namespace lima;
 %End
     public:
@@ -42,6 +43,13 @@ using namespace lima;
 
     virtual int getNbAcquiredFrames();
     virtual int getNbHwAcquiredFrames();
+
+    // Rayonix specific Hw Interface
+    void setFrameMode(RayonixHs::FrameMode mode);
+    void getFrameMode(RayonixHs::FrameMode &mode /Out/);
+    void setTriggerSignalType(RayonixHs::TriggerSignalType signal_type);
+    void getTriggerSignalType(RayonixHs::TriggerSignalType &signal_type /Out/);
+
   };
 
 }; // namespace RayonixHs

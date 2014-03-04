@@ -47,6 +47,21 @@ enum DetectorStatus {
    FAST_TRANSFER
  };
 
+ enum TriggerSignalType {
+   UNKNOWN, 
+   NONE,  
+   EXTENDED, 
+   OPTO,  
+   OPTO_INVERTED,  
+   CMOS, 
+   CMOS_PULLDOWN,  
+   CMOS_PULLUP,  
+   CMOS_PULLDOWN_INVERTED,  
+   CMOS_PULLUP_INVERTED,  
+   SOFTWARE   
+};
+
+
 class Camera : public HwMaxImageSizeCallbackGen {
    DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
    friend class Interface;
@@ -104,8 +119,8 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		// Specific Rayonix interface for configuration
 		void setFrameMode(FrameMode mode);
 		void getFrameMode(FrameMode &mode);
-		void setTriggerSignalType(craydl::TriggerSignalType_t signal_type);
-		void getTriggerSignalType(craydl::TriggerSignalType_t &signal_type);
+		void setTriggerSignalType(TriggerSignalType signal_type);
+		void getTriggerSignalType(TriggerSignalType &signal_type);
 
 	private:
 		void init();
@@ -131,7 +146,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		craydl::RxDetector *m_rx_detector;
 		FrameMode m_frame_mode;
-		craydl::TriggerSignalType_t m_trig_signal_type;
+		TriggerSignalType m_trig_signal_type;
 
 		volatile bool m_acquiring;
 

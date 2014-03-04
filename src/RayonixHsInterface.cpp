@@ -80,3 +80,25 @@ int Interface::getNbHwAcquiredFrames() {
 	return getNbAcquiredFrames();
 }
 
+
+void Interface::setFrameMode(FrameMode mode){
+        DEB_MEMBER_FUNCT();    
+	m_cam->setFrameMode(mode);
+}
+
+void Interface::getFrameMode(FrameMode &mode){
+        DEB_MEMBER_FUNCT();    
+	m_cam->getFrameMode(mode);
+}
+
+void Interface::setTriggerSignalType(TriggerSignalType signal_type){
+        DEB_MEMBER_FUNCT();    
+	m_cam->setTriggerSignalType(signal_type);
+}
+
+void Interface::getTriggerSignalType(TriggerSignalType &signal_type){
+
+        DEB_MEMBER_FUNCT();    
+	m_cam->getTriggerSignalType(signal_type);
+}
+

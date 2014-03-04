@@ -26,9 +26,23 @@ namespace RayonixHs {
 using namespace lima;
 %End
 
-  enum DETECTOR_STATUS {
-    DETECTOR_STATUS_IDLE,
-    DETECTOR_STATUS_INTEGRATING
+  enum FrameMode {
+    SINGLE,
+    FAST_TRANSFER
+  };  
+
+  enum TriggerSignalType {
+    UNKNOWN, 
+    NONE,  
+    EXTENDED, 
+    OPTO,  
+    OPTO_INVERTED,  
+    CMOS, 
+    CMOS_PULLDOWN,  
+    CMOS_PULLUP,  
+    CMOS_PULLDOWN_INVERTED,  
+    CMOS_PULLUP_INVERTED,  
+    SOFTWARE   
   };
 
   class Camera 
