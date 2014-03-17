@@ -26,6 +26,15 @@ namespace RayonixHs {
 using namespace lima;
 %End
 
+  enum DetectorStatus {
+   DETECTOR_STATUS_IDLE,
+   DETECTOR_STATUS_INTEGRATING,
+   DETECTOR_STATUS_READOUT,
+   DETECTOR_STATUS_LATENCY,
+   DETECTOR_STATUS_CONFIG,
+   DETECTOR_STATUS_FAULT
+  };
+
   enum FrameMode {
     SINGLE,
     FAST_TRANSFER
@@ -58,17 +67,14 @@ using namespace lima;
     void getDetectorModel(std::string &model /Out/);
     void getDetectorType(std::string &model /Out/);
 		
-    HwInterface::StatusType::Basic getStatus();
-
     void getMaxImageSize(Size& max_image_size /Out/);
     void getPixelSize(double &x /Out/, double &y /Out/);
 
     void reset();
-
-    bool acquiring();
     void prepareAcq();
     void startAcq();
     void stopAcq();
+    void getStatus(RayonixHs::DetectorStatus &status /Out/);
 
     void getTrigMode(TrigMode &mode /Out/);
     void setTrigMode(TrigMode mode);

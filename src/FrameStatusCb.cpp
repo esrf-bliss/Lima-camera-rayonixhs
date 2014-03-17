@@ -1,4 +1,24 @@
-//Copyright (C) Rayonix, LLC
+//###########################################################################
+//// This file is part of LImA, a Library for Image Acquisition
+////
+//// Copyright (C) : 2009-2014
+//// European Synchrotron Radiation Facility
+//// BP 220, Grenoble 38043
+//// FRANCE
+////
+//// This is free software; you can redistribute it and/or modify
+//// it under the terms of the GNU General Public License as published by
+//// the Free Software Foundation; either version 3 of the License, or
+//// (at your option) any later version.
+////
+//// This software is distributed in the hope that it will be useful,
+//// but WITHOUT ANY WARRANTY; without even the implied warranty of
+//// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//// GNU General Public License for more details.
+////
+//// You should have received a copy of the GNU General Public License
+//// along with this program; if not, see <http://www.gnu.org/licenses/>.
+////###########################################################################
 #include "RayonixHsCamera.h"
 
 #include "FrameStatusCb.h"
@@ -34,7 +54,11 @@ void FrameStatusCb::FrameError(int frame_number, int error_code, const std::stri
 
 void FrameStatusCb::SequenceStarted() { m_acquiring = true; std::cout << "FrameStatusCb: Sequence started." << std::endl; }
 
-void FrameStatusCb::SequenceEnded() { m_acquiring = false; std::cout << "FrameStatusCb: Sequence ended." << std::endl; }
+void FrameStatusCb::SequenceEnded() {
+      m_acquiring = false;
+      std::cout << "FrameStatusCb: Sequence ended." << std::endl; 
+      m_cam->setStatus(DETECTOR_STATUS_IDLE);
+}
 
 void FrameStatusCb::ExposureStarted(int frame) { std::cout << "FrameStatusCb: Exposure started." << std::endl; }
 void FrameStatusCb::ExposureEnded(int frame) { std::cout << "FrameStatusCb: Exposure ended." << std::endl; }
@@ -42,7 +66,10 @@ void FrameStatusCb::ExposureEnded(int frame) { std::cout << "FrameStatusCb: Expo
 void FrameStatusCb::ReadoutStarted(int frame) {}
 void FrameStatusCb::ReadoutEnded(int frame) {}
 
-void FrameStatusCb::FrameCompleted(int frame) {}
+void FrameStatusCb::FrameCompleted(int frame) {
+      // in case of IntTrigMult detector must be set to Idle after a frame is completed
+      m_cam->setStatus(DETECTOR_STATUS_IDLE);
+}
 
 int FrameStatusCb::frameCountRaw() const { return mRawFramesRcvd; }
 int FrameStatusCb::frameCountBackground() const { return mBgFramesRcvd; }

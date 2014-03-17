@@ -1,7 +1,7 @@
 //###########################################################################
 // This file is part of LImA, a Library for Image Acquisition
 //
-// Copyright (C) : 2009-2011
+// Copyright (C) : 2009-2014
 // European Synchrotron Radiation Facility
 // BP 220, Grenoble 38043
 // FRANCE
@@ -54,16 +54,8 @@ class SyncCtrlObj: public HwSyncCtrlObj {
 
 		virtual void getValidRanges(ValidRangesType& valid_ranges);
 
-		void startAcq();
-		void stopAcq(bool clearQueue = true);
-
-		void getStatus(HwInterface::StatusType&);
-
 	private:
 		Camera* m_cam;
-		TrigMode m_trig_mode;
-		int m_nb_frames;
-		bool m_started;
 };
 
 } // namespace RayonixHs

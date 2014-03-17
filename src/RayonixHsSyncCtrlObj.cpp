@@ -1,3 +1,24 @@
+//###########################################################################
+//// This file is part of LImA, a Library for Image Acquisition
+////
+//// Copyright (C) : 2009-2014
+//// European Synchrotron Radiation Facility
+//// BP 220, Grenoble 38043
+//// FRANCE
+////
+//// This is free software; you can redistribute it and/or modify
+//// it under the terms of the GNU General Public License as published by
+//// the Free Software Foundation; either version 3 of the License, or
+//// (at your option) any later version.
+////
+//// This software is distributed in the hope that it will be useful,
+//// but WITHOUT ANY WARRANTY; without even the implied warranty of
+//// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//// GNU General Public License for more details.
+////
+//// You should have received a copy of the GNU General Public License
+//// along with this program; if not, see <http://www.gnu.org/licenses/>.
+////###########################################################################
 #include <sstream>
 
 #include "RayonixHsSyncCtrlObj.h"
@@ -7,10 +28,7 @@ using namespace lima;
 using namespace lima::RayonixHs;
 
 SyncCtrlObj::SyncCtrlObj(Camera *cam)
-	: m_cam(cam),
-	  m_trig_mode(IntTrig),
-	  m_nb_frames(1),
-	  m_started(false) {
+	: m_cam(cam) {
 
 	DEB_CONSTRUCTOR();
 }
@@ -72,22 +90,22 @@ void SyncCtrlObj::setNbFrames(int nb_frames) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(nb_frames);
 
-	m_cam->setNbFrames(nb_frames);
+	setNbHwFrames(nb_frames);
 }
 
 void SyncCtrlObj::getNbFrames(int& nb_frames) {
         DEB_MEMBER_FUNCT();    
-	m_cam->getNbFrames(nb_frames);
+	getNbHwFrames(nb_frames);
 }
 
 void SyncCtrlObj::setNbHwFrames(int nb_frames) {
         DEB_MEMBER_FUNCT();    
-	setNbFrames(nb_frames);
+	m_cam->setNbFrames(nb_frames);
 }
 
 void SyncCtrlObj::getNbHwFrames(int& nb_frames) {
         DEB_MEMBER_FUNCT();    
-	getNbFrames(nb_frames);
+	m_cam->getNbFrames(nb_frames);
 }
 
 void SyncCtrlObj::getValidRanges(ValidRangesType& valid_ranges) {
@@ -95,55 +113,8 @@ void SyncCtrlObj::getValidRanges(ValidRangesType& valid_ranges) {
 	valid_ranges.min_exp_time = 1e-3;
 	valid_ranges.max_exp_time = 86400;
 	valid_ranges.min_lat_time = 1e-3;
-	valid_ranges.max_lat_time = 0.;
+	valid_ranges.max_lat_time = 100;
 
 	DEB_RETURN() << DEB_VAR2(valid_ranges.min_exp_time, valid_ranges.max_exp_time);
 	DEB_RETURN() << DEB_VAR2(valid_ranges.min_lat_time, valid_ranges.max_lat_time);
-}
-
-void SyncCtrlObj::startAcq() {
-	DEB_MEMBER_FUNCT();
-
-	if (!m_cam->acquiring()) {
-		m_cam->startAcq();
-	}
-}
-
-void SyncCtrlObj::stopAcq(bool clearQueue) {
-	DEB_MEMBER_FUNCT();
-
-	if (m_cam->acquiring()) {
-		DEB_TRACE() << "Try to stop Acq";
-		m_cam->stopAcq();
-	}
-}
-
-void SyncCtrlObj::getStatus(HwInterface::StatusType& status) {
-	DEB_MEMBER_FUNCT();
-
-	switch (m_cam->getStatus()) {
-	   case HwInterface::StatusType::Exposure:
-          status.acq = AcqRunning;
-	       status.det = DetExposure;
-	       break;
-	   case HwInterface::StatusType::Ready:
-		   status.acq = AcqReady;
-		   status.det = DetIdle;
-		   break;
-      case HwInterface::StatusType::Readout:
-         status.acq = AcqRunning;
-         status.det = DetReadout;
-         break;
-      case HwInterface::StatusType::Latency:
-         status.det = DetLatency;
-         break;
-      case HwInterface::StatusType::Config:
-         status.acq = AcqConfig;
-         break;
-      default:
-         status.acq = AcqFault;
-         status.det = DetFault;
-         break;
-	}
-	DEB_RETURN() << DEB_VAR1(status);
 }

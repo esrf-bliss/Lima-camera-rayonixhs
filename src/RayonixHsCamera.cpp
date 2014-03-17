@@ -1,4 +1,24 @@
-
+//###########################################################################
+//// This file is part of LImA, a Library for Image Acquisition
+////
+//// Copyright (C) : 2009-2014
+//// European Synchrotron Radiation Facility
+//// BP 220, Grenoble 38043
+//// FRANCE
+////
+//// This is free software; you can redistribute it and/or modify
+//// it under the terms of the GNU General Public License as published by
+//// the Free Software Foundation; either version 3 of the License, or
+//// (at your option) any later version.
+////
+//// This software is distributed in the hope that it will be useful,
+//// but WITHOUT ANY WARRANTY; without even the implied warranty of
+//// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//// GNU General Public License for more details.
+////
+//// You should have received a copy of the GNU General Public License
+//// along with this program; if not, see <http://www.gnu.org/licenses/>.
+////###########################################################################
 #include "craydl.h"
 #include "RayonixHsCamera.h"
 
@@ -7,7 +27,9 @@ using namespace lima::RayonixHs;
 
 Camera::Camera()
 	: m_rx_detector(new craydl::RxDetector("./RxDetector.conf")),
-	  m_acquiring(false) {
+	  m_status(DETECTOR_STATUS_IDLE),
+	  m_acquiring(false)
+{
         
 	DEB_CONSTRUCTOR();
 
@@ -22,21 +44,18 @@ void Camera::init() {
         DEB_MEMBER_FUNCT();
 	craydl::RxReturnStatus status;
 	
+	setStatus(DETECTOR_STATUS_FAULT, true);
 	//Open camera
 	status = m_rx_detector->Open();
 	if (status.IsError()) {
-		DEB_ERROR() << "Camera::init: Error opening camera!";
-		m_max_image_size = Size(0, 0);
-		return;
+	       m_max_image_size = Size(0, 0);
+	       THROW_HW_ERROR(Error) << "Camera::init: Error opening camera!";
 	}
 
-	m_detector_status = DETECTOR_STATUS_IDLE;
-	
 	//Get unbinned frame size from camera
 	craydl::DetectorFormat detector_format;
-	if (m_rx_detector->GetDetectorFormat(detector_format).IsError()) {
-		DEB_ERROR() << "Camera::init: Error getting camera format!";
-		return;
+	if (m_rx_detector->GetDetectorFormat(detector_format).IsError()) {                	  
+		THROW_HW_ERROR(Error) << "Camera::init: Error getting camera format!";
 	}
 	int fast, slow;
 	fast = detector_format.n_pixels_fast();
@@ -52,6 +71,8 @@ void Camera::init() {
 	// default frame mode is SINGLE, FAST_TRANFSER is not
 	m_frame_mode = SINGLE;
 	m_trig_signal_type = OPTO;
+
+	setStatus(DETECTOR_STATUS_IDLE, true);
 }
 
 Camera::~Camera() {
@@ -158,6 +179,7 @@ void Camera::getMaxImageSize(Size& max_image_size) {
 
 void Camera::setNbFrames(int nb_frames) {
         DEB_MEMBER_FUNCT();
+	DEB_PARAM() << DEB_VAR1(nb_frames);
 	if (nb_frames < 0)
 		throw LIMA_HW_EXC(InvalidValue, "Invalid nb of frames");
 
@@ -270,6 +292,7 @@ void Camera::getFrameDim(FrameDim& frame_dim) {
 	int fast, slow, depth;
 	m_rx_detector->GetFrameSize(fast, slow, depth);
 	frame_dim.setSize(Size(fast, slow));
+	frame_dim.setImageType(Bpp16);
 }
 
 void Camera::reset() {
@@ -278,81 +301,119 @@ void Camera::reset() {
 	init();
 }
 
-HwInterface::StatusType::Basic Camera::getStatus() {
+void Camera::getStatus(DetectorStatus &status) {
         DEB_MEMBER_FUNCT();
-	switch (m_detector_status) {
-		case DETECTOR_STATUS_IDLE:
-			return HwInterface::StatusType::Ready;
-		case DETECTOR_STATUS_INTEGRATING:
-			return HwInterface::StatusType::Exposure;
-		default:
-			throw LIMA_HW_EXC(Error, "Invalid status");
-	}
+
+	status = m_status;
+}
+
+//-----------------------------------------------------
+//
+//-----------------------------------------------------
+void Camera::setStatus(DetectorStatus status,bool force)
+{
+    DEB_MEMBER_FUNCT();
+    if(force || m_status != DETECTOR_STATUS_FAULT)
+        m_status = status;
 }
 
 void Camera::prepareAcq() {
         DEB_MEMBER_FUNCT();
    if (m_rx_detector->SetAcquisitionUserCB(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb)).IsError()) {
-      DEB_ERROR() << "Camera::prepareAcq: Error setting frame callback!";
+     THROW_HW_ERROR(Error) << "Camera::prepareAcq: Error setting frame callback!";
    }
    // 0 means first frame id equal 0 (InternalFrameID)
    if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError()) 
-     DEB_ERROR() << "Camera::prepareAcq: Error setting up acquisition sequence!";
+     THROW_HW_ERROR(Error) << "Camera::prepareAcq: Error setting up acquisition sequence!";
 
    craydl::FrameTriggerType_t rx_frame_trig_type;
-   craydl::TriggerSignalType_t rx_trig_signal_type;
+   craydl::DigitalIOSignalType_t rx_trig_signal_type;
    craydl::SequenceGate_t rx_sequence_gate;
-   craydl::TriggerDirection_t rx_trig_direction;
    int trigger;
 
    switch (m_trig_mode) {
    case IntTrig:
      rx_frame_trig_type  = craydl::FrameTriggerTypeNone;
-     rx_trig_signal_type = craydl::TriggerSignalTypeNone;
      rx_sequence_gate    = craydl::SequenceGateModeNone;
-     rx_trig_direction = craydl::TriggerDirectionInput;
+     rx_trig_signal_type = craydl::DigitalIOSignalTypeNone;
      trigger = 0;
      break;
    case IntTrigMult:
      rx_frame_trig_type  = craydl::FrameTriggerTypeFrame;
-     rx_trig_signal_type = craydl::TriggerSignalTypeSoftware;
      rx_sequence_gate    = craydl::SequenceGateModeNone;
-     rx_trig_direction = craydl::TriggerDirectionInput;
+     rx_trig_signal_type = craydl::DigitalIOSignalTypeSoftware;
      trigger = 0;
-     if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
-       DEB_ERROR() << "Camera::prepareAcq: Error preparing acquisition in IntTrigMult mode!";
      break;
 
    case ExtTrigSingle:
      rx_frame_trig_type  = craydl::FrameTriggerTypeNone;
-     rx_trig_signal_type = (craydl::TriggerSignalType_t)m_trig_signal_type;
      rx_sequence_gate    = craydl::SequenceGateModeStart;
-     rx_trig_direction = craydl::TriggerDirectionInput;
+     rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_trig_signal_type;
      trigger = 1; // the Gate input
      break;
 
    case ExtTrigMult:
      rx_frame_trig_type  = craydl::FrameTriggerTypeFrame;
-     rx_trig_signal_type =  (craydl::TriggerSignalType_t)m_trig_signal_type;
      rx_sequence_gate    = craydl::SequenceGateModeNone;
-     rx_trig_direction = craydl::TriggerDirectionInput;
+     rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_trig_signal_type;
      trigger = 0; // Frame input
      break;
 
    case ExtGate:
+     rx_frame_trig_type  = craydl::FrameTriggerTypeBulb;
+     rx_sequence_gate    = craydl::SequenceGateModeNone;
+     rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_trig_signal_type;
+     trigger = 0; // Frame input
      break;
 
    case ExtTrigReadout:
      break;
 
    }
-
+   // apply trigger mode (soft, trig, gate ...)
    m_rx_detector->SetFrameTriggerMode(craydl::FrameTriggerType(rx_frame_trig_type));
-   m_rx_detector->SetTriggerSignalType(trigger, rx_trig_direction, craydl::TriggerSignalType(rx_trig_signal_type));
    m_rx_detector->SetSequenceGate(craydl::SequenceGateMode(rx_sequence_gate));
+   // then set trig signal type and input (trig is input 0 and gate is input 1) 
+   if (trigger==1) 
+     m_rx_detector->SetSequenceGateSignalType(craydl::DigitalIOSignalType(rx_trig_signal_type));
+   else
+     m_rx_detector->SetFrameTriggerSignalType(craydl::DigitalIOSignalType(rx_trig_signal_type));
 
 
    m_expected_frame_nb = 0;
+   // acq will be started in the first call of startAcq()
+   if (m_trig_mode == IntTrigMult) m_int_trig_mult_started = false;
+
+   // reset the callbacks frame counters
+   m_frame_status_cb->resetFrameCounts();
+}
+
+void Camera::startAcq() {
+        DEB_MEMBER_FUNCT();
+
+	m_buffer_ctrl_obj.getBuffer().setStartTimestamp(Timestamp::now());
+
+        if (m_trig_mode == IntTrigMult && !m_int_trig_mult_started) {
+          if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+	    THROW_HW_ERROR(Error) << "Camera::startAcq: Error preparing acquisition in IntTrigMult mode!";
+	  m_int_trig_mult_started = true;
+        }
+	if (m_trig_mode == IntTrigMult) {
+	  if (m_rx_detector->PulseBulb(0.001).IsError())
+	    THROW_HW_ERROR(Error) << "Camera::startAcq: Error PulsBulb() acquisition!";
+	}
+	else {
+	  if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+	      THROW_HW_ERROR(Error) << "Camera::startAcq: Error starting acquisition!";
+	}     
+	setStatus(DETECTOR_STATUS_INTEGRATING);
+}
+
+void Camera::stopAcq() {
+        DEB_MEMBER_FUNCT();
+	if (m_rx_detector->EndAcquisition(true).IsError())
+		DEB_ERROR() << "Camera::stopAcq: Error stopping acquisition!";
+	setStatus(DETECTOR_STATUS_IDLE);
 }
 
 void Camera::getTriggerSignalType(TriggerSignalType & signal_type) {
@@ -363,33 +424,8 @@ void Camera::getTriggerSignalType(TriggerSignalType & signal_type) {
 void Camera::setTriggerSignalType(TriggerSignalType signal_type) {
   DEB_MEMBER_FUNCT();
   if (signal_type == SOFTWARE)
-    throw LIMA_HW_EXC(InvalidValue, "Signal Type SOFT is reserved, please use setTrigMode(IntTrig[Mult]) instead !");
+    throw LIMA_HW_EXC(InvalidValue, "Signal Type SOFT is reserved, please use setTrigMode(IntTrigMult) instead !");
   m_trig_signal_type = signal_type;
-}
-
-void Camera::startAcq() {
-        DEB_MEMBER_FUNCT();
-
-	//TODO: Other frame types?
-	m_frame_status_cb->resetFrameCounts();
-
-	m_buffer_ctrl_obj.getBuffer().setStartTimestamp(Timestamp::now());
-
-	if (m_trig_mode == IntTrigMult) {
-	  // in this mode startAcq() must  be called for each frame
-	  if (m_rx_detector->StartExposure(craydl::FrameAcquisitionTypeLight).IsError())
-	    DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
-	}
-	else {
-	  if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
-	    DEB_ERROR() << "Camera::startAcq: Error starting acquisition!";
-	}
-}
-
-void Camera::stopAcq() {
-        DEB_MEMBER_FUNCT();
-	if (m_rx_detector->EndAcquisition(true).IsError())
-		DEB_ERROR() << "Camera::stopAcq: Error stopping acquisition!";
 }
 
 int Camera::getNbAcquiredFrames() {
@@ -427,17 +463,21 @@ void Camera::checkRoi(const Roi& set_roi, Roi& hw_roi) {
 
 void Camera::frameReady(const craydl::RxFrame *pFrame) {
   
+   DEB_MEMBER_FUNCT();
+   int frameID = pFrame->InternalFrameID();
+
    StdBufferCbMgr& buffer_mgr = m_buffer_ctrl_obj.getBuffer();
-   void *ptr = buffer_mgr.getFrameBufferPtr(pFrame->InternalFrameID());
+   void *ptr = buffer_mgr.getFrameBufferPtr(frameID);
    FrameDim frame_dim(pFrame->getNFast(), pFrame->getNSlow(), Bpp16);
    memcpy(ptr,pFrame->getBufferAddress(),frame_dim.getMemSize());
 
    
    HwFrameInfoType frame_info;
-   frame_info.acq_frame_nb = pFrame->InternalFrameID();
+   frame_info.acq_frame_nb = frameID;
+   DEB_TRACE() << "got frame " << DEB_VAR1(frameID);
 
    AutoMutex aLock(m_mutex);
-   if(m_expected_frame_nb == pFrame->InternalFrameID())
+   if(m_expected_frame_nb == frameID)
      {
        bool continueAcq = buffer_mgr.newFrameReady(frame_info);
        ++m_expected_frame_nb;
@@ -455,6 +495,6 @@ void Camera::frameReady(const craydl::RxFrame *pFrame) {
 	 }
      }
    else
-     m_pending_frames[pFrame->InternalFrameID()] = frame_info;
+     m_pending_frames[frameID] = frame_info;
    
 }

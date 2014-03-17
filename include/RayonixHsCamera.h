@@ -1,7 +1,7 @@
 //###########################################################################
 // This file is part of LImA, a Library for Image Acquisition
 //
-// Copyright (C) : 2009-2011
+// Copyright (C) : 2009-2014
 // European Synchrotron Radiation Facility
 // BP 220, Grenoble 38043
 // FRANCE
@@ -39,7 +39,11 @@ namespace RayonixHs {
 
 enum DetectorStatus {
    DETECTOR_STATUS_IDLE,
-   DETECTOR_STATUS_INTEGRATING
+   DETECTOR_STATUS_INTEGRATING,
+   DETECTOR_STATUS_READOUT,
+   DETECTOR_STATUS_LATENCY,
+   DETECTOR_STATUS_CONFIG,
+   DETECTOR_STATUS_FAULT
 };
 
  enum FrameMode {
@@ -74,14 +78,13 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		void getDetectorModel(std::string &model);
 		void getDetectorType(std::string &model);
 		
-		HwInterface::StatusType::Basic getStatus();
+		void getStatus(DetectorStatus &status);
 
 		void getMaxImageSize(Size& max_image_size);
 	        void getPixelSize(double &x, double &y);
 
 		void reset();
 
-		bool acquiring() { return m_acquiring; }
 		void prepareAcq();
 		void startAcq();
 		void stopAcq();
@@ -124,9 +127,10 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 	private:
 		void init();
+		void setStatus(DetectorStatus status, bool force=false);
 
 		SoftBufferCtrlObj m_buffer_ctrl_obj;
-
+		
 		FrameDim m_frame_dim;
 
 		double m_exp_time;
@@ -137,7 +141,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		TrigMode m_trig_mode;
 		Size m_max_image_size;
 
-		DetectorStatus m_detector_status;
+		DetectorStatus m_status;
 
 		FrameStatusCb *m_frame_status_cb;
 		Mutex m_mutex;
@@ -148,6 +152,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		FrameMode m_frame_mode;
 		TriggerSignalType m_trig_signal_type;
 
+		volatile bool m_int_trig_mult_started;
 		volatile bool m_acquiring;
 
 		void frameReady(const craydl::RxFrame *pFrame);
