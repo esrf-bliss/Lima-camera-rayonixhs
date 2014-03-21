@@ -1,7 +1,7 @@
 //###########################################################################
 // This file is part of LImA, a Library for Image Acquisition
 //
-// Copyright (C) : 2009-2011
+// Copyright (C) : 2009-2014
 // European Synchrotron Radiation Facility
 // BP 220, Grenoble 38043
 // FRANCE
@@ -47,8 +47,25 @@ using namespace lima;
     // Rayonix specific Hw Interface
     void setFrameMode(RayonixHs::FrameMode mode);
     void getFrameMode(RayonixHs::FrameMode &mode /Out/);
-    void setTriggerSignalType(RayonixHs::TriggerSignalType signal_type);
-    void getTriggerSignalType(RayonixHs::TriggerSignalType &signal_type /Out/);
+    void setFrameTriggerSignalType(RayonixHs::SignalType signal_type);
+    void getFrameTriggerSignalType(RayonixHs::SignalType &signal_type /Out/);
+    void setSequenceGateSignalType(RayonixHs::SignalType signal_type);
+    void getSequenceGateSignalType(RayonixHs::SignalType &signal_type /Out/);
+
+   void setOutputSignalType(RayonixHs::OutputChannel output, RayonixHs::SignalType signal_type);
+   void getOutputSignalType(RayonixHs::OutputChannel output, RayonixHs::SignalType &signal_type /Out/);
+   void setOutputSignalID(RayonixHs::OutputChannel output, RayonixHs::SignalID signal_id);
+   void getOutputSignalID(RayonixHs::OutputChannel output, RayonixHs::SignalID &signal_id /Out/);
+
+    void setElectronicShutterEnabled(bool enable);
+    void getElectronicShutterEnabled(bool &enable /Out/);
+	
+    void setCoolerTemperatureSetpoint(double temperature);
+    void getCoolerTemperatureSetpoint(double &temperature /Out/);
+    void setSensorTemperatureSetpoint(double temperature);
+    void getSensorTemperatureSetpoint(double &temperature /Out/);
+    void setCooler(bool enable);
+    void setVacuumValve(bool enable);
 
   };
 

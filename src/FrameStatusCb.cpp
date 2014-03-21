@@ -26,53 +26,157 @@
 using namespace lima;
 using namespace lima::RayonixHs;
 
+//-----------------------------------------------------
+// @brief Ctor
+//-----------------------------------------------------
 FrameStatusCb::FrameStatusCb(Camera *cam, volatile bool &acquiring)
   : m_cam(cam),
     mRawFramesRcvd(0),
     mBgFramesRcvd(0),
     mCorrFramesRcvd(0),
     m_acquiring(acquiring) {
-    //acquisitionComplete(NULL) {
 
+        DEB_CONSTRUCTOR();
 }
 
 //void registerCallbackAcqComplete(void(*func)()) {
 //   acquistionComplete = func;
 //}
 
-FrameStatusCb::~FrameStatusCb() {}
+//-----------------------------------------------------
+// @brief Ctor
+//-----------------------------------------------------
+FrameStatusCb::~FrameStatusCb() {
+        DEB_DESTRUCTOR();
+}
 
-void FrameStatusCb::RawFrameReady(int frame_number, const craydl::RxFrame *rx_frame) { ++mRawFramesRcvd; std::cout << "Have received " << mRawFramesRcvd << " raw frames." << std::endl; }
+//-----------------------------------------------------
+// @brief callback on new raw frame, increase raw counter
+//-----------------------------------------------------
+void FrameStatusCb::RawFrameReady(int frame_number, const craydl::RxFrame *rx_frame) {
+	DEB_MEMBER_FUNCT();
+        ++mRawFramesRcvd; 
+        DEB_TRACE() << "Have received " << mRawFramesRcvd << " raw frames.";
+}
 
-void FrameStatusCb::BackgroundFrameReady(const craydl::RxFrame *frame_p) { ++mBgFramesRcvd; std::cout << "Have received " << mBgFramesRcvd << " background frames." << std::endl; }
+//-----------------------------------------------------
+// @brief callback on new background frame, increase the bkg counter
+//-----------------------------------------------------
+void FrameStatusCb::BackgroundFrameReady(const craydl::RxFrame *frame_p) {
+	DEB_MEMBER_FUNCT();
+        ++mBgFramesRcvd; 
+        DEB_TRACE() << "Have received " << mBgFramesRcvd << " background frames."; 
+}
 
-void FrameStatusCb::FrameReady(int frame_number, const craydl::RxFrame *rx_frame) { ++mCorrFramesRcvd; std::cout << "Have received " << mCorrFramesRcvd << " corrected frames." << std::endl; m_cam->frameReady(rx_frame); }
+//-----------------------------------------------------
+// @brief callback on new corrected frame, increase the corr counter
+//-----------------------------------------------------
+void FrameStatusCb::FrameReady(int frame_number, const craydl::RxFrame *rx_frame) {
+	DEB_MEMBER_FUNCT();
+        ++mCorrFramesRcvd; 
+        DEB_TRACE() << "Have received " << mCorrFramesRcvd << " corrected frames."; 
+        m_cam->frameReady(rx_frame); 
+}
 
-void FrameStatusCb::FrameAborted(int frame_number) { std::cout << "FrameStatusCb: Frame #" << frame_number << " aborted!" << std::endl; }
+//-----------------------------------------------------
+// @brief callback on acquisition aborted (stop)
+//-----------------------------------------------------
+void FrameStatusCb::FrameAborted(int frame_number) {
+	DEB_MEMBER_FUNCT();
+        DEB_TRACE() << "Frame #" << frame_number << " aborted!";
+}
 
-void FrameStatusCb::FrameError(int frame_number, int error_code, const std::string& error_string) { std::cout << "FrameStatusCb: Frame error with frame #" << frame_number << "!" << std::endl; }
+//-----------------------------------------------------
+// @brief callback on a acquired frame error
+//-----------------------------------------------------
+void FrameStatusCb::FrameError(int frame_number, int error_code, const std::string& error_string) { 
+	DEB_MEMBER_FUNCT();
+        DEB_ERROR() << "Frame error with frame #" << frame_number << ":"; 
+	DEB_ERROR() << error_string;
+}
 
-void FrameStatusCb::SequenceStarted() { m_acquiring = true; std::cout << "FrameStatusCb: Sequence started." << std::endl; }
+//-----------------------------------------------------
+// @brief callback on sequence started
+//-----------------------------------------------------
+void FrameStatusCb::SequenceStarted() { 
+	DEB_MEMBER_FUNCT();
+        m_acquiring = true; 
+        DEB_TRACE() << "Sequence started."; 
+}
 
+//-----------------------------------------------------
+// @brief callback on sequence ended
+//-----------------------------------------------------
 void FrameStatusCb::SequenceEnded() {
-      m_acquiring = false;
-      std::cout << "FrameStatusCb: Sequence ended." << std::endl; 
-      m_cam->setStatus(DETECTOR_STATUS_IDLE);
+	DEB_MEMBER_FUNCT();
+        m_acquiring = false;
+        std::cout << "Sequence ended."; 
+        m_cam->setStatus(DETECTOR_STATUS_IDLE);
 }
 
-void FrameStatusCb::ExposureStarted(int frame) { std::cout << "FrameStatusCb: Exposure started." << std::endl; }
-void FrameStatusCb::ExposureEnded(int frame) { std::cout << "FrameStatusCb: Exposure ended." << std::endl; }
+//-----------------------------------------------------
+// @brief callback on exposure started
+//-----------------------------------------------------
+void FrameStatusCb::ExposureStarted(int frame) { 
+	DEB_MEMBER_FUNCT();
+        DEB_TRACE() << "Exposure started."; 
+}
+//-----------------------------------------------------
+// @brief callback on exposure ended
+//-----------------------------------------------------
+void FrameStatusCb::ExposureEnded(int frame) { 
+	DEB_MEMBER_FUNCT();
+        DEB_TRACE() << "Exposure ended."; 
+}
 
-void FrameStatusCb::ReadoutStarted(int frame) {}
-void FrameStatusCb::ReadoutEnded(int frame) {}
+//-----------------------------------------------------
+// @brief callback on readout started
+//-----------------------------------------------------
+void FrameStatusCb::ReadoutStarted(int frame) {
+	DEB_MEMBER_FUNCT();
+}
+//-----------------------------------------------------
+// @brief callback on readout ended
+//-----------------------------------------------------
+void FrameStatusCb::ReadoutEnded(int frame) {
+	DEB_MEMBER_FUNCT();
+}
 
+//-----------------------------------------------------
+// @brief callback on a frame completed, set the camera status to IDLE
+//-----------------------------------------------------
 void FrameStatusCb::FrameCompleted(int frame) {
-      // in case of IntTrigMult detector must be set to Idle after a frame is completed
-      m_cam->setStatus(DETECTOR_STATUS_IDLE);
+	DEB_MEMBER_FUNCT();
+	// in case of IntTrigMult detector must be set to Idle after a frame is completed
+	m_cam->setStatus(DETECTOR_STATUS_IDLE);
 }
 
-int FrameStatusCb::frameCountRaw() const { return mRawFramesRcvd; }
-int FrameStatusCb::frameCountBackground() const { return mBgFramesRcvd; }
-int FrameStatusCb::frameCountCorrected() const { return mCorrFramesRcvd; }
+//-----------------------------------------------------
+// @brief return the raw frame count
+//-----------------------------------------------------
+int FrameStatusCb::frameCountRaw() const { 
+	DEB_MEMBER_FUNCT();
+	return mRawFramesRcvd; 
+}
+//-----------------------------------------------------
+// @brief return the background frame count
+//-----------------------------------------------------
+int FrameStatusCb::frameCountBackground() const { 
+	DEB_MEMBER_FUNCT();
+	return mBgFramesRcvd; 
+}
+//-----------------------------------------------------
+// @brief return the corrected frame count
+//-----------------------------------------------------
+int FrameStatusCb::frameCountCorrected() const {
+	DEB_MEMBER_FUNCT();
+	return mCorrFramesRcvd; 
+}
 
-void FrameStatusCb::resetFrameCounts() { mRawFramesRcvd = mBgFramesRcvd = mCorrFramesRcvd = 0; }
+//-----------------------------------------------------
+// @brief reset all the frame counts: raw, bkg and corrected
+//-----------------------------------------------------
+void FrameStatusCb::resetFrameCounts() { 
+	DEB_MEMBER_FUNCT();
+	mRawFramesRcvd = mBgFramesRcvd = mCorrFramesRcvd = 0; 
+}

@@ -51,7 +51,7 @@ enum DetectorStatus {
    FAST_TRANSFER
  };
 
- enum TriggerSignalType {
+ enum SignalType {
    UNKNOWN, 
    NONE,  
    EXTENDED, 
@@ -63,8 +63,33 @@ enum DetectorStatus {
    CMOS_PULLDOWN_INVERTED,  
    CMOS_PULLUP_INVERTED,  
    SOFTWARE   
-};
+ };
 
+ enum SignalID {
+   ID_UNKNOWN,
+   ID_NONE,
+   ID_EXTENDED,
+   ID_SHUTTER,
+   ID_INTEGRATE,
+   ID_FRAME,
+   ID_LINE,
+   ID_SHUTTER_OPENING,
+   ID_SHUTTER_CLOSING,
+   ID_SHUTTER_ACTIVE,
+   ID_TRIGGER_RISE_WAIT,
+   ID_TRIGGER_RISE_ACK,
+   ID_TRIGGER_FALL_WAIT,
+   ID_TRIGGER_FALL_ACK,
+   ID_TRIGGER_2_RISE_WAIT,
+   ID_TRIGGER_2_RISE_ACK,
+   ID_INPUT_FRAME,
+   ID_INPUT_GATE
+ };
+
+ enum OutputChannel {
+   CHANNEL_1,
+   CHANNEL_2
+ };
 
 class Camera : public HwMaxImageSizeCallbackGen {
    DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
@@ -72,6 +97,11 @@ class Camera : public HwMaxImageSizeCallbackGen {
    friend class FrameStatusCb;
 
 	public:
+                enum ShutterMode {
+		  FRAME,
+		  MANUAL
+		};
+
 		Camera();
 		~Camera();
 
@@ -110,10 +140,6 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		void getBin(Bin& bin);
 		void checkBin(Bin& bin);
 
-		void setRoi(const Roi& roi);
-		void getRoi(Roi& roi);
-		void checkRoi(const Roi& set_roi, Roi &hw_roi);
-
 		void setFrameDim(const FrameDim& frame_dim);
 		void getFrameDim(FrameDim& frame_dim);
 
@@ -122,9 +148,34 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		// Specific Rayonix interface for configuration
 		void setFrameMode(FrameMode mode);
 		void getFrameMode(FrameMode &mode);
-		void setTriggerSignalType(TriggerSignalType signal_type);
-		void getTriggerSignalType(TriggerSignalType &signal_type);
+		
+		void setFrameTriggerSignalType(SignalType signal_type);
+		void getFrameTriggerSignalType(SignalType &signal_type);
+		void setSequenceGateSignalType(SignalType signal_type);
+		void getSequenceGateSignalType(SignalType &signal_type);
+		
+		void setOutputSignalType(OutputChannel output, SignalType signal_type);
+		void getOutputSignalType(OutputChannel output, SignalType &signal_type);
+		void setOutputSignalID(OutputChannel output, SignalID signal_id);
+		void getOutputSignalID(OutputChannel output, SignalID &signal_id);
 
+		void setShutterOpenDelay(double delay);
+		void getShutterOpenDelay(double &delay);
+		void setShutterCloseDelay(double delay);
+		void getShutterCloseDelay(double &delay);
+		void getShutter(bool &open);
+		void setShutter(bool open);
+		void setElectronicShutterEnabled(bool enable);
+		void getElectronicShutterEnabled(bool &enable);
+		
+		void getCoolerTemperatureSetpoint(double &temperature);
+		void setCoolerTemperatureSetpoint(double temperature);
+		void getSensorTemperatureSetpoint(double &temperature);
+		void setSensorTemperatureSetpoint(double temperature);
+		void setCooler(bool enable);
+		void setVacuumValve(bool enable);
+		
+		
 	private:
 		void init();
 		void setStatus(DetectorStatus status, bool force=false);
@@ -150,8 +201,8 @@ class Camera : public HwMaxImageSizeCallbackGen {
 
 		craydl::RxDetector *m_rx_detector;
 		FrameMode m_frame_mode;
-		TriggerSignalType m_trig_signal_type;
-
+		SignalType m_frame_trig_signal_type;
+		SignalType m_sequ_gate_signal_type;
 		volatile bool m_int_trig_mult_started;
 		volatile bool m_acquiring;
 

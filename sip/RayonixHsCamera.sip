@@ -1,7 +1,7 @@
 //###########################################################################
 // This file is part of LImA, a Library for Image Acquisition
 //
-// Copyright (C) : 2009-2011
+// Copyright (C) : 2009-2014
 // European Synchrotron Radiation Facility
 // BP 220, Grenoble 38043
 // FRANCE
@@ -40,7 +40,7 @@ using namespace lima;
     FAST_TRANSFER
   };  
 
-  enum TriggerSignalType {
+  enum SignalType {
     UNKNOWN, 
     NONE,  
     EXTENDED, 
@@ -52,6 +52,31 @@ using namespace lima;
     CMOS_PULLDOWN_INVERTED,  
     CMOS_PULLUP_INVERTED,  
     SOFTWARE   
+  };
+  enum SignalID {
+    ID_UNKNOWN,
+    ID_NONE,
+    ID_EXTENDED,
+    ID_SHUTTER,
+    ID_INTEGRATE,
+    ID_FRAME,
+    ID_LINE,
+    ID_SHUTTER_OPENING,
+    ID_SHUTTER_CLOSING,
+    ID_SHUTTER_ACTIVE,
+    ID_TRIGGER_RISE_WAIT,
+    ID_TRIGGER_RISE_ACK,
+    ID_TRIGGER_FALL_WAIT,
+    ID_TRIGGER_FALL_ACK,
+    ID_TRIGGER_2_RISE_WAIT,
+    ID_TRIGGER_2_RISE_ACK,
+    ID_INPUT_FRAME,
+    ID_INPUT_GATE
+  };
+
+  enum OutputChannel {
+    CHANNEL_1,
+    CHANNEL_2
   };
 
   class Camera 
@@ -96,10 +121,6 @@ using namespace lima;
     void setBin(const Bin& bin);
     void getBin(Bin& bin /Out/);
     void checkBin(Bin& bin /In,Out/);
-
-    void setRoi(const Roi& roi);
-    void getRoi(Roi& roi /Out/);
-    void checkRoi(const Roi& set_roi, Roi &hw_roi /Out/);
 
     void setFrameDim(const FrameDim& frame_dim);
     void getFrameDim(FrameDim& frame_dim /Out/);

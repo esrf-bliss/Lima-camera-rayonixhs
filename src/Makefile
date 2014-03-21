@@ -1,4 +1,4 @@
-rayonixhs-objs = FrameStatusCb.o RayonixHsCamera.o RayonixHsInterface.o RayonixHsDetInfoCtrlObj.o RayonixHsSyncCtrlObj.o RayonixHsBinCtrlObj.o
+rayonixhs-objs = FrameStatusCb.o RayonixHsCamera.o RayonixHsInterface.o RayonixHsDetInfoCtrlObj.o RayonixHsSyncCtrlObj.o RayonixHsBinCtrlObj.o RayonixHsShutterCtrlObj.o
 
 SRCS = $(rayonixhs-objs:.o=.cpp)
 

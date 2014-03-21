@@ -27,16 +27,25 @@
 using namespace lima;
 using namespace lima::RayonixHs;
 
+//-----------------------------------------------------
+// @brief Ctor
+//-----------------------------------------------------
 SyncCtrlObj::SyncCtrlObj(Camera *cam)
 	: m_cam(cam) {
 
 	DEB_CONSTRUCTOR();
 }
 
+//-----------------------------------------------------
+// @brief Dtor
+//-----------------------------------------------------
 SyncCtrlObj::~SyncCtrlObj() {
 	DEB_DESTRUCTOR();
 }
 
+//-----------------------------------------------------
+// @brief return True if the mode is supported
+//-----------------------------------------------------
 bool SyncCtrlObj::checkTrigMode(TrigMode trig_mode) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(trig_mode);
@@ -45,6 +54,9 @@ bool SyncCtrlObj::checkTrigMode(TrigMode trig_mode) {
 	return m_cam->checkTrigMode(trig_mode);
 }
 
+//-----------------------------------------------------
+// @brief set the trigger mode
+//-----------------------------------------------------
 void SyncCtrlObj::setTrigMode(TrigMode trig_mode) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(trig_mode);
@@ -56,11 +68,17 @@ void SyncCtrlObj::setTrigMode(TrigMode trig_mode) {
 		throw LIMA_HW_EXC(NotSupported,"Trigger type not supported");
 }
 
+//-----------------------------------------------------
+// @brief return the trigger mode
+//-----------------------------------------------------
 void SyncCtrlObj::getTrigMode(TrigMode &trig_mode) {
         DEB_MEMBER_FUNCT();    
 	m_cam->getTrigMode(trig_mode);
 }
 
+//-----------------------------------------------------
+// @brief set the exposure time
+//-----------------------------------------------------
 void SyncCtrlObj::setExpTime(double exp_time) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(exp_time);
@@ -68,6 +86,9 @@ void SyncCtrlObj::setExpTime(double exp_time) {
         m_cam->setExpTime(exp_time);
 }
 
+//-----------------------------------------------------
+// @brief return the exposure time
+//-----------------------------------------------------
 void SyncCtrlObj::getExpTime(double &exp_time) {
 	DEB_MEMBER_FUNCT();
 
@@ -76,16 +97,24 @@ void SyncCtrlObj::getExpTime(double &exp_time) {
 	DEB_RETURN() << DEB_VAR1(exp_time);
 }
 
+//-----------------------------------------------------
+// @brief set the latency time
+//-----------------------------------------------------
 void SyncCtrlObj::setLatTime(double lat_time) {
         DEB_MEMBER_FUNCT();    
 	m_cam->setLatTime(lat_time);
 }
-
+//-----------------------------------------------------
+// @brief return the latency time
+//-----------------------------------------------------
 void SyncCtrlObj::getLatTime(double& lat_time) {
         DEB_MEMBER_FUNCT();    
 	m_cam->getLatTime(lat_time);
 }
 
+//-----------------------------------------------------
+// @brief set the number for frames
+//-----------------------------------------------------
 void SyncCtrlObj::setNbFrames(int nb_frames) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(nb_frames);
@@ -93,21 +122,33 @@ void SyncCtrlObj::setNbFrames(int nb_frames) {
 	setNbHwFrames(nb_frames);
 }
 
+//-----------------------------------------------------
+// @brief return the number of frames
+//-----------------------------------------------------
 void SyncCtrlObj::getNbFrames(int& nb_frames) {
         DEB_MEMBER_FUNCT();    
 	getNbHwFrames(nb_frames);
 }
 
+//-----------------------------------------------------
+// @brief
+//-----------------------------------------------------
 void SyncCtrlObj::setNbHwFrames(int nb_frames) {
         DEB_MEMBER_FUNCT();    
 	m_cam->setNbFrames(nb_frames);
 }
 
+//-----------------------------------------------------
+// @brief
+//-----------------------------------------------------
 void SyncCtrlObj::getNbHwFrames(int& nb_frames) {
         DEB_MEMBER_FUNCT();    
 	m_cam->getNbFrames(nb_frames);
 }
 
+//-----------------------------------------------------
+// @brief return the valid timing ranges
+//-----------------------------------------------------
 void SyncCtrlObj::getValidRanges(ValidRangesType& valid_ranges) {
         DEB_MEMBER_FUNCT();    
 	valid_ranges.min_exp_time = 1e-3;

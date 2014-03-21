@@ -31,6 +31,7 @@ namespace RayonixHs {
 class DetInfoCtrlObj;
 class SyncCtrlObj;
 class BinCtrlObj;
+class ShutterCtrlObj;
 
 class Interface: public HwInterface {
 	DEB_CLASS_NAMESPC(DebModCamera, "Interface", "RayonixHs");
@@ -53,15 +54,33 @@ class Interface: public HwInterface {
 		// Rayonix specific Hw Interface
 		void setFrameMode(FrameMode mode);
 		void getFrameMode(FrameMode &mode);
-		void setTriggerSignalType(TriggerSignalType signal_type);
-		void getTriggerSignalType(TriggerSignalType &signal_type);
+		void setFrameTriggerSignalType(SignalType signal_type);
+		void getFrameTriggerSignalType(SignalType &signal_type);
+		void setSequenceGateSignalType(SignalType signal_type);
+		void getSequenceGateSignalType(SignalType &signal_type);
+
+		void setOutputSignalType(OutputChannel output, SignalType signal_type);
+		void getOutputSignalType(OutputChannel output, SignalType &signal_type);
+		void setOutputSignalID(OutputChannel output, SignalID signal_id);
+		void getOutputSignalID(OutputChannel output, SignalID &signal_id);
+
+		void setElectronicShutterEnabled(bool enable);
+		void getElectronicShutterEnabled(bool &enable);
+		
+		void getCoolerTemperatureSetpoint(double &temperature);
+		void setCoolerTemperatureSetpoint(double temperature);
+		void getSensorTemperatureSetpoint(double &temperature);
+		void setSensorTemperatureSetpoint(double temperature);
+		void setCooler(bool enable);
+		void setVacuumValve(bool enable);
 		
 	private:
 		Camera* m_cam;
 		DetInfoCtrlObj* m_det_info;
 		HwBufferCtrlObj* m_buffer;
 		SyncCtrlObj* m_sync;
-		BinCtrlObj *m_bin;
+		BinCtrlObj* m_bin;
+		ShutterCtrlObj* m_shutter;
 };
 
 } // namespace RayonixHs
