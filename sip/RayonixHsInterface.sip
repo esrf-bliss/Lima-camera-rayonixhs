@@ -64,9 +64,11 @@ using namespace lima;
     void getCoolerTemperatureSetpoint(double &temperature /Out/);
     void setSensorTemperatureSetpoint(double temperature);
     void getSensorTemperatureSetpoint(double &temperature /Out/);
-    void setCooler(bool enable);
-    void setVacuumValve(bool enable);
-
+    void getSensorTemperature(double &temperature /Out/);
+    void setCooler(bool start);
+    void getCooler(bool &start /Out/);
+    void setVacuumValve(bool open);
+    void getVacuumValve(bool &open /Out/);
   };
 
 }; // namespace RayonixHs

@@ -172,8 +172,12 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		void setCoolerTemperatureSetpoint(double temperature);
 		void getSensorTemperatureSetpoint(double &temperature);
 		void setSensorTemperatureSetpoint(double temperature);
-		void setCooler(bool enable);
-		void setVacuumValve(bool enable);
+		void getSensorTemperature(double &temperature);
+
+		void setCooler(bool start);
+		void getCooler(bool& start);
+		void setVacuumValve(bool open);
+		void getVacuumValve(bool& open);
 		
 		
 	private:
@@ -205,6 +209,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		SignalType m_sequ_gate_signal_type;
 		volatile bool m_int_trig_mult_started;
 		volatile bool m_acquiring;
+		bool m_cooler, m_vac_valve;
 
 		void frameReady(const craydl::RxFrame *pFrame);
 };

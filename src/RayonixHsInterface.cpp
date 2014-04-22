@@ -311,6 +311,16 @@ void Interface::getSensorTemperatureSetpoint(double &temperature) {
 } 
 
 //---------------------------
+// @brief return the sensor temperature
+// @param[out] temperature in degree Celcius
+//---------------------------
+void Interface::getSensorTemperature(double &temperature) {
+	DEB_MEMBER_FUNCT();
+	
+	m_cam->getSensorTemperature(temperature);
+} 
+
+//---------------------------
 // @brief set the sensor temperature set point 
 // @param[in] temperature in degree Celcius
 //---------------------------
@@ -331,11 +341,33 @@ void Interface::setCooler(bool enable) {
 }
 
 //---------------------------
+// @brief return if the cooling system is running or not
+// @param[out] started true = started, false = stopped
+//---------------------------
+void Interface::getCooler(bool &started) {
+	DEB_MEMBER_FUNCT();
+       
+	m_cam->getCooler(started);
+
+}
+
+//---------------------------
 // @brief close or open the vacuum valve
 // @param[in] enable true = open, false = close
 //---------------------------
-void Interface::setVacuumValve(bool enable) {
+void Interface::setVacuumValve(bool open) {
 	DEB_MEMBER_FUNCT();
 
-	m_cam->setVacuumValve(enable);
+	m_cam->setVacuumValve(open);
+}
+
+//---------------------------
+// @brief close or open the vacuum valve
+// @param[in] opened true = open, false = close
+//---------------------------
+void Interface::getVacuumValve(bool& opened)
+{
+	DEB_MEMBER_FUNCT();
+
+	m_cam->getVacuumValve(opened);
 }

@@ -71,8 +71,11 @@ class Interface: public HwInterface {
 		void setCoolerTemperatureSetpoint(double temperature);
 		void getSensorTemperatureSetpoint(double &temperature);
 		void setSensorTemperatureSetpoint(double temperature);
-		void setCooler(bool enable);
-		void setVacuumValve(bool enable);
+		void getSensorTemperature(double &temperature);
+		void setCooler(bool start);
+		void getCooler(bool &start);
+		void setVacuumValve(bool open);
+		void getVacuumValve(bool &open);
 		
 	private:
 		Camera* m_cam;

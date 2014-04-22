@@ -32,7 +32,9 @@ using namespace lima::RayonixHs;
 Camera::Camera()
 	: m_rx_detector(new craydl::RxDetector("./RxDetector.conf")),
 	  m_status(DETECTOR_STATUS_IDLE),
-	  m_acquiring(false)
+	  m_acquiring(false),
+	  m_cooler(true),
+	  m_vac_valve(false)
 {
 	DEB_CONSTRUCTOR();
 
@@ -322,7 +324,7 @@ void Camera::setLatTime(double lat_time) {
 	}
 	else {
 		// FAST_TRANSFER: latency is fixed, 1ms of frame transfer
-		THROW_HW_ERROR(Error) << "Cannot set latency in FAST_TRANSFER frame mode!";
+		DEB_WARNING() << "Cannot set latency in FAST_TRANSFER frame mode: fixed to 1ms!";
 	}
 	m_lat_time = lat_time;
 }
@@ -805,27 +807,65 @@ void Camera::setSensorTemperatureSetpoint(double temperature) {
 }
 
 //---------------------------
-// @brief start or stop the cooling system
-// @param[in] enable true = start, false = stop
+// @brief return the sensor temperature (average) 
+// @param[out] temperature in degree Celcius
 //---------------------------
-void Camera::setCooler(bool enable) {
+void Camera::getSensorTemperature(double &temperature) {
 	DEB_MEMBER_FUNCT();
-	DEB_PARAM() << DEB_VAR1(enable);
+	
+	temperature = m_rx_detector->SensorTemperatureAve();
+}
 
-	if (m_rx_detector->CommandCooler(enable).IsError())
+
+//---------------------------
+// @brief start or stop the cooling system
+// @param[in] start true = start, false = stop
+//---------------------------
+void Camera::setCooler(bool start) {
+	DEB_MEMBER_FUNCT();
+	DEB_PARAM() << DEB_VAR1(start);
+
+	if (m_rx_detector->CommandCooler(start).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set cooler to : "
-				      << DEB_VAR1(enable);
+				      << DEB_VAR1(start);
+	m_cooler = start;
+}
+
+//---------------------------
+// @brief return if the cooling system is running or not
+// @param[out] started true = started, false = stopped
+//---------------------------
+void Camera::getCooler(bool& started)
+{
+	DEB_MEMBER_FUNCT();
+
+	m_cooler = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagCoolerEnabled);	
+	started = m_cooler;
+
 }
 
 //---------------------------
 // @brief close or open the vacuum valve
-// @param[in] enable true = open, false = close
+// @param[in] open true = open, false = close
 //---------------------------
-void Camera::setVacuumValve(bool enable) {
+void Camera::setVacuumValve(bool open) {
 	DEB_MEMBER_FUNCT();
-	DEB_PARAM() << DEB_VAR1(enable);
+	DEB_PARAM() << DEB_VAR1(open);
 
-	if (m_rx_detector->CommandVacuumValve(enable).IsError())
+	if (m_rx_detector->CommandVacuumValve(open).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set vacuum valve to : "
-				      << DEB_VAR1(enable);
+				      << DEB_VAR1(open);
+	m_vac_valve = open;
+}
+
+//---------------------------
+// @brief close or open the vacuum valve
+// @param[in] opened true = open, false = close
+//---------------------------
+void Camera::getVacuumValve(bool& opened)
+{
+	DEB_MEMBER_FUNCT();
+
+	m_vac_valve = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagVacuumValveEnabled);
+	opened = m_vac_valve;
 }
