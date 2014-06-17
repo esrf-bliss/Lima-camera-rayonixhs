@@ -1,3 +1,5 @@
+.. _camera-rayonixhs:
+
 Rayonix HS
 -----------
 
