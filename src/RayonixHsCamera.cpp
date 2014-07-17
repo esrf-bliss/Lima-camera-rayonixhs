@@ -869,3 +869,29 @@ void Camera::getVacuumValve(bool& opened)
 	m_vac_valve = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagVacuumValveEnabled);
 	opened = m_vac_valve;
 }
+
+//---------------------------
+// @brief return if the detector needs a new background
+// @param[out] needed: true = yes, false = no
+//---------------------------
+void Camera::getNewBackgroundNeeded(bool& needed)
+{
+	DEB_MEMBER_FUNCT();
+
+	needed  = m_rx_detector->NewBackgroundNeeded();
+}
+
+
+//---------------------------
+// @brief return if the detector needs a new background
+// @param[in] block: true = blocking cmd, false = none-blocking cmd
+//---------------------------
+void Camera::acquireNewBackground(bool block, int n_background)
+{
+	DEB_MEMBER_FUNCT();
+	DEB_PARAM() << DEB_VAR2(block,n_background);
+
+	if (m_rx_detector->AcquireNewBackground(block,n_background).IsError())
+		THROW_HW_ERROR(Error) << "Cannot take a new background :"
+				      << DEB_VAR2(block, n_background);	
+}

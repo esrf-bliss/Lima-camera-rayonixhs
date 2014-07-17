@@ -179,7 +179,9 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		void setVacuumValve(bool open);
 		void getVacuumValve(bool& open);
 		
-		
+		void getNewBackgroundNeeded(bool& needed);
+		void acquireNewBackground(bool block = false, int n_backgrounds = 0);
+
 	private:
 		void init();
 		void setStatus(DetectorStatus status, bool force=false);

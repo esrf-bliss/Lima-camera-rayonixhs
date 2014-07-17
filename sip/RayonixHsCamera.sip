@@ -124,6 +124,9 @@ using namespace lima;
 
     void setFrameDim(const FrameDim& frame_dim);
     void getFrameDim(FrameDim& frame_dim /Out/);
+
+    void getNewBackgroundNeeded(bool& needed /Out/);
+    void acquireNewBackground(bool block = false, int n_backgrounds = 0);
   };
 
 

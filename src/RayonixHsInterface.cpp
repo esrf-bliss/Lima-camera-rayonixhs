@@ -371,3 +371,27 @@ void Interface::getVacuumValve(bool& opened)
 
 	m_cam->getVacuumValve(opened);
 }
+//---------------------------
+// @brief return if the detector needs a new background
+// @param[out] needed: true = yes, false = no
+//---------------------------
+void Interface::getNewBackgroundNeeded(bool& needed)
+{
+        DEB_MEMBER_FUNCT();
+
+        m_cam->getNewBackgroundNeeded(needed);
+}
+
+
+//---------------------------
+// @brief return if the detector needs a new background
+// @param[in] block: true = blocking cmd, false = none-blocking cmd
+//---------------------------
+void Interface::acquireNewBackground(bool block, int n_background)
+{
+        DEB_MEMBER_FUNCT();
+
+	m_cam->acquireNewBackground(block, n_background);
+}
+
+

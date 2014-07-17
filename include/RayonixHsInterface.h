@@ -76,7 +76,8 @@ class Interface: public HwInterface {
 		void getCooler(bool &start);
 		void setVacuumValve(bool open);
 		void getVacuumValve(bool &open);
-		
+		void getNewBackgroundNeeded(bool& needed);
+		void acquireNewBackground(bool block = false, int n_backgrounds = 0);		
 	private:
 		Camera* m_cam;
 		DetInfoCtrlObj* m_det_info;

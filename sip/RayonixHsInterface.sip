@@ -69,6 +69,9 @@ using namespace lima;
     void getCooler(bool &start /Out/);
     void setVacuumValve(bool open);
     void getVacuumValve(bool &open /Out/);
+    void getNewBackgroundNeeded(bool& needed /Out/);
+    void acquireNewBackground(bool block = false, int n_backgrounds = 0);
+
   };
 
 }; // namespace RayonixHs
