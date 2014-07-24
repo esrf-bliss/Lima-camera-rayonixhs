@@ -30,7 +30,7 @@ namespace RayonixHs
 using namespace lima;
 %End
     public:
-    Interface(RayonixHs::Camera*);
+    Interface(RayonixHs::Camera* /KeepReference/);
     virtual ~Interface();
 
     //virtual void getCapList(CapList &) const;
