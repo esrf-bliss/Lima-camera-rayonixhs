@@ -91,6 +91,15 @@ enum DetectorStatus {
    CHANNEL_2
  };
 
+ enum ReadoutMode {
+   READOUT_MODE_UNKNOWN,
+   READOUT_MODE_STANDARD,
+   READOUT_MODE_HIGH_GAIN,
+   READOUT_MODE_LOW_NOISE,
+   READOUT_MODE_HDR,
+   READOUT_MODE_TURBO
+ };
+
 class Camera : public HwMaxImageSizeCallbackGen {
    DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
    friend class Interface;
@@ -102,7 +111,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		  MANUAL
 		};
 
-		Camera();
+		Camera(std::string config_path = "RxDetector.conf");
 		~Camera();
 
 		void getDetectorModel(std::string &model);
@@ -182,6 +191,9 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		void getNewBackgroundNeeded(bool& needed);
 		void acquireNewBackground(bool block = false, int n_backgrounds = 0);
 
+		void getReadoutMode(ReadoutMode& mode);
+		void setReadoutMode(ReadoutMode mode);
+
 	private:
 		void init();
 		void setStatus(DetectorStatus status, bool force=false);
@@ -201,6 +213,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		DetectorStatus m_status;
 
 		FrameStatusCb *m_frame_status_cb;
+		craydl::CallbackConnection_t m_frame_cb_connection;
 		Mutex m_mutex;
 		std::map<int,HwFrameInfoType> m_pending_frames;
 		int m_expected_frame_nb;

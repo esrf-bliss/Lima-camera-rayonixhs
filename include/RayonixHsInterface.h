@@ -77,7 +77,10 @@ class Interface: public HwInterface {
 		void setVacuumValve(bool open);
 		void getVacuumValve(bool &open);
 		void getNewBackgroundNeeded(bool& needed);
-		void acquireNewBackground(bool block = false, int n_backgrounds = 0);		
+		void acquireNewBackground(bool block = false, int n_backgrounds = 0);
+		void getReadoutMode(ReadoutMode &mode);
+		void setReadoutMode(ReadoutMode mode);
+		
 	private:
 		Camera* m_cam;
 		DetInfoCtrlObj* m_det_info;

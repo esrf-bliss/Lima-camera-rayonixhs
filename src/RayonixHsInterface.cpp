@@ -395,3 +395,23 @@ void Interface::acquireNewBackground(bool block, int n_background)
 }
 
 
+//---------------------------
+// @brief return the readout mode
+// @param[out] mode:
+//---------------------------
+void Interface::getReadoutMode(ReadoutMode& mode)
+{
+	DEB_MEMBER_FUNCT();
+
+	m_cam->getReadoutMode(mode);
+}
+//---------------------------
+// @brief set the readout mode
+// @param[in] mode:
+//---------------------------
+void Interface::setReadoutMode(ReadoutMode mode)
+{
+	DEB_MEMBER_FUNCT();
+	
+	m_cam->setReadoutMode(mode);
+}
