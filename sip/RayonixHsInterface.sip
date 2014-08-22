@@ -71,6 +71,8 @@ using namespace lima;
     void getVacuumValve(bool &open /Out/);
     void getNewBackgroundNeeded(bool& needed /Out/);
     void acquireNewBackground(bool block = false, int n_backgrounds = 0);
+    void getReadoutMode(RayonixHs::ReadoutMode& mode /Out/);
+    void setReadoutMode(RayonixHs::ReadoutMode mode);
 
   };
 

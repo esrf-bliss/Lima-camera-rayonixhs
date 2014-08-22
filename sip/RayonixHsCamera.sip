@@ -79,6 +79,15 @@ using namespace lima;
     CHANNEL_2
   };
 
+ enum ReadoutMode {
+   READOUT_MODE_UNKNOWN,
+   READOUT_MODE_STANDARD,
+   READOUT_MODE_HIGH_GAIN,
+   READOUT_MODE_LOW_NOISE,
+   READOUT_MODE_HDR,
+   READOUT_MODE_TURBO
+ };
+
   class Camera 
 {
 %TypeHeaderCode
@@ -86,7 +95,7 @@ using namespace lima;
 using namespace lima;
 %End
   public:
-    Camera();
+    Camera(std::string config_path = "RxDetector.conf");
     ~Camera();
 
     void getDetectorModel(std::string &model /Out/);
@@ -127,6 +136,9 @@ using namespace lima;
 
     void getNewBackgroundNeeded(bool& needed /Out/);
     void acquireNewBackground(bool block = false, int n_backgrounds = 0);
+    void getReadoutMode(RayonixHs::ReadoutMode& mode /Out/);
+    void setReadoutMode(RayonixHs::ReadoutMode mode);
+
   };
 
 

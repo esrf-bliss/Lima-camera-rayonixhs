@@ -89,7 +89,7 @@ void FrameStatusCb::FrameAborted(int frame_number) {
 //-----------------------------------------------------
 // @brief callback on a acquired frame error
 //-----------------------------------------------------
-void FrameStatusCb::FrameError(int frame_number, int error_code, const std::string& error_string) { 
+void FrameStatusCb::FrameError(int frame_number, const craydl::RxFrame* frame_p, int error_code, const std::string& error_string) { 
 	DEB_MEMBER_FUNCT();
         DEB_ERROR() << "Frame error with frame #" << frame_number << ":"; 
 	DEB_ERROR() << error_string;

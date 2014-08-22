@@ -45,7 +45,7 @@ class FrameStatusCb : public virtual craydl::VirtualFrameCallback {
 
         void FrameAborted(int frame_number);
 
-        void FrameError(int frame_number, int error_code, const std::string& error_string);
+        void FrameError(int frame_number, const craydl::RxFrame* frame_p, int error_code, const std::string& error_string);
 
         void SequenceStarted();
 

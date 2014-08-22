@@ -29,8 +29,8 @@ using namespace lima::RayonixHs;
 //---------------------------
 // @brief  Ctor
 //---------------------------
-Camera::Camera()
-	: m_rx_detector(new craydl::RxDetector("./RxDetector.conf")),
+Camera::Camera(std::string config_path)
+	: m_rx_detector(new craydl::RxDetector(config_path)),
 	  m_status(DETECTOR_STATUS_IDLE),
 	  m_acquiring(false),
 	  m_cooler(true),
@@ -180,8 +180,11 @@ bool Camera::checkTrigMode(TrigMode mode) {
 	case ExtTrigSingle:
 	case ExtTrigMult:
 	case ExtGate:
+	        valid_mode = true;
+		break;
 	case ExtTrigReadout:
-		valid_mode = true;
+	        // Only in FAST_TRANSER mode
+	        valid_mode = (m_frame_mode == FAST_TRANSFER);
 		break;
 	default:
 		valid_mode = false;
@@ -440,9 +443,11 @@ void Camera::setStatus(DetectorStatus status,bool force)
 void Camera::prepareAcq() {
 	DEB_MEMBER_FUNCT();
 
-	if (m_rx_detector->SetAcquisitionUserCB(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb)).IsError()) {
-		THROW_HW_ERROR(Error) << "SetAcquisitionUserCB() failed";
-	}
+	m_frame_cb_connection = m_rx_detector->RegisterFrameCallback(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb));
+	//if (m_frame_cb_connection.connected())
+	// this return false, don't know how to test if the callback is registered.
+	//      THROW_HW_ERROR(Error) << "RegisterFrameCallback() failed";
+
 	// 0 means first frame id equal 0 (InternalFrameID)
 	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError()) 
 		THROW_HW_ERROR(Error) << "SetupAcquisitionSequence() failed!";
@@ -488,8 +493,12 @@ void Camera::prepareAcq() {
 		break;
 
 	case ExtTrigReadout:
-		// TODO: only in FAST_TRANSFER frame mode
-		break;
+	        // only in FAST_TRANSFER frame mode
+	        rx_frame_trig_type	 = craydl::FrameTriggerTypeFrame;
+		rx_sequence_gate	 = craydl::SequenceGateModeNone;
+		rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_frame_trig_signal_type;
+		trigger = 0; // Frame input
+break;
 
 	}
 	// apply trigger mode (soft, trig, gate ...)
@@ -523,6 +532,9 @@ void Camera::startAcq() {
 	m_buffer_ctrl_obj.getBuffer().setStartTimestamp(Timestamp::now());
 
 	if (m_trig_mode == IntTrigMult && !m_int_trig_mult_started) {
+	        // Release the bulb if still High otherwise acq 'll start immediately
+	        if (m_rx_detector->Bulb())
+		        m_rx_detector->ReleaseBulb();
 		if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
 			THROW_HW_ERROR(Error) << "Cannot start the acquisition in IntTrigMult mode";
 		m_int_trig_mult_started = true;
@@ -639,7 +651,7 @@ void Camera::setOutputSignalType(OutputChannel output, SignalType signal_type) {
 
 	craydl::DigitalIOSignalType_t sig_type = (craydl::DigitalIOSignalType_t)signal_type;
 
-	if(m_rx_detector->SetDigitalIOSignalType((int) output, craydl::TriggerDirectionOutput, craydl::DigitalIOSignalType(sig_type)).IsError())
+	if(m_rx_detector->SetDigitalOutputSignalType((int) output, craydl::DigitalIOSignalType(sig_type)).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set output signal type";
 }
 //---------------------------
@@ -651,7 +663,7 @@ void Camera::getOutputSignalType(OutputChannel output, SignalType &signal_type) 
 	DEB_MEMBER_FUNCT();
 
 	craydl::DigitalIOSignalType_t sig_type;
-	sig_type = m_rx_detector->GetDigitalIOSignalType((int)output, craydl::TriggerDirectionOutput).key();
+	sig_type = m_rx_detector->GetDigitalOutputSignalType((int)output).key();
 	signal_type = (SignalType)sig_type;
 }
 
@@ -665,7 +677,7 @@ void Camera::setOutputSignalID(OutputChannel output, SignalID signal_id) {
 
 	craydl::DigitalIOSignalID_t sig_id = (craydl::DigitalIOSignalID_t)signal_id;
 
-	if(m_rx_detector->SetDigitalIOSignalID((int) output, craydl::TriggerDirectionOutput, craydl::DigitalIOSignalID(sig_id)).IsError())
+	if(m_rx_detector->SetDigitalOutputSignalID((int) output, craydl::DigitalIOSignalID(sig_id)).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set output signal ID";
 }
 //---------------------------
@@ -677,7 +689,7 @@ void Camera::getOutputSignalID(OutputChannel output, SignalID &signal_id) {
 	DEB_MEMBER_FUNCT();
 
 	craydl::DigitalIOSignalID_t sig_id;
-	sig_id = m_rx_detector->GetDigitalIOSignalID((int)output, craydl::TriggerDirectionOutput).key();
+	sig_id = m_rx_detector->GetDigitalOutputSignalID((int)output).key();
 	signal_id = (SignalID)sig_id;
 }
 
@@ -769,7 +781,7 @@ void Camera::getElectronicShutterEnabled(bool &enable) {
 void Camera::getCoolerTemperatureSetpoint(double &temperature) {
 	DEB_MEMBER_FUNCT();
 
-	temperature = m_rx_detector->CoolerTemperatureSetpoint();
+	temperature = m_rx_detector->SensorTemperatureSetpoint();
 }
 
 //---------------------------
@@ -780,7 +792,7 @@ void Camera::setCoolerTemperatureSetpoint(double temperature) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(temperature);
 
-	if (m_rx_detector->SetCoolerTemperatureSetpoint(temperature).IsError())
+	if (m_rx_detector->SetSensorTemperatureSetpoint(temperature).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set cooler temperature setpoint!";
 }
 
@@ -825,7 +837,7 @@ void Camera::setCooler(bool start) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(start);
 
-	if (m_rx_detector->CommandCooler(start).IsError())
+	if (m_rx_detector->CommandCoolers(start).IsError())
 		THROW_HW_ERROR(Error) << "Cannot set cooler to : "
 				      << DEB_VAR1(start);
 	m_cooler = start;
@@ -839,7 +851,7 @@ void Camera::getCooler(bool& started)
 {
 	DEB_MEMBER_FUNCT();
 
-	m_cooler = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagCoolerEnabled);	
+	m_cooler = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagCoolersEnabled);	
 	started = m_cooler;
 
 }
@@ -883,7 +895,7 @@ void Camera::getNewBackgroundNeeded(bool& needed)
 
 
 //---------------------------
-// @brief return if the detector needs a new background
+// @brief acquire (a) new background frame(s)
 // @param[in] block: true = blocking cmd, false = none-blocking cmd
 //---------------------------
 void Camera::acquireNewBackground(bool block, int n_background)
@@ -894,4 +906,29 @@ void Camera::acquireNewBackground(bool block, int n_background)
 	if (m_rx_detector->AcquireNewBackground(block,n_background).IsError())
 		THROW_HW_ERROR(Error) << "Cannot take a new background :"
 				      << DEB_VAR2(block, n_background);	
+}
+
+//---------------------------
+// @brief return the readout mode
+// @param[out] mode:
+//---------------------------
+void Camera::getReadoutMode(ReadoutMode& mode)
+{
+	DEB_MEMBER_FUNCT();
+	
+	mode = (ReadoutMode)m_rx_detector->GetReadoutMode().key();
+}
+//---------------------------
+// @brief set the readout mode
+// @param[in] mode:
+//---------------------------
+void Camera::setReadoutMode(ReadoutMode mode)
+{
+	DEB_MEMBER_FUNCT();
+	
+	craydl::ReadoutMode readout_mode(static_cast<craydl::ReadoutMode_t> (mode));
+
+	if (m_rx_detector->SetReadoutMode(readout_mode).IsError())
+	        THROW_HW_ERROR(Error) << "Cannot set the readout mode :"	
+				      << DEB_VAR1(mode);
 }
