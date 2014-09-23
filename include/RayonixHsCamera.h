@@ -209,6 +209,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		int m_nb_frames;
 		TrigMode m_trig_mode;
 		Size m_max_image_size;
+		ImageType m_image_type;
 
 		DetectorStatus m_status;
 

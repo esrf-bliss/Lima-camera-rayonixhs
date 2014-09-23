@@ -34,7 +34,8 @@ Camera::Camera(std::string config_path)
 	  m_status(DETECTOR_STATUS_IDLE),
 	  m_acquiring(false),
 	  m_cooler(true),
-	  m_vac_valve(false)
+	  m_vac_valve(false),
+          m_image_type(Bpp16)
 {
 	DEB_CONSTRUCTOR();
 
@@ -148,7 +149,7 @@ void Camera::getDetectorModel(std::string &model) {
 //---------------------------
 void Camera::getImageType(ImageType &img_type) {
 	DEB_MEMBER_FUNCT();
-	img_type = Bpp16;
+	img_type = m_image_type;
 }
 
 //---------------------------
@@ -156,13 +157,8 @@ void Camera::getImageType(ImageType &img_type) {
 //---------------------------
 void Camera::setImageType(ImageType img_type) {
 	DEB_MEMBER_FUNCT();
-	switch (img_type) {
-		case Bpp16:
-			break;
-		default:
-		  THROW_HW_ERROR(InvalidValue) << "Image type is not supported: "
-					       << DEB_VAR1(img_type);
-	}
+        THROW_HW_ERROR(InvalidValue) << "Image type is not supported: "
+                                     << DEB_VAR1(img_type);
 }
 
 
@@ -903,6 +899,11 @@ void Camera::acquireNewBackground(bool block, int n_background)
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR2(block,n_background);
 
+        if (m_status == DETECTOR_STATUS_INTEGRATING) {
+		THROW_HW_ERROR(Error) << "Cannot set a new background while the detector is running. "
+                                      << "Please stop the acquisition before !!";
+        } 
+       
 	if (m_rx_detector->AcquireNewBackground(block,n_background).IsError())
 		THROW_HW_ERROR(Error) << "Cannot take a new background :"
 				      << DEB_VAR2(block, n_background);	
@@ -928,7 +929,14 @@ void Camera::setReadoutMode(ReadoutMode mode)
 	
 	craydl::ReadoutMode readout_mode(static_cast<craydl::ReadoutMode_t> (mode));
 
+        if (m_status == DETECTOR_STATUS_INTEGRATING) {
+		THROW_HW_ERROR(Error) << "Cannot change the readout mode while the detector is running. "
+                                      << "Please stop the acquisition before !!";
+        } 
 	if (m_rx_detector->SetReadoutMode(readout_mode).IsError())
 	        THROW_HW_ERROR(Error) << "Cannot set the readout mode :"	
 				      << DEB_VAR1(mode);
+        // In High Dynamic Range, the image type Bpp32
+        if (mode == READOUT_MODE_HDR) m_image_type = Bpp32;
+        else m_image_type = Bpp16;
 }
