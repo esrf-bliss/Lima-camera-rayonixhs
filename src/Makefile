@@ -7,7 +7,7 @@ SRCS = $(rayonixhs-objs:.o=.cpp)
 CXXFLAGS += -I../include -I../../../hardware/include -I../../../common/include -I/opt/rayonix/include/craydl\
             -I/opt/rayonix/include \
             -I/opt/rayonix/include/marccd \
-	    -pthread -fPIC
+	    -pthread -fPIC -std=c++0x
 
 all:	RayonixHs.o
 
