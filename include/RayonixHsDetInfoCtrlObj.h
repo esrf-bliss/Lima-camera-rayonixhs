@@ -22,8 +22,8 @@
 #ifndef RAYONIXHSDETINFOCTRLOBJ_H
 #define RAYONIXHSDETINFOCTRLOBJ_H
 
-#include "HwDetInfoCtrlObj.h"
-#include "Debug.h"
+#include "lima/HwDetInfoCtrlObj.h"
+#include "lima/Debug.h"
 
 namespace lima {
 namespace RayonixHs {

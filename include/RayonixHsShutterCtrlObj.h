@@ -22,7 +22,7 @@
 #ifndef RAYONIXHSSHUTTERCTRLOBJ_H
 #define RAYONIXSHUTTERCTRLOBJ_H
 
-#include "HwInterface.h"
+#include "lima/HwInterface.h"
 #include "RayonixHsCamera.h"
 
 namespace lima

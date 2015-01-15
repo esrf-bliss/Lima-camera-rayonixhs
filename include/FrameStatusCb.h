@@ -23,7 +23,7 @@
 #define FRAMESTATUSCB_H
 
 #include "craydl.h"
-#include "Debug.h"
+#include "lima/Debug.h"
 
 namespace lima {
 namespace RayonixHs {

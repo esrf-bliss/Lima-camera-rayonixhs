@@ -24,11 +24,11 @@
 
 //#include <ostream>
 
-#include "Debug.h"
-#include "HwMaxImageSizeCallback.h"
-#include "HwInterface.h"
-#include "HwBufferMgr.h"
-#include "SizeUtils.h"
+#include "lima/Debug.h"
+#include "lima/HwMaxImageSizeCallback.h"
+#include "lima/HwInterface.h"
+#include "lima/HwBufferMgr.h"
+#include "lima/SizeUtils.h"
 
 #include "craydl.h"
 #include "FrameStatusCb.h"

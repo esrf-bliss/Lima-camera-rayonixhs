@@ -22,7 +22,7 @@
 #ifndef RayonixHsINTERFACE_H
 #define RayonixHsINTERFACE_H
 
-#include "HwInterface.h"
+#include "lima/HwInterface.h"
 #include "RayonixHsCamera.h"
 
 namespace lima {
