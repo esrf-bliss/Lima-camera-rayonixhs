@@ -41,7 +41,16 @@ Camera::Camera(std::string config_path)
 
 	init();
 
+	// create callback obj and register only once here
+	// Do not trust comment /opt/rayonix/include/craydl/RxDetector.h:2974
+	// EndAcquisition() does not unregister any callback, so it is permanently added.
 	m_frame_status_cb = new FrameStatusCb(this, m_acquiring);
+	m_frame_cb_connection = m_rx_detector->RegisterFrameCallback(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb));
+	//if (m_frame_cb_connection.connected())
+	// this return false, don't know how to test if the callback is registered.
+	//      THROW_HW_ERROR(Error) << "RegisterFrameCallback() failed";
+
+
 	//m_frame_status_cb->registerCallbackAcqComplete(&lima::RayonixHs::Camera::acquisitionComplete);
 	//m_frame_status_cb->registerCallbackAcqComplete(&acquisitionComplete);
 }
@@ -439,11 +448,6 @@ void Camera::setStatus(DetectorStatus status,bool force)
 void Camera::prepareAcq() {
 	DEB_MEMBER_FUNCT();
 
-	m_frame_cb_connection = m_rx_detector->RegisterFrameCallback(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb));
-	//if (m_frame_cb_connection.connected())
-	// this return false, don't know how to test if the callback is registered.
-	//      THROW_HW_ERROR(Error) << "RegisterFrameCallback() failed";
-
 	// 0 means first frame id equal 0 (InternalFrameID)
 	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError()) 
 		THROW_HW_ERROR(Error) << "SetupAcquisitionSequence() failed!";
@@ -553,6 +557,7 @@ void Camera::stopAcq() {
 	DEB_MEMBER_FUNCT();
 	if (m_rx_detector->EndAcquisition(true).IsError())
 		DEB_ERROR() << "Camera::stopAcq: Error stopping acquisition!";
+
 	setStatus(DETECTOR_STATUS_IDLE);
 }
 
@@ -575,7 +580,7 @@ void Camera::frameReady(const craydl::RxFrame *pFrame) {
    
 	HwFrameInfoType frame_info;
 	frame_info.acq_frame_nb = frameID;
-	DEB_TRACE() << "got frame " << DEB_VAR1(frameID);
+	DEB_ALWAYS() << "got frame " << DEB_VAR1(frameID);
 
 	AutoMutex aLock(m_mutex);
 	if(m_expected_frame_nb == frameID){
