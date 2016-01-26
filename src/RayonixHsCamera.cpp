@@ -944,4 +944,8 @@ void Camera::setReadoutMode(ReadoutMode mode)
         // In High Dynamic Range, the image type Bpp32
         if (mode == READOUT_MODE_HDR) m_image_type = Bpp32;
         else m_image_type = Bpp16;
+	// Update CtImage about image size changes
+	Size image_size;
+	getMaxImageSize(image_size);
+	maxImageSizeChanged(image_size,m_image_type);
 }
