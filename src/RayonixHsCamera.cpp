@@ -942,7 +942,7 @@ void Camera::setReadoutMode(ReadoutMode mode)
 	        THROW_HW_ERROR(Error) << "Cannot set the readout mode :"	
 				      << DEB_VAR1(mode);
         // In High Dynamic Range, the image type Bpp32
-        if (mode == READOUT_MODE_HDR) m_image_type = Bpp32;
+        if (mode == READOUT_MODE_HDR32) m_image_type = Bpp32;
         else m_image_type = Bpp16;
 	// Update CtImage about image size changes
 	Size image_size;
