@@ -1,7 +1,7 @@
 .. _camera-rayonixhs:
 
-Rayonix HS
------------
+Rayonix HS camera
+-----------------
 
 .. image:: rayonix-final.png 
 
@@ -73,6 +73,7 @@ Std capabilities
 This plugin has been implement in respect of the mandatory capabilites but with some limitations which are due to the camera and SDK features.  We only provide here extra information for a better understanding of the capabilities.
 
 * HwDetInfo
+
  The detector is set to full image size at startup which means a binning of 1x1. The recommended binning for most of the experiment is 2x2.
 
 * HwSync
@@ -177,11 +178,11 @@ This is a simple python test program:
 .. code-block:: python
 
   from Lima import RayonixHs
-  from lima impor Core
+  from lima import Core
 
   cam = RayonixHs.Camera()
   hwint = RayonixHs.Interface(cam)
-  control = Core.control(hwint)
+  control = Core.CtControl(hwint)
 
   acq = control.acquisition()
 
@@ -192,7 +193,7 @@ This is a simple python test program:
     print " Hoops, detector is not cooled down, temp = ", sens_temp
 
   # setting new file parameters and autosaving mode
-  saving=c.saving()
+  saving=control.saving()
 
   pars=saving.getParameters()
   pars.directory='/somewhere/'
@@ -210,5 +211,14 @@ This is a simple python test program:
   acq.setAcqExpoTime(0.01)
   acq.setNbImages(100) 
   
-  acq.prepareAcq()
-  acq.startAcq()
+  control.prepareAcq()
+  control.startAcq()
+
+  # wait for last image (#xi99) ready
+  lastimg = control.getStatus().ImageCounters.LastImageReady
+  while lastimg !=99:
+    time.sleep(1)
+    lastimg = control.getStatus().ImageCounters.LastImageReady
+ 
+  # read the first image
+  im0 = control.ReadImage(0)
