@@ -515,6 +515,12 @@ break;
 	}
 
 
+	// Clear here the mapped queue, sometimes Rx can send frames in an arbitrary order
+	// so we use a queue mechanism, BUT if an acquisition
+	// is stopped before end it can remain some frames in the queue
+	// We experienced this problem when Rx has not enough memory to work
+	// (Lima used 70% of RAM), in that case some processing tasks become slow !!
+	m_pending_frames.clear();
 	m_expected_frame_nb = 0;
 	// acq will be started in the first call of startAcq()
 	if (m_trig_mode == IntTrigMult) m_int_trig_mult_started = false;
