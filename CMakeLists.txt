@@ -29,6 +29,7 @@ SET(rayonixhs_srcs src/RayonixHsShutterCtrlObj.cpp src/RayonixHsCamera.cpp
 	src/RayonixHsSyncCtrlObj.cpp src/FrameStatusCb.cpp src/RayonixHsBinCtrlObj.cpp)
 
 FILE(STRINGS "VERSION" rayonixhs_vers)
+
 ADD_LIBRARY(limarayonixhs SHARED ${rayonixhs_srcs})
 
 #INCLUDEs
@@ -53,3 +54,7 @@ IF(COMPILE_SIP)
     include(CameraRunSIP)
     INSTALL(FILES python/__init__.py DESTINATION "${PYTHON_SITE_PACKAGES_DIR}/Lima/RayonixHS")
 ENDIF()
+
+if(COMPILE_TEST)
+	add_subdirectory(test/)
+endif()
