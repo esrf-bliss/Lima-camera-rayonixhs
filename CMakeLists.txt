@@ -21,41 +21,41 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, see <http://www.gnu.org/licenses/>.
 ############################################################################
+set(NAME "rayonixhs")
 
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--add-needed")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+
 #SOURCEs
-set(rayonixhs_srcs src/RayonixHsShutterCtrlObj.cpp src/RayonixHsCamera.cpp  
+set(${NAME}_srcs src/RayonixHsShutterCtrlObj.cpp src/RayonixHsCamera.cpp  
 	src/RayonixHsDetInfoCtrlObj.cpp  src/RayonixHsInterface.cpp 
 	src/RayonixHsSyncCtrlObj.cpp src/FrameStatusCb.cpp src/RayonixHsBinCtrlObj.cpp)
 
-file(STRINGS "VERSION" rayonixhs_vers)
-
-add_library(limarayonixhs SHARED ${rayonixhs_srcs})
+add_library(lima${NAME} SHARED ${${NAME}_srcs})
 
 #INCLUDEs
-target_include_directories(limarayonixhs PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_include_directories(limarayonixhs PUBLIC "/opt/rayonix/include")
-target_include_directories(limarayonixhs PUBLIC "/opt/rayonix/include/marccd")
-target_include_directories(limarayonixhs PUBLIC "/opt/rayonix/include/craydl")
+target_include_directories(lima${NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(lima${NAME} PUBLIC "/opt/rayonix/include")
+target_include_directories(lima${NAME} PUBLIC "/opt/rayonix/include/marccd")
+target_include_directories(lima${NAME} PUBLIC "/opt/rayonix/include/craydl")
 
 #LIBRARIES
-find_library(RAYONIXHS_LIB_CRAYDL craydl /opt/rayonix/lib64)
+find_library(RAYONIXHS_CRAYDL_LIB craydl /opt/rayonix/lib64)
+if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_LIB-NOTFOUND"))
+  message(FATAL_ERROR "${NAME} : libcraydl not found, you can search it in cmake-gui or try to install it if it isn't here.")
+endif()
 
-target_link_libraries(limarayonixhs limacore)
-target_link_libraries(limarayonixhs ${RAYONIXHS_LIB_CRAYDL})
+target_link_libraries(lima${NAME} limacore)
+target_link_libraries(lima${NAME} ${RAYONIXHS_CRAYDL_LIB})
 
+include(CameraVERSION)
+install(TARGETS lima${NAME} LIBRARY DESTINATION lib)
 
-set_target_properties(limarayonixhs PROPERTIES VERSION ${rayonixhs_vers} SOVERSION "1")
-
-install(TARGETS limarayonixhs LIBRARY DESTINATION lib)
-
-if(COMPILE_SIP)
-    set(NAME "rayonixhs")
+if(LIMA_ENABLE_PYTHON)
     include(CameraRunSIP)
     install(FILES python/__init__.py DESTINATION "${PYTHON_SITE_PACKAGES_DIR}/Lima/RayonixHS")
 endif()
 
-if(COMPILE_TEST)
+if(LIMA_ENABLE_TEST)
 	add_subdirectory(test/)
 endif()
