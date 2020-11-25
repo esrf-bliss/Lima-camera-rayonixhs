@@ -82,18 +82,16 @@ if (CAMERA_MASTER_PROJECT)
   endif()
 endif()
 
-find_package(PvAPI REQUIRED)
-
 file(GLOB_RECURSE RAYONIXHS_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 # Library definition
 add_library(rayonixhs SHARED
-  src/RayonixhsCamera.cpp
-  src/RayonixhsInterface.cpp
-  src/RayonixhsDetInfoCtrlObj.cpp
-  src/RayonixhsSyncCtrlObj.cpp
-  src/RayonixhsBinCtrlObj.cpp
-  src/RayonixhsShutterCtrlObj.cpp
+  src/RayonixHsCamera.cpp
+  src/RayonixHsInterface.cpp
+  src/RayonixHsDetInfoCtrlObj.cpp
+  src/RayonixHsSyncCtrlObj.cpp
+  src/RayonixHsBinCtrlObj.cpp
+  src/RayonixHsShutterCtrlObj.cpp
   src/FrameStatusCb.cpp
   ${RAYONIXHS_INCS}
 )
