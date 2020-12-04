@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "craydl.h"
+#include "craydl/craydl.h"
 #include "craydl_c.h"
 
 using namespace craydl;
@@ -10,7 +10,7 @@ using namespace craydl;
 
 Craydl_RxDetector_t Craydl_RxDetector_Ctor(const char* config_path)
 {
-    return reinterpret_cast<void*>(new RxDetector(config_path));
+    return reinterpret_cast<void*>(RxDetector::create(config_path));
 }
 
 void Craydl_RxDetector_Dctor(Craydl_RxDetector_t det)
@@ -24,15 +24,15 @@ bool Craydl_RxDetector_Open(Craydl_RxDetector_t det)
     return self->Open().IsError();
 }
 
-bool Craydl_RxDetector_GetDetectorID(Craydl_RxDetector_t det, char* name, char* serial_number)
+bool Craydl_RxDetector_GetDetectorID(Craydl_RxDetector_t det, char** name, char** serial_number)
 {
     RxDetector *self = reinterpret_cast<RxDetector *>(det);
 
     std::string tmp_name, tmp_serial_number;
     bool res = self->GetDetectorID(tmp_name, tmp_serial_number).IsError();
 
-    name = strdup(tmp_name.c_str());
-    serial_number = strdup(tmp_serial_number.c_str());
+    *name = strdup(tmp_name.c_str());
+    *serial_number = strdup(tmp_serial_number.c_str());
 
     return res;
 }
@@ -45,15 +45,15 @@ bool Craydl_RxDetector_GetDetectorFormat(Craydl_RxDetector_t det, Craydl_Detecto
     return self->GetDetectorFormat(*reinterpret_cast<DetectorFormat *>(df)).IsError();
 }
 
-bool Craydl_RxDetector_GetDetectorFirmwareID(Craydl_RxDetector_t det, char* name, char* version)
+bool Craydl_RxDetector_GetDetectorFirmwareID(Craydl_RxDetector_t det, char** name, char** version)
 {
     RxDetector *self = reinterpret_cast<RxDetector *>(det);
 
     std::string tmp_name, tmp_version;
     bool res = self->GetDetectorFirmwareID(tmp_name, tmp_version).IsError();
 
-    name = strdup(tmp_name.c_str());
-    version = strdup(tmp_version.c_str());
+    *name = strdup(tmp_name.c_str());
+    *version = strdup(tmp_version.c_str());
 
     return res;
 }

@@ -131,9 +131,9 @@ void Camera::init() {
 	}
 
 	char *model, *serial, *version, *junk;
-	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, model, serial))
+	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, &model, &serial))
 		THROW_HW_ERROR(Error) << "Cannot get camera ID";
-	if (Craydl_RxDetector_GetDetectorFirmwareID(m_rx_detector, junk, version))
+	if (Craydl_RxDetector_GetDetectorFirmwareID(m_rx_detector, &junk, &version))
 		THROW_HW_ERROR(Error) << "Cannot get camera firmware ID";
 
 	DEB_ALWAYS() << "Found RayonixHs model " << model
@@ -215,7 +215,7 @@ int Camera::getNbAcquiredFrames() {
 void Camera::getDetectorModel(std::string &model) {
 	DEB_MEMBER_FUNCT();
 	char *model_buf, *junk_buf;
-	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, model_buf, junk_buf))
+	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, &model_buf, &junk_buf))
 		DEB_ERROR() << "Cannot read the detector model";
 
         model = model_buf;

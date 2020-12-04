@@ -30,23 +30,8 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 # If conda build, always set lib dir to 'lib'
-if($ENV{CONDA_BUILD})
+if(DEFINED ENV{CONDA_BUILD} OR DEFINED ENV{CONDA_PREFIX})
   set(CMAKE_INSTALL_LIBDIR "lib")
-endif()
-
-target_include_directories(lima${NAME} PUBLIC "/users/blissadm/.local/include")
-
-
-#LIBRARIES
-find_library(RAYONIXHS_CRAYDL_LIB 
-  NAMES craydl
-  PATHS "/opt/rayonix/lib64"
-  NO_CMAKE_FIND_ROOT_PATH
-  NO_DEFAULT_PATH
-  )
-
-if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_LIB-NOTFOUND"))
-  message(FATAL_ERROR "${NAME} : libcraydl not found") 
 endif()
 
 # Set lower / upper case project names
@@ -85,12 +70,14 @@ if (CAMERA_MASTER_PROJECT)
   endif()
 endif()
 
-find_library(RAYONIXHS_CRAYDL_C_LIB craydl_c)
-if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_C_LIB-NOTFOUND"))
-  message(FATAL_ERROR "rayonixhs: libcraydl_c not found, you can search it in cmake-gui or try to install it if it isn't here.")
-endif()
+find_package(Craydl REQUIRED)
 
-target_compile_options(rayonixhs PRIVATE "-Wl,--add-needed")
+#add_subdirectory(craydl_c)
+
+#find_library(RAYONIXHS_CRAYDL_C_LIB craydl_c)
+#if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_C_LIB-NOTFOUND"))
+#  message(FATAL_ERROR "rayonixhs: libcraydl_c not found, you can search it in cmake-gui or try to install it if it isn't here.")
+#endif()
 
 file(GLOB_RECURSE RAYONIXHS_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
@@ -106,6 +93,9 @@ add_library(rayonixhs SHARED
   ${RAYONIXHS_INCS}
 )
 
+#target_compile_options(rayonixhs PRIVATE "-Wl,--add-needed")
+
+target_link_libraries(rayonixhs PUBLIC craydl_c)
 
 # Generate export macros
 generate_export_header(rayonixhs)
@@ -129,9 +119,8 @@ target_include_directories(rayonixhs
   PUBLIC "/opt/rayonix/include/craydl"
   )
 
-
 target_link_libraries(rayonixhs PUBLIC limacore)
-target_link_libraries(rayonixhs ${RAYONIXHS_CRAYDL_C_LIB})
+target_link_libraries(rayonixhs PUBLIC ${CRAYDL_LIBRARIES})
 
 if(WIN32)
   target_compile_definitions(rayonixhs
@@ -154,7 +143,6 @@ if(CAMERA_MASTER_PROJECT)
 endif()
 
 ## Installation
-
 install(
   TARGETS rayonixhs
   EXPORT "${TARGETS_EXPORT_NAME}"

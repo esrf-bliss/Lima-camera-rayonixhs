@@ -62,8 +62,8 @@ Craydl_RxDetector_t  Craydl_RxDetector_Ctor(const char* config_path);
 void Craydl_RxDetector_Dctor(Craydl_RxDetector_t det);
 
 bool Craydl_RxDetector_Open(Craydl_RxDetector_t det);
-bool Craydl_RxDetector_GetDetectorID(Craydl_RxDetector_t det, char* name, char* serial_number);
-bool Craydl_RxDetector_GetDetectorFirmwareID(Craydl_RxDetector_t det, char* name, char* version);
+bool Craydl_RxDetector_GetDetectorID(Craydl_RxDetector_t det, char** name, char** serial_number);
+bool Craydl_RxDetector_GetDetectorFirmwareID(Craydl_RxDetector_t det, char** name, char** version);
 bool Craydl_RxDetector_GetDetectorFormat(Craydl_RxDetector_t det, Craydl_DetectorFormat_t df);
 
 bool Craydl_RxDetector_SetupAcquisitionSequence(Craydl_RxDetector_t det, int n_frames, int start_frame_number);
