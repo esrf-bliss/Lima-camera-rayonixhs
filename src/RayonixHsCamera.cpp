@@ -20,17 +20,62 @@
 //// along with this program; if not, see <http://www.gnu.org/licenses/>.
 ////###########################################################################
 
-#include "craydl.h"
 #include "RayonixHsCamera.h"
 
 using namespace lima;
 using namespace lima::RayonixHs;
 
+
+// Home made std::bind for C
+#define RAYONIXHS_FRAMESTATUS_CALLBACK0(name) \
+static void name(void *cbk) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(); \
+}
+
+#define RAYONIXHS_FRAMESTATUS_CALLBACK1(name, t1) \
+static void name(void *cbk, t1 p1) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(p1); \
+}
+
+#define RAYONIXHS_FRAMESTATUS_CALLBACK2(name, t1, t2) \
+static void name(void *cbk, t1 p1, t2 p2) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(p1, p2); \
+}
+
+#define RAYONIXHS_FRAMESTATUS_CALLBACK3(name, t1, t2, t3) \
+static void name(void *cbk, t1 p1, t2 p2, t3 p3) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(p1, p2, p3); \
+}
+
+#define RAYONIXHS_FRAMESTATUS_CALLBACK4(name, t1, t2, t3, t4) \
+static void name(void *cbk, t1 p1, t2 p2, t3 p3, t4 p4) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(p1, p2, p3, p4); \
+}
+
+#define RAYONIXHS_FRAMESTATUS_CALLBACK5(name, t1, t2, t3, t4, t5) \
+static void name(void *cbk, t1 p1, t2 p2, t3 p3, t4 p4, t5 p5) { \
+   reinterpret_cast<FrameStatusCb *>(cbk)->name(p1, p2, p3, p4, p5); \
+}
+
+RAYONIXHS_FRAMESTATUS_CALLBACK0(SequenceStarted)
+RAYONIXHS_FRAMESTATUS_CALLBACK0(SequenceEnded)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(ExposureStarted, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(ExposureEnded, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(ReadoutStarted, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(ReadoutEnded, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(BackgroundFrameReady, const Craydl_RxFrame_t)
+RAYONIXHS_FRAMESTATUS_CALLBACK2(RawFrameReady, int, const Craydl_RxFrame_t)
+RAYONIXHS_FRAMESTATUS_CALLBACK2(FrameReady, int, const Craydl_RxFrame_t)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(FrameAborted, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK1(FrameCompleted, int)
+RAYONIXHS_FRAMESTATUS_CALLBACK4(FrameError, int, const Craydl_RxFrame_t, int, const char*)
+
+
 //---------------------------
 // @brief  Ctor
 //---------------------------
 Camera::Camera(std::string config_path) :
-    m_rx_detector(Craydl_DelRxDetectorctor(config_path.c_str())),
+    m_rx_detector(Craydl_RxDetector_Ctor(config_path.c_str())),
     m_status(DETECTOR_STATUS_IDLE),
     m_acquiring(false),
     m_cooler(true),
@@ -41,11 +86,28 @@ Camera::Camera(std::string config_path) :
 
 	init();
 
+        m_frame_status_cb = new FrameStatusCb(this, m_acquiring);
+
+        struct Craydl_FrameCallback_t cbk;
+        cbk.SequenceStarted = SequenceStarted;
+        cbk.SequenceEnded = SequenceEnded;
+        cbk.ExposureStarted = ExposureStarted;
+        cbk.ExposureEnded = ExposureEnded;
+        cbk.ReadoutStarted = ReadoutStarted;
+        cbk.ReadoutEnded = ReadoutEnded;
+        cbk.BackgroundFrameReady = BackgroundFrameReady;
+        cbk.RawFrameReady = RawFrameReady;
+        cbk.FrameReady = FrameReady;
+        cbk.FrameAborted = FrameAborted;
+        cbk.FrameCompleted = FrameCompleted;
+        cbk.FrameError = FrameError;
+        cbk.user_data = m_frame_status_cb;
+
 	// create callback obj and register only once here
 	// Do not trust comment /opt/rayonix/include/craydl/RxDetector.h:2974
 	// EndAcquisition() does not unregister any callback, so it is permanently added.
-	m_frame_status_cb = new FrameStatusCb(this, m_acquiring);
-	m_frame_cb_connection = m_rx_detector->RegisterFrameCallback(static_cast<craydl::VirtualFrameCallback *> (m_frame_status_cb));
+	
+	m_frame_cb_connection = Craydl_RxDetector_RegisterFrameCallback(m_rx_detector, cbk);
 	//if (m_frame_cb_connection.connected())
 	// this return false, don't know how to test if the callback is registered.
 	//      THROW_HW_ERROR(Error) << "RegisterFrameCallback() failed";
@@ -59,34 +121,38 @@ Camera::Camera(std::string config_path) :
 // @brief  Initialize method
 //---------------------------
 void Camera::init() {
-	DEB_MEMBER_FUNCT();
-	craydl::RxReturnStatus status;
+	DEB_MEMBER_FUNCT();	
 
 	setStatus(DETECTOR_STATUS_FAULT, true);
 	//Open camera
-	status = Craydl_RxDetectorOpen(m_rx_detector);
-	if (status.IsError()) {
+	if (Craydl_RxDetector_Open(m_rx_detector)) {
 		m_max_image_size = Size(0, 0);
 		THROW_HW_ERROR(Error) << "Fatal error opening camera";
 	}
-	std::string model, serial, version, junk;
-	if (m_rx_detector->GetDetectorID(model, serial).IsError())
+
+	char *model, *serial, *version, *junk;
+	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, model, serial))
 		THROW_HW_ERROR(Error) << "Cannot get camera ID";
-	if (m_rx_detector->GetDetectorFirmwareID(junk, version).IsError())
+	if (Craydl_RxDetector_GetDetectorFirmwareID(m_rx_detector, junk, version))
 		THROW_HW_ERROR(Error) << "Cannot get camera firmware ID";
 
 	DEB_ALWAYS() << "Found RayonixHs model " << model
 		     << "  - serial   # " << serial
 		     << "  - firmware # " << version;
 
+	free(model);
+        free(serial);
+        free(version);
+        free(junk);
+
 	//Get unbinned frame size from camera
-	craydl::DetectorFormat detector_format;
-	if (m_rx_detector->GetDetectorFormat(detector_format).IsError()) {
+	Craydl_DetectorFormat_t detector_format = Craydl_DetectorFormat_Ctor();
+	if (Craydl_RxDetector_GetDetectorFormat(m_rx_detector, detector_format)) {
 		THROW_HW_ERROR(Error) << "Cannot get camera format";
 	}
-	int fast, slow;
-	fast = detector_format.n_pixels_fast();
-	slow = detector_format.n_pixels_slow();
+
+	int fast = Cray_DetectorFormat_n_pixels_fast(detector_format);
+	int slow = Cray_DetectorFormat_n_pixels_slow(detector_format);
 
 	m_max_image_size = Size(fast, slow);
 
@@ -109,13 +175,13 @@ void Camera::init() {
 Camera::~Camera() {
 	DEB_DESTRUCTOR();
 
-	if (m_rx_detector->EndAcquisition(true).IsError())
+	if (Craydl_RxDetector_EndAcquisition(m_rx_detector, true))
 		DEB_ERROR() << "Cannot end acquisition";
 
-	if (m_rx_detector->Close().IsError())
+	if (Craydl_RxDetector_Close(m_rx_detector))
 		DEB_ERROR() << "Cannot close camera";
 
-	Craydl_RxDetectorDctor(m_rx_detector);
+	Craydl_RxDetector_Dctor(m_rx_detector);
 	delete m_frame_status_cb;
 }
 
@@ -148,9 +214,13 @@ int Camera::getNbAcquiredFrames() {
 //---------------------------
 void Camera::getDetectorModel(std::string &model) {
 	DEB_MEMBER_FUNCT();
-	std::string junk;
-	if (m_rx_detector->GetDetectorID(model, junk).IsError())
+	char *model_buf, *junk_buf;
+	if (Craydl_RxDetector_GetDetectorID(m_rx_detector, model_buf, junk_buf))
 		DEB_ERROR() << "Cannot read the detector model";
+
+        model = model_buf;
+	free(model_buf);
+	free(junk_buf);
 }
 
 //---------------------------
@@ -211,7 +281,7 @@ void Camera::setFrameMode(FrameMode mode) {
 		else // FAST_TRANSFER
 			exp_time = 0;
 
-		if (m_rx_detector->SetExposureTime(exp_time).IsError())
+		if (Craydl_RxDetector_SetExposureTime(m_rx_detector, exp_time))
 			THROW_HW_ERROR(Error) << "Failed  setting a new exposure time";
 
 
@@ -247,7 +317,7 @@ void Camera::setTrigMode(TrigMode mode) {
 //---------------------------
 void Camera::getPixelSize(double &x, double &y) {
 	DEB_MEMBER_FUNCT();
-	m_rx_detector->GetPixelSize(x, y);
+	Craydl_RxDetector_GetPixelSize(m_rx_detector, x, y);
 }
 
 //---------------------------
@@ -286,29 +356,29 @@ void Camera::setExpTime(double exp_time) {
 	if (exp_time < 0)
 		THROW_HW_ERROR(InvalidValue) << "Invalid exposure time";
 	if (m_frame_mode == SINGLE) {
-		if (m_rx_detector->SetExposureTime(exp_time).IsError())
+		if (Craydl_RxDetector_SetExposureTime(m_rx_detector, exp_time))
 			THROW_HW_FATAL(Error) << "Failed setting exposure!";
 		m_exp_time = exp_time;
 	}
 	else { // FAST_TRANSFER
-		if (m_rx_detector->SetIntervalTime(exp_time).IsError())
+		if (Craydl_RxDetector_SetIntervalTime(m_rx_detector, exp_time))
 			THROW_HW_FATAL(Error) << "Failed setting interval time for exposure in FAST_TRANSFER mode";
 		m_int_time = exp_time;
 	}
 }
 
 //---------------------------
-// @brief  returnt the exposure time in second
+// @brief  return the exposure time in second
 //---------------------------
 void Camera::getExpTime(double& exp_time) {
 	DEB_MEMBER_FUNCT();
 
 	if (m_frame_mode == SINGLE) {
-		m_exp_time = m_rx_detector->ExposureTime();
+		m_exp_time = Craydl_RxDetector_GetExposureTime(m_rx_detector);
 		exp_time = m_exp_time;
 	}
 	else { // FAST_TRANSFER
-		m_int_time = m_rx_detector->IntervalTime();
+		m_int_time = Craydl_RxDetector_GetIntervalTime(m_rx_detector);
 		exp_time = m_int_time;
 	}
 }
@@ -326,7 +396,7 @@ void Camera::setLatTime(double lat_time) {
 	// in SINGLE frame mode latency = interval - exposure
 	// in FAST_TRANSFER latency = 1ms and interval is the exposure (exposure must be 0 )
 	if (m_frame_mode == SINGLE){
-		if (m_rx_detector->SetIntervalTime(lat_time+m_exp_time).IsError())
+		if (Craydl_RxDetector_SetIntervalTime(m_rx_detector, lat_time+m_exp_time))
 			THROW_HW_FATAL(Error) << "Cannot set latency time";
 
 	}
@@ -359,7 +429,7 @@ void Camera::getLatTime(double& lat_time) {
 void Camera::setBin(const Bin& bin) {
 	DEB_MEMBER_FUNCT();
 
-	if (m_rx_detector->SetBinning(bin.getX(), bin.getY()).IsError())
+	if (Craydl_RxDetector_SetBinning(m_rx_detector, bin.getX(), bin.getY()))
 		THROW_HW_ERROR(Error) << "Cannot set a new binning!";
 }
 
@@ -370,7 +440,7 @@ void Camera::getBin(Bin& bin) {
 	DEB_MEMBER_FUNCT();
 
 	int binFast, binSlow;
-	if (m_rx_detector->GetBinning(binFast, binSlow).IsError()) {
+	if (Craydl_RxDetector_GetBinning(m_rx_detector, binFast, binSlow)) {
 		THROW_HW_ERROR(Error) << "Cannot read binning!";
 		return;
 	}
@@ -384,7 +454,7 @@ void Camera::getBin(Bin& bin) {
 void Camera::checkBin(Bin& bin) {
 	DEB_MEMBER_FUNCT();
 
-	if (!m_rx_detector->CheckBinning(bin.getX(), bin.getY())) {
+	if (!Craydl_RxDetector_CheckBinning(m_rx_detector, bin.getX(), bin.getY())) {
 		DEB_TRACE() << "Invalid binning.  Setting bin to current detector binning.";
 		getBin(bin);
 	}
@@ -406,7 +476,7 @@ void Camera::getFrameDim(FrameDim& frame_dim) {
 	DEB_MEMBER_FUNCT();
 
 	int fast, slow, depth;
-	m_rx_detector->GetFrameSize(fast, slow, depth);
+	Craydl_RxDetector_GetFrameSize(m_rx_detector, fast, slow, depth);
 	frame_dim.setSize(Size(fast, slow));
 	frame_dim.setImageType(Bpp16);
 }
@@ -449,68 +519,68 @@ void Camera::prepareAcq() {
 	DEB_MEMBER_FUNCT();
 
 	// 0 means first frame id equal 0 (InternalFrameID)
-	if (m_rx_detector->SetupAcquisitionSequence(m_nb_frames, 0).IsError())
+	if (Craydl_RxDetector_SetupAcquisitionSequence(m_rx_detector, m_nb_frames, 0))
 		THROW_HW_ERROR(Error) << "SetupAcquisitionSequence() failed!";
 
-	craydl::FrameTriggerType_t rx_frame_trig_type;
-	craydl::DigitalIOSignalType_t rx_trig_signal_type;
-	craydl::SequenceGate_t rx_sequence_gate;
+	Craydl_FrameTriggerType_t rx_frame_trig_type;
+	Craydl_DigitalIOSignalType_t rx_trig_signal_type;
+	Craydl_SequenceGate_t rx_sequence_gate;
 	int trigger;
 
 	switch (m_trig_mode) {
 	case IntTrig:
-		rx_frame_trig_type	 = craydl::FrameTriggerTypeNone;
-		rx_sequence_gate	 = craydl::SequenceGateModeNone;
-		rx_trig_signal_type = craydl::DigitalIOSignalTypeNone;
+		rx_frame_trig_type	 = FrameTriggerTypeNone;
+		rx_sequence_gate	 = SequenceGateModeNone;
+		rx_trig_signal_type 	 = DigitalIOSignalTypeNone;
 		trigger = 0;
 		break;
 	case IntTrigMult:
-		rx_frame_trig_type	 = craydl::FrameTriggerTypeFrame;
-		rx_sequence_gate	 = craydl::SequenceGateModeNone;
-		rx_trig_signal_type = craydl::DigitalIOSignalTypeSoftware;
+		rx_frame_trig_type	 = FrameTriggerTypeFrame;
+		rx_sequence_gate	 = SequenceGateModeNone;
+		rx_trig_signal_type      = DigitalIOSignalTypeSoftware;
 		trigger = 0;
 		break;
 
 	case ExtTrigSingle:
-		rx_frame_trig_type	 = craydl::FrameTriggerTypeNone;
-		rx_sequence_gate	 = craydl::SequenceGateModeStart;
-		rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_sequ_gate_signal_type;
+		rx_frame_trig_type	 = FrameTriggerTypeNone;
+		rx_sequence_gate	 = SequenceGateModeStart;
+		rx_trig_signal_type      = (Craydl_DigitalIOSignalType_t) m_sequ_gate_signal_type;
 		trigger = 1; // the Gate input
 		break;
 
 	case ExtTrigMult:
-		rx_frame_trig_type	 = craydl::FrameTriggerTypeFrame;
-		rx_sequence_gate	 = craydl::SequenceGateModeNone;
-		rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_frame_trig_signal_type;
+		rx_frame_trig_type	 = FrameTriggerTypeFrame;
+		rx_sequence_gate	 = SequenceGateModeNone;
+		rx_trig_signal_type      = (Craydl_DigitalIOSignalType_t) m_frame_trig_signal_type;
 		trigger = 0; // Frame input
 		break;
 
 	case ExtGate:
-		rx_frame_trig_type	 = craydl::FrameTriggerTypeBulb;
-		rx_sequence_gate	 = craydl::SequenceGateModeNone;
-		rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_frame_trig_signal_type;
+		rx_frame_trig_type	 = FrameTriggerTypeBulb;
+		rx_sequence_gate	 = SequenceGateModeNone;
+		rx_trig_signal_type      = (Craydl_DigitalIOSignalType_t) m_frame_trig_signal_type;
 		trigger = 0; // Frame input
 		break;
 
 	case ExtTrigReadout:
 	        // only in FAST_TRANSFER frame mode
-	        rx_frame_trig_type	 = craydl::FrameTriggerTypeFrame;
-		rx_sequence_gate	 = craydl::SequenceGateModeNone;
-		rx_trig_signal_type = (craydl::DigitalIOSignalType_t) m_frame_trig_signal_type;
+	        rx_frame_trig_type	 = FrameTriggerTypeFrame;
+		rx_sequence_gate	 = SequenceGateModeNone;
+		rx_trig_signal_type      = (Craydl_DigitalIOSignalType_t) m_frame_trig_signal_type;
 		trigger = 0; // Frame input
 break;
 
 	}
 	// apply trigger mode (soft, trig, gate ...)
-	m_rx_detector->SetFrameTriggerMode(craydl::FrameTriggerType(rx_frame_trig_type));
-	m_rx_detector->SetSequenceGate(craydl::SequenceGateMode(rx_sequence_gate));
+	Craydl_RxDetector_SetFrameTriggerMode(m_rx_detector, rx_frame_trig_type);
+	Craydl_RxDetector_SetSequenceGate(m_rx_detector, rx_sequence_gate);
 	// then set trig signal type and input (trig is input 0 and gate is input 1)
 	if (trigger==1) {
-		if (m_rx_detector->SetSequenceGateSignalType(craydl::DigitalIOSignalType(rx_trig_signal_type)).IsError())
+		if (Craydl_RxDetector_SetSequenceGateSignalType(m_rx_detector, rx_trig_signal_type))
 			THROW_HW_FATAL(Error) << "SetSequenceGateSignalType() failed";
 	}
 	else {
-		if (m_rx_detector->SetFrameTriggerSignalType(craydl::DigitalIOSignalType(rx_trig_signal_type)).IsError())
+		if (Craydl_RxDetector_SetFrameTriggerSignalType(m_rx_detector, rx_trig_signal_type))
 			THROW_HW_FATAL(Error) << "SetFrameTriggerSignalType() failed";
 	}
 
@@ -539,18 +609,18 @@ void Camera::startAcq() {
 
 	if (m_trig_mode == IntTrigMult && !m_int_trig_mult_started) {
 	        // Release the bulb if still High otherwise acq 'll start immediately
-	        if (m_rx_detector->Bulb())
-		        m_rx_detector->ReleaseBulb();
-		if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+	        if (Craydl_RxDetector_Bulb(m_rx_detector))
+		        Craydl_RxDetector_ReleaseBulb(m_rx_detector);
+		if (Craydl_RxDetector_StartAcquisition(m_rx_detector))
 			THROW_HW_ERROR(Error) << "Cannot start the acquisition in IntTrigMult mode";
 		m_int_trig_mult_started = true;
 	}
 	if (m_trig_mode == IntTrigMult) {
-		if (m_rx_detector->PulseBulb(0.001).IsError())
+		if (Craydl_RxDetector_PulseBulb(m_rx_detector, 0.001))
 			THROW_HW_ERROR(Error) << "PulsBulb() failed!";
 	}
 	else {
-		if (m_rx_detector->StartAcquisition(craydl::FrameAcquisitionTypeLight).IsError())
+		if (Craydl_RxDetector_StartAcquisition(m_rx_detector))
 			THROW_HW_ERROR(Error) << "StartAcquisition() failed!";
 	}
 	setStatus(DETECTOR_STATUS_INTEGRATING);
@@ -561,7 +631,7 @@ void Camera::startAcq() {
 //---------------------------
 void Camera::stopAcq() {
 	DEB_MEMBER_FUNCT();
-	if (m_rx_detector->EndAcquisition(true).IsError())
+	if (Craydl_RxDetector_EndAcquisition(m_rx_detector, true))
 		DEB_ERROR() << "Camera::stopAcq: Error stopping acquisition!";
 
 	setStatus(DETECTOR_STATUS_IDLE);
@@ -573,15 +643,15 @@ void Camera::stopAcq() {
 // @brief  callback function for each new frame
 // called by FrameStatusCB.FrameReady()
 //---------------------------
-void Camera::frameReady(const craydl::RxFrame *pFrame) {
+void Camera::frameReady(const Craydl_RxFrame_t pFrame) {
 
 	DEB_MEMBER_FUNCT();
-	int frameID = pFrame->InternalFrameID();
+	int frameID = Craydl_RxFrame_InternalFrameID(pFrame);
 
 	StdBufferCbMgr& buffer_mgr = m_buffer_ctrl_obj.getBuffer();
 	void *ptr = buffer_mgr.getFrameBufferPtr(frameID);
-	FrameDim frame_dim(pFrame->getNFast(), pFrame->getNSlow(), Bpp16);
-	memcpy(ptr,pFrame->getBufferAddress(),frame_dim.getMemSize());
+	FrameDim frame_dim(Craydl_RxFrame_getNFast(pFrame), Craydl_RxFrame_getNSlow(pFrame), Bpp16);
+	memcpy(ptr, Craydl_RxFrame_getBufferAddress(pFrame), frame_dim.getMemSize());
 
 
 	HwFrameInfoType frame_info;
@@ -656,9 +726,9 @@ void Camera::setSequenceGateSignalType(SignalType signal_type) {
 void Camera::setOutputSignalType(OutputChannel output, SignalType signal_type) {
 	DEB_MEMBER_FUNCT();
 
-	craydl::DigitalIOSignalType_t sig_type = (craydl::DigitalIOSignalType_t)signal_type;
+	Craydl_DigitalIOSignalType_t sig_type = (Craydl_DigitalIOSignalType_t)signal_type;
 
-	if(m_rx_detector->SetDigitalOutputSignalType((int) output, craydl::DigitalIOSignalType(sig_type)).IsError())
+	if(Craydl_RxDetector_SetDigitalOutputSignalType(m_rx_detector, (int) output, sig_type))
 		THROW_HW_ERROR(Error) << "Cannot set output signal type";
 }
 //---------------------------
@@ -669,8 +739,8 @@ void Camera::setOutputSignalType(OutputChannel output, SignalType signal_type) {
 void Camera::getOutputSignalType(OutputChannel output, SignalType &signal_type) {
 	DEB_MEMBER_FUNCT();
 
-	craydl::DigitalIOSignalType_t sig_type;
-	sig_type = m_rx_detector->GetDigitalOutputSignalType((int)output).key();
+	Craydl_DigitalIOSignalType_t sig_type;
+	sig_type = Craydl_RxDetector_GetDigitalOutputSignalType(m_rx_detector, (int)output);
 	signal_type = (SignalType)sig_type;
 }
 
@@ -682,9 +752,9 @@ void Camera::getOutputSignalType(OutputChannel output, SignalType &signal_type) 
 void Camera::setOutputSignalID(OutputChannel output, SignalID signal_id) {
 	DEB_MEMBER_FUNCT();
 
-	craydl::DigitalIOSignalID_t sig_id = (craydl::DigitalIOSignalID_t)signal_id;
+	Craydl_DigitalIOSignalID_t sig_id = (Craydl_DigitalIOSignalID_t)signal_id;
 
-	if(m_rx_detector->SetDigitalOutputSignalID((int) output, craydl::DigitalIOSignalID(sig_id)).IsError())
+	if(Craydl_RxDetector_SetDigitalOutputSignalID(m_rx_detector, (int) output, sig_id))
 		THROW_HW_ERROR(Error) << "Cannot set output signal ID";
 }
 //---------------------------
@@ -695,8 +765,8 @@ void Camera::setOutputSignalID(OutputChannel output, SignalID signal_id) {
 void Camera::getOutputSignalID(OutputChannel output, SignalID &signal_id) {
 	DEB_MEMBER_FUNCT();
 
-	craydl::DigitalIOSignalID_t sig_id;
-	sig_id = m_rx_detector->GetDigitalOutputSignalID((int)output).key();
+	Craydl_DigitalIOSignalID_t sig_id;
+	sig_id = Craydl_RxDetector_GetDigitalOutputSignalID(m_rx_detector, (int)output);
 	signal_id = (SignalID)sig_id;
 }
 
@@ -706,7 +776,7 @@ void Camera::getOutputSignalID(OutputChannel output, SignalID &signal_id) {
 void Camera::setShutterOpenDelay(double delay) {
 	DEB_MEMBER_FUNCT();
 
-	if (m_rx_detector->SetShutterOpenDelay(delay).IsError())
+	if (Craydl_RxDetector_SetShutterOpenDelay(m_rx_detector, delay))
 		THROW_HW_ERROR(Error) << "Cannot set shutter open delay";
 }
 
@@ -716,7 +786,7 @@ void Camera::setShutterOpenDelay(double delay) {
 void Camera::getShutterOpenDelay(double &delay) {
 	DEB_MEMBER_FUNCT();
 
-	delay = m_rx_detector->ShutterOpenDelay();
+	delay = Craydl_RxDetector_GetShutterOpenDelay(m_rx_detector);
 }
 
 //---------------------------
@@ -725,7 +795,7 @@ void Camera::getShutterOpenDelay(double &delay) {
 void Camera::setShutterCloseDelay(double delay) {
 	DEB_MEMBER_FUNCT();
 
-	if (m_rx_detector->SetShutterCloseDelay(delay).IsError())
+	if (Craydl_RxDetector_SetShutterCloseDelay(m_rx_detector, delay))
 		THROW_HW_ERROR(Error) << "Cannot set shutter close delay";
 }
 
@@ -735,7 +805,7 @@ void Camera::setShutterCloseDelay(double delay) {
 void Camera::getShutterCloseDelay(double &delay) {
 	DEB_MEMBER_FUNCT();
 
-	delay = m_rx_detector->ShutterCloseDelay();
+	delay = Craydl_RxDetector_GetShutterCloseDelay(m_rx_detector);
 }
 
 //---------------------------
@@ -746,7 +816,7 @@ void Camera::setShutter(bool open) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(open);
 
-	if (m_rx_detector->CommandShutter(open).IsError())
+	if (Craydl_RxDetector_CommandShutter(m_rx_detector, open))
 		THROW_HW_ERROR(Error) << "Cannot set manual shutter to :"
 				      << DEB_VAR1(open);
 }
@@ -758,7 +828,7 @@ void Camera::setShutter(bool open) {
 void Camera::getShutter(bool &open) {
 	DEB_MEMBER_FUNCT();
 
-	open = m_rx_detector->Shutter();
+	open = Craydl_RxDetector_Shutter(m_rx_detector);
 }
 
 //---------------------------
@@ -768,7 +838,7 @@ void Camera::getShutter(bool &open) {
 void Camera::setElectronicShutterEnabled(bool enable) {
 	DEB_MEMBER_FUNCT();
 
-	if (m_rx_detector->EnableElectronicShutter(enable).IsError())
+	if (Craydl_RxDetector_EnableElectronicShutter(m_rx_detector, enable))
 		THROW_HW_ERROR(Error) << "Cannot enable electronic shutter";
 }
 
@@ -778,7 +848,7 @@ void Camera::setElectronicShutterEnabled(bool enable) {
 void Camera::getElectronicShutterEnabled(bool &enable) {
 	DEB_MEMBER_FUNCT();
 
-	enable = m_rx_detector->ElectronicShutterEnabled();
+	enable = Craydl_RxDetector_ElectronicShutterEnabled(m_rx_detector);
 }
 
 //---------------------------
@@ -788,7 +858,7 @@ void Camera::getElectronicShutterEnabled(bool &enable) {
 void Camera::getCoolerTemperatureSetpoint(double &temperature) {
 	DEB_MEMBER_FUNCT();
 
-	temperature = m_rx_detector->SensorTemperatureSetpoint();
+	temperature = Craydl_RxDetector_SensorTemperatureSetpoint(m_rx_detector);
 }
 
 //---------------------------
@@ -799,7 +869,7 @@ void Camera::setCoolerTemperatureSetpoint(double temperature) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(temperature);
 
-	if (m_rx_detector->SetSensorTemperatureSetpoint(temperature).IsError())
+	if (Craydl_RxDetector_SetSensorTemperatureSetpoint(m_rx_detector, temperature))
 		THROW_HW_ERROR(Error) << "Cannot set cooler temperature setpoint!";
 }
 
@@ -810,7 +880,7 @@ void Camera::setCoolerTemperatureSetpoint(double temperature) {
 void Camera::getSensorTemperatureSetpoint(double &temperature) {
 	DEB_MEMBER_FUNCT();
 
-	temperature = m_rx_detector->SensorTemperatureSetpoint();
+	temperature = Craydl_RxDetector_SensorTemperatureSetpoint(m_rx_detector);
 }
 
 //---------------------------
@@ -821,7 +891,7 @@ void Camera::setSensorTemperatureSetpoint(double temperature) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(temperature);
 
-	if (m_rx_detector->SetSensorTemperatureSetpoint(temperature).IsError())
+	if (Craydl_RxDetector_SetSensorTemperatureSetpoint(m_rx_detector, temperature))
 		THROW_HW_ERROR(Error) << "Cannot set sensor temperature setpoint!";
 }
 
@@ -832,7 +902,7 @@ void Camera::setSensorTemperatureSetpoint(double temperature) {
 void Camera::getSensorTemperature(double &temperature) {
 	DEB_MEMBER_FUNCT();
 
-	temperature = m_rx_detector->SensorTemperatureAve();
+	temperature = Craydl_RxDetector_SensorTemperatureAve(m_rx_detector);
 }
 
 
@@ -844,7 +914,7 @@ void Camera::setCooler(bool start) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(start);
 
-	if (m_rx_detector->CommandCoolers(start).IsError())
+	if (Craydl_RxDetector_CommandCoolers(m_rx_detector, start))
 		THROW_HW_ERROR(Error) << "Cannot set cooler to : "
 				      << DEB_VAR1(start);
 	m_cooler = start;
@@ -858,7 +928,7 @@ void Camera::getCooler(bool& started)
 {
 	DEB_MEMBER_FUNCT();
 
-	m_cooler = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagCoolersEnabled);
+	m_cooler = Craydl_RxDetector_SupportedStatusFlagValue(m_rx_detector, StatusFlagCoolersEnabled);
 	started = m_cooler;
 
 }
@@ -871,7 +941,7 @@ void Camera::setVacuumValve(bool open) {
 	DEB_MEMBER_FUNCT();
 	DEB_PARAM() << DEB_VAR1(open);
 
-	if (m_rx_detector->CommandVacuumValve(open).IsError())
+	if (Craydl_RxDetector_CommandVacuumValve(m_rx_detector, open))
 		THROW_HW_ERROR(Error) << "Cannot set vacuum valve to : "
 				      << DEB_VAR1(open);
 	m_vac_valve = open;
@@ -885,7 +955,7 @@ void Camera::getVacuumValve(bool& opened)
 {
 	DEB_MEMBER_FUNCT();
 
-	m_vac_valve = m_rx_detector->SupportedStatusFlagValue(craydl::StatusFlagVacuumValveEnabled);
+	m_vac_valve = Craydl_RxDetector_SupportedStatusFlagValue(m_rx_detector, StatusFlagVacuumValveEnabled);
 	opened = m_vac_valve;
 }
 
@@ -897,7 +967,7 @@ void Camera::getNewBackgroundNeeded(bool& needed)
 {
 	DEB_MEMBER_FUNCT();
 
-	needed  = m_rx_detector->NewBackgroundNeeded();
+	needed  = Craydl_RxDetector_NewBackgroundNeeded(m_rx_detector);
 }
 
 
@@ -915,7 +985,7 @@ void Camera::acquireNewBackground(bool block, int n_background)
                                       << "Please stop the acquisition before !!";
         }
 
-	if (m_rx_detector->AcquireNewBackground(block,n_background).IsError())
+	if (Craydl_RxDetector_AcquireNewBackground(m_rx_detector, block, n_background))
 		THROW_HW_ERROR(Error) << "Cannot take a new background :"
 				      << DEB_VAR2(block, n_background);
 }
@@ -928,8 +998,9 @@ void Camera::getReadoutMode(ReadoutMode& mode)
 {
 	DEB_MEMBER_FUNCT();
 
-	mode = (ReadoutMode)m_rx_detector->GetReadoutMode().key();
+	mode = (ReadoutMode) Craydl_RxDetector_GetReadoutMode(m_rx_detector);
 }
+
 //---------------------------
 // @brief set the readout mode
 // @param[in] mode:
@@ -938,13 +1009,11 @@ void Camera::setReadoutMode(ReadoutMode mode)
 {
 	DEB_MEMBER_FUNCT();
 
-	craydl::ReadoutMode readout_mode(static_cast<craydl::ReadoutMode_t> (mode));
-
         if (m_status == DETECTOR_STATUS_INTEGRATING) {
 		THROW_HW_ERROR(Error) << "Cannot change the readout mode while the detector is running. "
                                       << "Please stop the acquisition before !!";
         }
-	if (m_rx_detector->SetReadoutMode(readout_mode).IsError())
+	if (Craydl_RxDetector_SetReadoutMode(m_rx_detector, (Craydl_ReadoutMode_t) mode))
 	        THROW_HW_ERROR(Error) << "Cannot set the readout mode :"
 				      << DEB_VAR1(mode);
         // In High Dynamic Range, the image type Bpp32

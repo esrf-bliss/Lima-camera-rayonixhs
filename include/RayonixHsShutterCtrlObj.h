@@ -20,7 +20,7 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //###########################################################################
 #ifndef RAYONIXHSSHUTTERCTRLOBJ_H
-#define RAYONIXSHUTTERCTRLOBJ_H
+#define RAYONIXSHUTTERCTRLOBJ_H  sdfsdf
 
 #include "lima/HwInterface.h"
 #include "RayonixHsCamera.h"

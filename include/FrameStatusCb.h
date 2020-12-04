@@ -22,7 +22,7 @@
 #ifndef FRAMESTATUSCB_H
 #define FRAMESTATUSCB_H
 
-#include "craydl.h"
+#include "craydl_c.h"
 #include "lima/Debug.h"
 
 namespace lima {
@@ -30,22 +30,22 @@ namespace RayonixHs {
 
 class Camera;
 
-class FrameStatusCb : public virtual craydl::VirtualFrameCallback {
+class FrameStatusCb {
   DEB_CLASS_NAMESPC(DebModCamera, "Camera", "RayonixHs");
     public:
         FrameStatusCb(Camera *cam, volatile bool &acquiring);
 
         ~FrameStatusCb();
 
-        void RawFrameReady(int frame_number, const craydl::RxFrame *rx_frame);
+        void RawFrameReady(int frame_number, Craydl_RxFrame_t rx_frame);
 
-        void BackgroundFrameReady(const craydl::RxFrame *frame_p);
+        void BackgroundFrameReady(const Craydl_RxFrame_t rx_frame);
 
-        void FrameReady(int frame_number, const craydl::RxFrame *rx_frame);
+        void FrameReady(int frame_number, const Craydl_RxFrame_t rx_frame);
 
         void FrameAborted(int frame_number);
 
-        void FrameError(int frame_number, const craydl::RxFrame* frame_p, int error_code, const std::string& error_string);
+        void FrameError(int frame_number, const Craydl_RxFrame_t rx_frame, int error_code, const std::string& error_string);
 
         void SequenceStarted();
 
@@ -64,10 +64,12 @@ class FrameStatusCb : public virtual craydl::VirtualFrameCallback {
 	int frameCountCorrected() const;
 	
     private:
+    	Craydl_FrameCallback_t m_cbk;
+
     	Camera *m_cam;
-    	volatile int mRawFramesRcvd;
-	volatile int mBgFramesRcvd;
-	volatile int mCorrFramesRcvd;
+    	volatile int m_RawFramesRcvd;
+	volatile int m_BgFramesRcvd;
+	volatile int m_CorrFramesRcvd;
 	
 	volatile bool &m_acquiring;
 };

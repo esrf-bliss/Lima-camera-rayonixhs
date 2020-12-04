@@ -34,6 +34,9 @@ if($ENV{CONDA_BUILD})
   set(CMAKE_INSTALL_LIBDIR "lib")
 endif()
 
+target_include_directories(lima${NAME} PUBLIC "/users/blissadm/.local/include")
+
+
 #LIBRARIES
 find_library(RAYONIXHS_CRAYDL_LIB 
   NAMES craydl
@@ -82,6 +85,13 @@ if (CAMERA_MASTER_PROJECT)
   endif()
 endif()
 
+find_library(RAYONIXHS_CRAYDL_C_LIB craydl_c)
+if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_C_LIB-NOTFOUND"))
+  message(FATAL_ERROR "rayonixhs: libcraydl_c not found, you can search it in cmake-gui or try to install it if it isn't here.")
+endif()
+
+target_compile_options(rayonixhs PRIVATE "-Wl,--add-needed")
+
 file(GLOB_RECURSE RAYONIXHS_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 # Library definition
@@ -121,8 +131,7 @@ target_include_directories(rayonixhs
 
 
 target_link_libraries(rayonixhs PUBLIC limacore)
-
-target_link_libraries(rayonixhs PUBLIC ${RAYONIXHS_CRAYDL_LIB})
+target_link_libraries(rayonixhs ${RAYONIXHS_CRAYDL_C_LIB})
 
 if(WIN32)
   target_compile_definitions(rayonixhs

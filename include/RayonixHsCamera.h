@@ -30,7 +30,7 @@
 #include "lima/HwBufferMgr.h"
 #include "lima/SizeUtils.h"
 
-#include "craydl.h"
+#include "craydl_c.h"
 #include "FrameStatusCb.h"
 #include "RayonixHsSyncCtrlObj.h"
 
@@ -215,12 +215,12 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		DetectorStatus m_status;
 
 		FrameStatusCb *m_frame_status_cb;
-		craydl::CallbackConnection_t m_frame_cb_connection;
+		Craydl_CallbackConnection_t m_frame_cb_connection;
 		Mutex m_mutex;
 		std::map<int,HwFrameInfoType> m_pending_frames;
 		int m_expected_frame_nb;
 
-		craydl::RxDetector *m_rx_detector;
+		Craydl_RxDetector_t m_rx_detector;
 		FrameMode m_frame_mode;
 		SignalType m_frame_trig_signal_type;
 		SignalType m_sequ_gate_signal_type;
@@ -228,7 +228,7 @@ class Camera : public HwMaxImageSizeCallbackGen {
 		volatile bool m_acquiring;
 		bool m_cooler, m_vac_valve;
 
-		void frameReady(const craydl::RxFrame *pFrame);
+		void frameReady(const Craydl_RxFrame_t pFrame);
 };
 
 
