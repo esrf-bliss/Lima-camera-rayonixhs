@@ -70,7 +70,8 @@ if (CAMERA_MASTER_PROJECT)
   endif()
 endif()
 
-find_package(Craydl REQUIRED)
+# for gitlab CI not needed
+#find_package(Craydl REQUIRED)
 
 #add_subdirectory(craydl_c)
 
