@@ -71,14 +71,7 @@ if (CAMERA_MASTER_PROJECT)
 endif()
 
 # for gitlab CI not needed
-#find_package(Craydl REQUIRED)
-
-#add_subdirectory(craydl_c)
-
-#find_library(RAYONIXHS_CRAYDL_C_LIB craydl_c)
-#if (("${RAYONIXHS_CRAYDL_LIB}" STREQUAL "RAYONIXHS_CRAYDL_C_LIB-NOTFOUND"))
-#  message(FATAL_ERROR "rayonixhs: libcraydl_c not found, you can search it in cmake-gui or try to install it if it isn't here.")
-#endif()
+find_package(Craydl_c REQUIRED)
 
 file(GLOB_RECURSE RAYONIXHS_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
@@ -96,7 +89,7 @@ add_library(rayonixhs SHARED
 
 #target_compile_options(rayonixhs PRIVATE "-Wl,--add-needed")
 
-target_link_libraries(rayonixhs PUBLIC craydl_c)
+target_link_libraries(rayonixhs PUBLIC ${CRAYDL_C_LIBRARIES})
 
 # Generate export macros
 generate_export_header(rayonixhs)
