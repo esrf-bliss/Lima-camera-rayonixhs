@@ -190,7 +190,7 @@ This is a simple python test program:
 
   # now ask for 10ms sec. exposure and 100 frames
   acq.setAcqExpoTime(0.01)
-  acq.setNbImages(100)
+  acq.setAcqNbFrames(100)
 
   control.prepareAcq()
   control.startAcq()

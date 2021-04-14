@@ -31,9 +31,9 @@ using namespace lima::RayonixHs;
 //-----------------------------------------------------
 FrameStatusCb::FrameStatusCb(Camera *cam, volatile bool &acquiring)
   : m_cam(cam),
-    mRawFramesRcvd(0),
-    mBgFramesRcvd(0),
-    mCorrFramesRcvd(0),
+    m_RawFramesRcvd(0),
+    m_BgFramesRcvd(0),
+    m_CorrFramesRcvd(0),
     m_acquiring(acquiring) {
 
         DEB_CONSTRUCTOR();
@@ -53,28 +53,28 @@ FrameStatusCb::~FrameStatusCb() {
 //-----------------------------------------------------
 // @brief callback on new raw frame, increase raw counter
 //-----------------------------------------------------
-void FrameStatusCb::RawFrameReady(int frame_number, const craydl::RxFrame *rx_frame) {
+void FrameStatusCb::RawFrameReady(int frame_number, const Craydl_RxFrame_t rx_frame) {
 	DEB_MEMBER_FUNCT();
-        ++mRawFramesRcvd; 
-        DEB_TRACE() << "Have received " << mRawFramesRcvd << " raw frames.";
+        ++m_RawFramesRcvd; 
+        DEB_TRACE() << "Have received " << m_RawFramesRcvd << " raw frames.";
 }
 
 //-----------------------------------------------------
 // @brief callback on new background frame, increase the bkg counter
 //-----------------------------------------------------
-void FrameStatusCb::BackgroundFrameReady(const craydl::RxFrame *frame_p) {
+void FrameStatusCb::BackgroundFrameReady(const Craydl_RxFrame_t frame_p) {
 	DEB_MEMBER_FUNCT();
-        ++mBgFramesRcvd; 
-        DEB_TRACE() << "Have received " << mBgFramesRcvd << " background frames."; 
+        ++m_BgFramesRcvd; 
+        DEB_TRACE() << "Have received " << m_BgFramesRcvd << " background frames."; 
 }
 
 //-----------------------------------------------------
 // @brief callback on new corrected frame, increase the corr counter
 //-----------------------------------------------------
-void FrameStatusCb::FrameReady(int frame_number, const craydl::RxFrame *rx_frame) {
+void FrameStatusCb::FrameReady(int frame_number, const Craydl_RxFrame_t rx_frame) {
 	DEB_MEMBER_FUNCT();
-        ++mCorrFramesRcvd; 
-        DEB_TRACE() << "Have received " << mCorrFramesRcvd << " corrected frames."; 
+        ++m_CorrFramesRcvd; 
+        DEB_TRACE() << "Have received " << m_CorrFramesRcvd << " corrected frames."; 
         m_cam->frameReady(rx_frame); 
 }
 
@@ -89,7 +89,7 @@ void FrameStatusCb::FrameAborted(int frame_number) {
 //-----------------------------------------------------
 // @brief callback on a acquired frame error
 //-----------------------------------------------------
-void FrameStatusCb::FrameError(int frame_number, const craydl::RxFrame* frame_p, int error_code, const std::string& error_string) { 
+void FrameStatusCb::FrameError(int frame_number, const Craydl_RxFrame_t frame_p, int error_code, const std::string& error_string) { 
 	DEB_MEMBER_FUNCT();
         DEB_ERROR() << "Frame error with frame #" << frame_number << ":"; 
 	DEB_ERROR() << error_string;
@@ -156,21 +156,21 @@ void FrameStatusCb::FrameCompleted(int frame) {
 //-----------------------------------------------------
 int FrameStatusCb::frameCountRaw() const { 
 	DEB_MEMBER_FUNCT();
-	return mRawFramesRcvd; 
+	return m_RawFramesRcvd; 
 }
 //-----------------------------------------------------
 // @brief return the background frame count
 //-----------------------------------------------------
 int FrameStatusCb::frameCountBackground() const { 
 	DEB_MEMBER_FUNCT();
-	return mBgFramesRcvd; 
+	return m_BgFramesRcvd; 
 }
 //-----------------------------------------------------
 // @brief return the corrected frame count
 //-----------------------------------------------------
 int FrameStatusCb::frameCountCorrected() const {
 	DEB_MEMBER_FUNCT();
-	return mCorrFramesRcvd; 
+	return m_CorrFramesRcvd; 
 }
 
 //-----------------------------------------------------
@@ -178,5 +178,6 @@ int FrameStatusCb::frameCountCorrected() const {
 //-----------------------------------------------------
 void FrameStatusCb::resetFrameCounts() { 
 	DEB_MEMBER_FUNCT();
-	mRawFramesRcvd = mBgFramesRcvd = mCorrFramesRcvd = 0; 
+	m_RawFramesRcvd = m_BgFramesRcvd = m_CorrFramesRcvd = 0; 
 }
+

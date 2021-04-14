@@ -10,3 +10,5 @@ build.release
 test/test
 test/test.o
 test/test.P
+build/
+*/build
