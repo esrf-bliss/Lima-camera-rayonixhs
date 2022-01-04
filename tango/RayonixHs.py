@@ -1,7 +1,7 @@
 ############################################################################
 # This file is part of LImA, a Library for Image Acquisition
 #
-# Copyright (C) : 2009-2014
+# Copyright (C) : 2009-2022
 # European Synchrotron Radiation Facility
 # BP 220, Grenoble 38043
 # FRANCE
@@ -301,9 +301,9 @@ class RayonixHs(PyTango.Device_4Impl):
     @Core.DEB_MEMBER_FUNCT
     def getAttrStringValueList(self, attr_name):
         if attr_name in ['output1_id','output2_id']:
-            return self.__OutputSignalID.keys()
+            return list(self.__OutputSignalID.keys())
         elif attr_name in ['output1_signal_type', 'output2_signal_type']:
-            return self.__OutputSignalType.keys()
+            return list(self.__OutputSignalType.keys())
         else:
             return AttrHelper.get_attr_string_value_list(self, attr_name)
     
