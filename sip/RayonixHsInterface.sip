@@ -74,6 +74,8 @@ using namespace lima;
     void getReadoutMode(RayonixHs::ReadoutMode& mode /Out/);
     void setReadoutMode(RayonixHs::ReadoutMode mode);
 
+  private:
+     Interface(const RayonixHs::Interface&);
   };
 
 }; // namespace RayonixHs
