@@ -1,7 +1,7 @@
 ###########################################################################
 # This file is part of LImA, a Library for Image Acquisition
 #
-#  Copyright (C) : 2009-2019
+#  Copyright (C) : 2009-2024
 #  European Synchrotron Radiation Facility
 #  CS40220 38043 Grenoble Cedex 9
 #  FRANCE
@@ -21,7 +21,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, see <http://www.gnu.org/licenses/>.
 ############################################################################
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(rayonixhs)
 
